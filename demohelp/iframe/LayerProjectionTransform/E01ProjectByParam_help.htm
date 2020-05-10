@@ -1,0 +1,276 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>投影转换服务</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        投影转换服务（根据空间参照系信息投影）:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例底图显示“世界政区”矢量图层，实现根据空间参照系信息进行类投影转换功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用“世界政区”矢量图层。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]<br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。OpenLayers 3对OpenLayers网络地图库进行了根本的重新设计。openlayer2虽然被广泛使用，但从JavaScript开发的早期发展阶段开始，已日益显示出它的落后。
+        OL3已运用现代的设计模式从底层重写。）、ol.css（是地图样式文件，包含了地图样式的方方面面，例如，填充色、图标样式、图片样式、规则图形样式、边界样式、文字样式等，样式一般针对矢量要素图层。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGISWeb二次开发的脚本库)；
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）然后编写调用矢量图层显示的脚本函数init()，即初始化ol.Map与Zondy.Map.Layer类（一个用于初始化地图，一个用于存放结果图层），通过设置ol.Map类的view属性确定地图的显示中心和级别以及坐标系，通过设置ol.Map()类的controls属性给地图容器添加鼠标位置控件，再通过Map对象的addLayer方法加载Layer对象；
+        <br />
+        <br />
+        [投影转换]<br />
+        <br />
+        （4）接下来初始化图层投影转换服务Zondy.Service.ProjectByLayer，设置转换要素类地址和结果要素类地址；
+        <br />
+        <br />
+        （5） 最后调用投影转换服务的execute方法执行空间参照系信息投影转换。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element | string | undefined）可选项，指定地图所在的网页div元素的id，例如代码中：'mapCon'。如果在构建时未指定，则必须调用ol.Map()类的setTarget()方法以便绘制地图。<br />
+            <font class="nextParameter">【2】layers：</font>（Array-[ol.layer.Base] | ol.Collection[ol.layer.Base | undefined]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View | undefined）可选项，设置地图显示视图。如果在构建时未指定，则必须通过ol.Map()类的setView()方法指定，否则不会提取图层源。<br />
+        </div>
+        <font class="funDescription">1.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>将地图图层添加到地图容器中。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">getLayers()：</font>获取地图所有图层。<br />
+            <font class="functionName">getView()：</font>获取地图视图。返回值为{ol.View}类。<br />
+            <font class="functionName">setView(view)：</font>设置地图视图。<br />
+            <font class="nextParameter">view：</font>(ol.View）地图视图。<br />
+            <font class="functionName">removeLayer(layer)：</font>将图层从地图容器中移除。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">render()：</font>请求地图渲染（下一帧动画）。<br />
+            <font class="functionName">getEventPixel(event)：</font>获取相对于浏览器窗口的地图像素位置。<br />
+            <font class="nextParameter">event：</font>(event）事件。<br />
+        </div>
+        <font class="Class">2、ol.View类：</font>该类是一个地图显示视图类。ol.View对象是地图初始化必备三要素之一，表示一个简单的二维视图的映射，主要控制地图与用户的交互，如进行缩放，调节分辨率、地图的旋转等。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.View(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】center：</font>（ol.Coordinate|undefined）可选项，设置地图显示中心；<br />
+            <font class="nextParameter">【2】zoom：</font>（number|undefined）可选项，设置地图的显示级数。<br />
+            <font class="nextParameter">【3】minZoom：</font>（number|undefined）可选项，设置地图最小缩放级别，它与maxZoom(或minResolution)和zoomFactor一起使用，如果同时给出maxResolution,maxResolution优先级高于minZoom。<br />默认值为0。<br />
+            <font class="nextParameter">【4】maxZoom：</font>（number|undefined）可选项，设置地图最大缩放级别，它与minZoom(或maxResolution)和zoomFactor一起使用，如果同时给出minResolution,minResolution优先级高于maxZoom。<br />默认值为28。<br />
+            <font class="nextParameter">【5】rotation：</font>（number|undefined）可选项，设置初始视图的旋转弧度（顺时针方向)。<br />默认值为0。<br />
+            <font class="nextParameter">【6】projection：</font>（ol.ProjectionLike）可选项，地图的投影坐标系。<br />默认为EPSG:3857，即墨卡托坐标系。<br />
+        </div>
+        <font class="funDescription">2.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getZoom()：</font>获取当前地图视图缩放级别，如果当前视图分辨率未定义或分辨率未在约束值范围内，将返回undefined。返回值为{number|undefined}类型。<br />
+            <font class="functionName">getCenter()：</font>获取当前地图视图中心。返回值为{ol.Coordinate|undefined}类型<br />
+            <font class="functionName">getRotation()：</font>获取当前地图视图的旋转弧度。返回值为{number}类型。<br />
+            <font class="functionName">setZoom(zoom)：</font>设置地图视图的缩放级别。<br />
+            <font class="nextParameter">zoom：</font>(number）地图视图的缩放级别。<br />
+            <font class="functionName">setCenter(center)：</font>设置地图视图的中心坐标。<br />
+            <font class="nextParameter">center：</font>(ol.Coordinate | undefined）地图视图的中心坐标。<br />
+            <font class="functionName">setRotation(rotation)：</font>设置当前地图视图的旋转弧度。返回值为{number}类型。<br />
+            <font class="nextParameter">rotation：</font>(number)为地图视图设置新的旋转值。<br />
+        </div>
+    <font class="Class">3、ol.control.MousePosition类：</font>该类是控制显示鼠标光标的坐标<br/>
+
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+    <div class="zhuji">
+        <font class="constructor">ol.control.MousePosition(opt_options)</font><br/>
+        <br/>
+        <font class="paraDescription">参数说明：</font>
+        <br/>
+        <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br/>
+        <font class="nextParameter">【1】coordinateFormat：</font>（ol.CoordinateFormatType|undefined）可选项，设置坐标格式。<br/>
+        <font class="nextParameter">【2】projection：</font>（ol.ProjectionLike）可选项，设置投影信息。<br/>默认是地图本身投影。<br/>
+        <font class="nextParameter">【3】className：</font>（string|undefined）可选项，设置坐标信息样式类名。<br/>默认为ol-mouse-position。<br/>
+        <font class="nextParameter">【4】target：</font>（Element|undefined）可选项，设置显示鼠标位置信息的目标容器。例如代码中：document.getElementById('mouse-position')。<br/>
+        <font class="nextParameter">【5】undefinedHTML：</font>（string|undefined）可选项，标记未定义坐标。<br/>默认为空字符串。<br/>
+    </div>
+        <font class="Class">4、Zondy.Map.Layer类：</font>提供显示矢量图层的功能服务类<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Layer(opt_name, opt_gdbps, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_name：</font>（String类型）可填项，设置显示图层的名称，可自行设置任名称；<br />
+            <font class="parameter">opt_gdbps：</font>（Array数组类型-[String类型]）必填项，设置要加载的矢量图层的名称（desktop平台中相对应的路径），多个用,分隔，如：[gdbp1,gdbp2]；<br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器地址ip。<br />默认值："localhost"；<br />
+            <font class="nextParameter">【2】port：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器端口。<br />默认值："6163"；<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）可选项，是否作为基础图层显示，默认值：true。
+            <br />
+        </div>    
+        <font style="font-weight: bold;">5、Zondy.Service.ProjectByLayer类：</font>该类是一个图层投影转换类<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.ProjectByLayer(opt_cprojectParam, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_cprojectParam：</font>（Zondy.Service.CProjectParam类型）投影转换空间参数；<br/>
+            <font class="nextParameter">【1】ProjTypeID：</font>（Int类型）投影类型，详细如下所示：<br />
+            &nbsp; &nbsp; &nbsp;0：地理坐标系(经纬度)<br />
+            &nbsp; &nbsp; &nbsp;1：通用横向墨卡托投影坐标系(UTM)<br />
+            &nbsp; &nbsp; &nbsp;2：亚尔勃斯等积圆锥投影坐标系(ALBERS CONICAL EQ)<br />
+            &nbsp; &nbsp; &nbsp;3：兰伯特等角圆锥投影坐标系(LAMBERT CONFORMAL C)<br />
+            &nbsp; &nbsp; &nbsp;4：墨卡托(正轴等角圆柱)投影坐标系(MERCATOR)<br />
+            &nbsp; &nbsp; &nbsp;5：高斯-克吕格(横切椭圆柱等角)投影(GAUSS-KRUGER)<br />
+            &nbsp; &nbsp; &nbsp;6：普通多圆锥投影坐标系(POLYCONIC)<br />
+            &nbsp; &nbsp; &nbsp;7：等距圆锥投影坐标系(EQUIDISTANT CONI)<br />
+            &nbsp; &nbsp; &nbsp;8：横向墨卡托(横切圆柱等角)投影(TRANSVERSE MECA)<br />
+            &nbsp; &nbsp; &nbsp;9：球面投影(视点在球面)坐标系(STEREOGRAPHIC)<br />
+            &nbsp; &nbsp; &nbsp;10：兰伯特等积方位投影坐标系(LAMBERT AZIMUTHAL EQUAL_AREA)<br />
+            &nbsp; &nbsp; &nbsp;11：等距方位投影坐标系(AZIMUTHAL EQUIDISTANT)<br />
+            &nbsp; &nbsp; &nbsp;12：心射切面(球心)投影坐标系(GNOMONIC)<br />
+            &nbsp; &nbsp; &nbsp;13：正射投影(视点无穷远)坐标系(ORTHOGRAPHIC)<br />
+            &nbsp; &nbsp; &nbsp;14：通用垂直近距透视(外心)投影(GENERAL VERTICAL NEAR_SIDE PERSPECTIVE)<br />
+            &nbsp; &nbsp; &nbsp;15：正弦投影(伪圆柱)坐标系(SINUSOIDAL)<br />
+            &nbsp; &nbsp; &nbsp;16：等距离切圆柱(方格)投影坐标系(EQUIRECTANGULAR)<br />
+            &nbsp; &nbsp; &nbsp;17：米勒圆柱(透视正圆柱)投影坐标系(MILLER CYLINDRICAL)<br />
+            &nbsp; &nbsp; &nbsp;18：范德格林顿I投影坐标系(VAN DER GRINTEN I)<br />
+            &nbsp; &nbsp; &nbsp;19：斜轴墨卡托投影坐标系(OBLIQUE MERCATOR (HOTINE))<br />
+            &nbsp; &nbsp; &nbsp;20：极点球面投影坐标系(POLAR SREREOGRAPHIC)。
+            <br /> 默认为0。
+            <br/>
+            <font class="nextParameter">【2】sphereType：</font>（Double类型）椭球类型定义，详细如下所示：<br />
+            &nbsp; &nbsp; &nbsp;0：未指定"参考椭球体参数类型"<br />
+            &nbsp; &nbsp; &nbsp;1：北京54/克拉索夫斯基(1940年)椭球(Krasovsky)<br />
+            &nbsp; &nbsp; &nbsp;2：西安80/1975 年I.U.G.G推荐椭球<br />
+            &nbsp; &nbsp; &nbsp;3：1979 年I.U.G.G推荐椭球<br />
+            &nbsp; &nbsp; &nbsp;4：1983 年I.U.G.G推荐椭球<br />
+            &nbsp; &nbsp; &nbsp;5：新的椭球参数(自定义)<br />
+            &nbsp; &nbsp; &nbsp;6：1967 年I.U.G.G推荐椭球<br />
+            &nbsp; &nbsp; &nbsp;7：WGS-84<br />
+            &nbsp; &nbsp; &nbsp;8：GRS-80<br />
+            &nbsp; &nbsp; &nbsp;9：WGS-72<br />
+            &nbsp; &nbsp; &nbsp;10：澳大利亚1965年椭球
+            <br/> 默认为0。
+            <br/>
+            <font class="nextParameter">【3】ProjAngleUnit：</font>（整型）角度单位,详细如下所示：<br />
+            &nbsp; &nbsp; &nbsp;0：毫米<br />
+            &nbsp; &nbsp; &nbsp;1：毫米<br />
+            &nbsp; &nbsp; &nbsp;2：米<br />
+            &nbsp; &nbsp; &nbsp;3：秒<br />
+            &nbsp; &nbsp; &nbsp;4：度<br />
+            &nbsp; &nbsp; &nbsp;5：度分秒,即±DDDMMSS.SSSS格式<br />
+            &nbsp; &nbsp; &nbsp;6：英尺<br />
+            &nbsp; &nbsp; &nbsp;7：分(60分之一度)<br />
+            &nbsp; &nbsp; &nbsp;8：弧度<br />
+            &nbsp; &nbsp; &nbsp;9：梯度 1梯度=0.015707963267949弧度<br />
+            &nbsp; &nbsp; &nbsp;10：公里<br />
+            &nbsp; &nbsp; &nbsp;11：分米<br />
+            &nbsp; &nbsp; &nbsp;12：厘米<br />
+            &nbsp; &nbsp; &nbsp;13：英寸<br />
+            &nbsp; &nbsp; &nbsp;14：码<br />
+            &nbsp; &nbsp; &nbsp;15：海里<br />
+            &nbsp; &nbsp; &nbsp;16：英里<br />
+            &nbsp; &nbsp; &nbsp;17：DM.S<br />
+            &nbsp; &nbsp; &nbsp;18：D.MS
+            <br /> 默认为0。
+            <br />
+            <font class="nextParameter">【4】ProjType：</font>（Int类型）坐标系类型，详细如下所示：<br />
+            &nbsp; &nbsp; &nbsp;0：用户自定义坐标系 Cartesian coordinates 笛卡儿坐标<br />
+            &nbsp; &nbsp; &nbsp;1：地理坐标系<br />
+            &nbsp; &nbsp; &nbsp;2：local coordinates 地方坐标<br />
+            &nbsp; &nbsp; &nbsp;3：投影平面直角坐标系 projected coordinates投影坐标<br />
+            &nbsp; &nbsp; &nbsp;4：地心大地直角坐标系 geocentric coordinates 地心坐标<br />
+            &nbsp; &nbsp; &nbsp;5：vertical coordinates 纵坐标<br />
+            &nbsp; &nbsp; &nbsp;6：photograph coordinates<br />
+            &nbsp; &nbsp; &nbsp;7：stereo-object-space coordinates<br />
+            &nbsp; &nbsp; &nbsp;8：display coordinates 显示坐标<br />
+            &nbsp; &nbsp; &nbsp;9：military grid coordinates
+            <br /> 默认为0。
+            <br/>
+            <font class="nextParameter">【5】ProjZoneType：</font>（Short类型）投影分带类型。<br /> 默认为0。<br />
+            <font class="nextParameter">【6】ProjZoneNO：</font>（Short类型）投影带号。<br /> 默认为0。<br/>
+            <font class="nextParameter">【7】ProjLon：</font>（Double类型）中央子午线经度。<br /> 默认为0.0。<br />
+            <font class="nextParameter">【8】ProjLat：</font>（Double类型）投影原点纬度。<br /> 默认为0.0。<br />
+            <font class="nextParameter">【9】ProjLat1：</font>（Double类型）第一标准纬度。<br /> 默认为0.0。<br />
+            <font class="nextParameter">【10】ProjLat2：</font>（Double类型）第二标准纬度。<br /> 默认为0.0。<br />
+            <font class="nextParameter">【11】ProjUnit：</font>（整型）长度单位，详细如下所示：<br />
+            &nbsp; &nbsp; &nbsp;0：毫米<br />
+            &nbsp; &nbsp; &nbsp;1：毫米<br />
+            &nbsp; &nbsp; &nbsp;2：米<br />
+            &nbsp; &nbsp; &nbsp;3：秒<br />
+            &nbsp; &nbsp; &nbsp;4：度<br />
+            &nbsp; &nbsp; &nbsp;5：度分秒,即±DDDMMSS.SSSS格式<br />
+            &nbsp; &nbsp; &nbsp;6：英尺<br />
+            &nbsp; &nbsp; &nbsp;7：分(60分之一度)<br />
+            &nbsp; &nbsp; &nbsp;8：弧度<br />
+            &nbsp; &nbsp; &nbsp;9：梯度 1梯度=0.015707963267949弧度<br />
+            &nbsp; &nbsp; &nbsp;10：公里<br />
+            &nbsp; &nbsp; &nbsp;11：分米<br />
+            &nbsp; &nbsp; &nbsp;12：厘米<br />
+            &nbsp; &nbsp; &nbsp;13：英寸<br />
+            &nbsp; &nbsp; &nbsp;14：码<br />
+            &nbsp; &nbsp; &nbsp;15：海里<br />
+            &nbsp; &nbsp; &nbsp;16：英里<br />
+            &nbsp; &nbsp; &nbsp;17：DM.S<br />
+            &nbsp; &nbsp; &nbsp;18：D.MS
+            <br /> 默认为0。
+            <br />
+            <font class="nextParameter">【12】ProjRate：</font>（Double类型）水平比例尺。<br /> 默认为0.0。<br/>
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br/>
+            <font class="nextParameter">【1】clsName：</font>（String类型） 需转换的要素类地址，来自于父类Zondy.Service.ProjectBase。<br />
+            <font class="nextParameter">【2】desClsName：</font>（String类型） 结果要素类地址，来自于父类Zondy.Service.ProjectBase。<br />
+            <font class="nextParameter">【3】resultName：</font>（String类型） 工作流执行后的结果文件名称，来自于父类Zondy.Service.ProjectBase。<br />
+        </div>
+        <font class="funDescription">5.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">execute(onSuccess, way, isAsy, f, onError)：</font>执行投影转换。参数详细介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）必要参数，执行成功后的回调函数。<br />
+            <font class="nextParameter">way：</font>（String类型）服务器请求类型，post和get两种，当所需要发送的数据量比较大时，请选择'Post',否则可能会执行失败。<br />默认为'Get'。<br />
+            <font class="nextParameter">isAsy：</font>（Boolean类型）是否异步传输。<br />默认为false。<br />
+            <font class="nextParameter">f：</font>（String类型）指明执行返回结果的格式，json' or 'xml'。<br />默认为json。<br />
+            <font class="nextParameter">onError：</font>（Function类型）投影转换执行失败的回调函数名称。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+           target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>统计分析（ECharts）</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        统计分析：
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能
+    </div>
+    <div class="zhengwen">
+        该示例实现统计分析功能，显示的是一个世界矢量地图文档。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明:
+    </div>
+    <div class="zhengwen">
+        1、数据：使用一个世界矢量地图文档（WorldJWVector.mapx）。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为Web GIS客户端开发提供的JavaScript类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js（中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库）。
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式。
+        <br />
+        <br />
+        （3）然后编写调用矢量地图文档显示的脚本函数init()，即初始化ol.Map与Zondy.Map.Doc类。通过设置该类的layers属性加载图层，再通过设置该类的view属性初始化地图的显示中心和级别。
+        <br />
+        <br />
+        [创建div元素]
+        <br />
+        <br />
+        （4）创建关联到地图具体位置的div元素。
+        <br />
+        <br />
+        [统计分析]
+        <br />
+        <br />
+        （5）调用统计图表插件（ECharts），创建统计图表对象（搭建DIV层，使得echarts能够在div中进行显示），设置统计值，最终实现统计分析功能。<br />
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项。设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项。指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项。指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项。设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项。添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="funDescription">1.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>添加单个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layer：</font>继承于ol.layer.Base的图层对象<br />
+            <br />
+            <font class="functionName">addOverlay(overlay)：</font>添加单个叠加图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">overlay：</font>继承于ol.Overlay的叠加图层对象<br />
+        </div>
+        <font class="Class">2、ol.View类：</font>该类是一个地图显示视图类。ol.View对象是地图初始化必备三要素之一，表示一个简单的二维视图的映射，主要控制地图与用户的交互，如进行缩放，调节分辨率、地图的旋转等。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.View(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项。设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】center：</font>（ol.Coordinate|undefined类型）可选项。设置地图显示中心。<br />
+            <font class="nextParameter">【2】zoom：</font>（number|undefined类型）可选项。设置地图的显示级数。<br />
+            <font class="nextParameter">【3】minZoom：</font>（number|undefined类型）可选项。设置地图最小缩放级别，它与maxZoom(或minResolution)和zoomFactor一起使用，如果同时给出maxResolution，maxResolution优先级高于minZoom。<br />默认值为0。<br />
+            <font class="nextParameter">【4】maxZoom：</font>（number|undefined类型）可选项。设置地图最大缩放级别，它与minZoom(或maxResolution)和zoomFactor一起使用，如果同时给出minResolution，minResolution优先级高于maxZoom。<br />默认值为28。<br />
+            <font class="nextParameter">【5】rotation：</font>（number|undefined类型）可选项。设置初始视图的旋转弧度（顺时针方向）。<br />默认值为0。<br />
+            <font class="nextParameter">【6】projection：</font>（ol.ProjectionLike类型）可选项。地图的投影坐标系。<br />默认为EPSG:3857，即墨卡托坐标系。<br />
+        </div>
+        <font class="Class">3、Zondy.Map.Doc类：</font>该类是一个提供显示矢量地图文档的功能服务类<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Doc(name,docName,options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必填项，设置显示图层的名称（可自行设置名称）。<br />
+            <font class="parameter">docName：</font>（String类型）必填项，设置地图文档文件的名称（根据IGServer上发布的实际名称）。<br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置其他属性赋值对象，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器地址ip，默认值："localhost"。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器端口，默认值："6163"。<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）可选项，是否作为基础图层显示，默认值：true。
+        </div>
+        <div class="zhuji">
+            <font class="constructorTile">ECharts的option设置项说明：</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="nextParameter">tooltip：</font>鼠标移上统计图提示信息设置。<br />
+            <br />
+            <font class="nextParameter">series：</font>用于生成统计图表的数据系列，其中data表示具体的数据序列，itemStyle表示显示样式。<br />
+            <br />
+            <font class="nextParameter">该插件的使用，请参见官方示例和说明。</font><br />
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client API。"
+           target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client API手册。</a>
+    </p>
+</body>
+</html>

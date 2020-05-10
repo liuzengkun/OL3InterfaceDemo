@@ -1,0 +1,120 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>加载OGC的WMS地图文档</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        加载OGC的WMS地图文档:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现一个简单的OGC数据加载功能，显示OGC的WMS数据。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用MapGIS示例数据——基于经纬度世界范围的地图文档发布的WMS服务（WorldJWVector）。需事先在IGS服务器中发布OGC规范的WMS服务，即基于地图文档的WMS（WorldJWVector）。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）最后编写页面加载脚本函数init()，即初始化ol.Map；
+        <br />
+        <br />
+        （4）创建、初始化WMS控件（ol.source.ImageWMS）并添加到地图容器，加载基于地图文档的WMS服务；
+        <br />
+        <br />
+        （5）由Map对象的view属性初始化地图的显示中心和级别，加载地图。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项，指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项，设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项，添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="funDescription">1.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>添加单个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layer：</font>继承于ol.layer.Base的图层对象<br />
+        </div>
+        <font class="Class">2、ol.layer.Image类：</font>该类是设置一个图片图层类：主要是指服务器端渲染的图像，可能是已经渲染好的图像，或者是每一次请求，都根据请求内容定制化地生成一幅图片，该图层类型支持任意的范围和分辨率。该类继承了ol.layer.Layer类<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.layer.Image(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】opacity：</font>（number|undefined类型）可选项，设置透明度（取值范围0-1完全透明/完全不透明）。<br />默认值是1<br />
+            <font class="nextParameter">【2】source：</font>（ol.source.Image类型）必填项。为图层设置来源、服务地址。<br />
+            <font class="nextParameter">【3】map：</font>（ol.Map|undefined类型）可选项。为图层设置覆盖在哪个地图容器上。若没有设置，则使用ol.Map的addLayer方法添加图层到地图容器里<br />
+            <font class="nextParameter">【4】visible：</font>（boolean|undefined类型）可选项。设置是否可见性。<br />默认值是true(可见的)。<br />
+            <font class="nextParameter">【5】extent：</font>(ol.Extent|undefined类型)可选项，设置要素的边界。<br />
+            <font class="nextParameter">【6】minResolution：</font>（number|undefined类型）可选项。设置可见图层最小的分辨率。<br />
+            <font class="nextParameter">【7】maxResolution：</font>（number|undefined类型）可选项。设置可见图层最大的分辨率。<br />
+        </div>
+        <font class="Class">3、ol.source.ImageWMS类：</font>该类是为WMS 服务提供的单一的图片数据，继承自ol.source.Image<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.source.ImageWMS(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】attributions：</font>（ol.AttributionLike|undefined类型）可选项，设置属性信息。<br />
+            <font class="nextParameter">【2】crossOrigin：</font>（null| string|undefined类型）可选项。设置crossOrigin属性用以加载图片。<br />必须提供一个crossOrigin值如果使用WebGL渲染器或如果你想访问与画布渲染器像素数据。请搜索https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image查看更多细节。<br />
+            <font class="nextParameter">【3】hidpi：</font>（boolean|undefined类型）可选项。当请求来自远程服务器上的图片时，使用ol.Map的pixelRatio方法。<br />默认值是true<br />
+            <font class="nextParameter">【4】serverType：</font>（ol.source.WMSServerType|string|undefined类型）可选项。远程WMS服务器的类型:mapserver geoserver或qgis，需要设置hidpi为真。<br />默认值是undefined(未定义的)。<br />
+            <font class="nextParameter">【5】imageLoadFunction：</font>(ol.ImageLoadFunctionType|undefined类型)可选项，设置加载图像URL的可选函数。<br />
+            <font class="nextParameter">【6】logo：</font>（string|olx.LogoOptions|undefined类型）可选项。设置logo标志。<br />
+            <font class="nextParameter">【7】params：</font>（Object.[string数组]类型）必选项。设置WMS请求参数。至少一层参数是必需的。风格是“VERSION默认是1.3.0版本。默认情况下。WIDTH，HEIGHT，BBOX和CRS（WMS的srs版本应当小于1.3.0版本）将动态设置。<br />
+            <font class="nextParameter">【8】projection：</font>（ol.ProjectionLike类型）可选项，地图的投影坐标系。<br />
+            <font class="nextParameter">【9】ratio：</font>（number|undefined类型）可选项。设置比率。1意味着图像请求地图窗口的大小,2意味着地图窗口宽度和高度的两倍,等等。必须1或更高。<br />默认值是1.5。<br />
+            <font class="nextParameter">【10】resolutions：</font>（[umber]数组|undefined类型）可选项。设置分辨率。如果指定,请求将使用该分辨率<br />
+            <font class="nextParameter">【11】url：</font>（string|undefined类型）可选项。设置WMS服务的URL<br />
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+           target="_blank">
+            注：详细说明请参见MapGIS IGServer JavaScript Client的API手册和MapGIS IGServer
+            REST API.chm。
+        </a>
+    </p>
+</body>
+</html>

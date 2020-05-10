@@ -1,0 +1,83 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>矢量地图文档过滤显示</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        矢量地图文档过滤显示:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例以MapGIS矢量地图文档WorldJWVector为底图。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：已经在IGServer上面发布的矢量地图文档WorldJWVector。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，加载MapGIS矢量图层；
+        <br />
+        <br />
+        （3）在地图初始化函数init()中初始化图层对象（Zondy.Map.Doc），设置Zondy.Map.Doc类的filters属性来完成矢量地图文档中图层中的要素的过滤显示功能。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项，指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项，设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项，添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="funDescription">1.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>添加单个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layer：</font>继承于ol.layer.Base的图层对象。
+        </div>
+        <font class="Class">2、Zondy.Map.Doc类：</font>该类用于地图文档的显示。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Doc(name, docName, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必选项，设置图层的显示名称。<br />
+            <font class="parameter">docName：</font>（String类型）必选项，设置要加载的地图文档的名称，该地图文档必须已在IGSerever上发布，并且这里的地图文档名称要与发布的地图文档名称一致。<br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）该矢量图层所在服务器的ip。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）设置端口号。<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）是否设置为底图。<br />
+            <font class="nextParameter">【3】filters：</font>（String类型） 用户指定的图层过滤条件，它由多个键值对组成，值为您所要设定的过滤条件。例如：'filters=1:ID>4,3:ID>1'。中文请使用UTF-8编码后再传入参数，javascitpt中请使用encodeURI（）函数编码后再代入filters参数中。注意，在此函数中“：”和“，”是保留字符，用于表示键值对概念和分隔不同图层的条件，请不要将这2个字符用于自定义条件中。
+        </div>
+    </div>
+    <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+       target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+</body>
+</html>

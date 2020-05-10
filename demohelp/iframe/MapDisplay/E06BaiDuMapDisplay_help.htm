@@ -1,0 +1,113 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>显示百度地图</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        显示百度地图:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现一个简单的百度地图加载功能，显示百度地图。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用网络在线的世界范围的百度地图。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。OpenLayers 3对OpenLayers网络地图库进行了根本的重新设计。openlayer2虽然被广泛使用，但从JavaScript开发的早期发展阶段开始，已日益显示出它的落后。
+        OL3已运用现代的设计模式从底层重写。）、ol.css（是地图样式文件，包含了地图样式的方方面面，例如，填充色、图标样式、图片样式、规则图形样式、边界样式、文字样式等，样式一般针对矢量要素图层。）、jquery-1.11.2.min.js（第三方js资源库）、zondyClient.js(中地公司提供的一套基于OpenLayers的MapGIS Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）最后编写调用百度地图显示的脚本函数init()，即初始化ol.Map()类和Zondy.Map.BaiduLayer()类，通过设置ol.Map()类的layers属性加载百度地图，再通过设置ol.Map()类的view属性设置初始化地图的中心点与显示级别以及最大、最小显示级别，加载百度地图；
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、Zondy.Map.BaiDuLayer类：</font>该类是一个显示百度地图的功能服务类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.BaiDuLayer(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置其他属性赋值对象。<br />
+            <font class="nextParameter">【1】source：</font>（String）可选项，设置百度地图数据来源。<br />
+        </div>
+        <font class="Class">2、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element | string | undefined）可选项，指定地图所在的网页div元素的id，例如代码中：'mapCon'。如果在构建时未指定，则必须调用ol.Map()类的setTarget()方法以便绘制地图。<br />
+            <font class="nextParameter">【2】layers：</font>（Array-[ol.layer.Base] | ol.Collection[ol.layer.Base | undefined]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View | undefined）可选项，设置地图显示视图。如果在构建时未指定，则必须通过ol.Map()类的setView()方法指定，否则不会提取图层源。<br />
+        </div>
+        <font class="funDescription">2.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getView()：</font>获取地图视图。返回值为{ol.View}类。<br />
+            <font class="functionName">addLayer(layer)：</font>将地图图层添加到地图容器中。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">removeLayer(layer)：</font>将图层从地图容器中移除。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">render()：</font>请求地图渲染（下一帧动画）。<br />
+            <font class="functionName">getEventPixel(event)：</font>获取相对于浏览器窗口的地图像素位置。<br />
+            <font class="nextParameter">event：</font>(event）事件。<br />
+        </div>
+        <font class="Class">3、ol.View类：</font>该类是一个地图显示视图类。ol.View对象是地图初始化必备三要素之一，表示一个简单的二维视图的映射，主要控制地图与用户的交互，如进行缩放，调节分辨率、地图的旋转等。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.View(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】center：</font>（ol.Coordinate|undefined）可选项，设置地图显示中心；<br />
+            <font class="nextParameter">【2】zoom：</font>（number|undefined）可选项，设置地图的显示级数。<br />
+            <font class="nextParameter">【3】minZoom：</font>（number|undefined）可选项，设置地图最小缩放级别，它与maxZoom(或minResolution)和zoomFactor一起使用，如果同时给出maxResolution,maxResolution优先级高于minZoom。<br />默认值为0。<br />
+            <font class="nextParameter">【4】maxZoom：</font>（number|undefined）可选项，设置地图最大缩放级别，它与minZoom(或maxResolution)和zoomFactor一起使用，如果同时给出minResolution,minResolution优先级高于maxZoom。<br />默认值为28。<br />
+            <font class="nextParameter">【5】rotation：</font>（number|undefined）可选项，设置初始视图的旋转弧度（顺时针方向)。<br />默认值为0。<br />
+            <font class="nextParameter">【6】projection：</font>（ol.ProjectionLike）可选项，地图的投影坐标系。<br />默认为EPSG:3857，即墨卡托坐标系。<br />
+        </div>
+        <font class="funDescription">3.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">setCenter(center)：</font>设置地图视图的中心坐标。<br />
+            <font class="nextParameter">center：</font>(ol.Coordinate | undefined）地图视图的中心坐标。<br />
+            <font class="functionName">setZoom(zoom)：</font>设置地图视图的缩放级别。<br />
+            <font class="nextParameter">zoom：</font>(number）地图视图的缩放级别。<br />
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+            target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>

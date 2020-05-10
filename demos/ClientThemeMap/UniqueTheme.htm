@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>单值专题图</title>
+    <!--导入外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <!--<link href="../../libs/ol/ol.css" rel="stylesheet" type="text/css" />-->
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var map = null;
+        var mapDocLayer = null;
+        var clientUniqueTheme = null;
+
+        function init() {
+            var extent = [-180, -90, 180, 90];
+            var projection = new ol.proj.Projection({ units: ol.proj.Units.DEGREES, extent: extent });
+            var center = [0, 0];
+
+            mapDocLayer = new Zondy.Map.Doc("doc", "world", {
+                projection: projection,
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+            map = new ol.Map({
+                target: 'mapCon',
+                layers: [mapDocLayer],
+                view: new ol.View({
+                    center: center,
+                    projection: projection,
+                    extent: extent,
+                    maxZoom: 12,
+                    minZoom: 0,
+                    zoom: 2
+                })
+            });
+        };
+
+        function ClientDraw() {
+            //初始化单值信息
+            var uniqueInfos = new Zondy.ClientUniqueInfos();
+            uniqueInfos.fldName = "Country";
+            uniqueInfos.isGradualColor = true;
+
+            var fill = new ol.style.Fill({ color: 'rgba(0,255,0,0.4)' });
+            var image = new ol.style.Circle({ radius: 7, fill: fill });
+            var stroke = new ol.style.Stroke({ color: '#FF0000', width: 1 });
+            var style = new ol.style.Style({ fill: fill, stroke: stroke, image: image });
+            uniqueInfos.defaultStyle = style;
+
+            var fill0 = new ol.style.Fill({ color: 'rgba(255,0,0,0.4)' });
+            var image0 = new ol.style.Circle({ radius: 30, fill: fill0 });
+            var stroke0 = new ol.style.Stroke({ color: '#FF0000', width: 1 });
+            var style0 = new ol.style.Style({ fill: fill0, stroke: stroke0, image: image0 });
+            uniqueInfos.AppendUniqueInfo("中华人民共和国", style0);
+
+            var fill1 = new ol.style.Fill({ color: 'rgba(0,255,0,0.4)' });
+            var image1 = new ol.style.Circle({ radius: 20, fill: fill1 });
+            var stroke1 = new ol.style.Stroke({ color: '#00FF00', width: 1 });
+            var style1 = new ol.style.Style({ fill: fill1, stroke: stroke1, image: image1 });
+            uniqueInfos.AppendUniqueInfo("日本", style1);
+
+            var fill2 = new ol.style.Fill({ color: 'rgba(0,0,255,0.4)' });
+            var image2 = new ol.style.Circle({ radius: 10, fill: fill2 });
+            var stroke2 = new ol.style.Stroke({ color: '#0000FF', width: 1 });
+            var style2 = new ol.style.Style({ fill: fill2, stroke: stroke2, image: image2 });
+            uniqueInfos.AppendUniqueInfo("韩国", style2);
+
+            var layerURL = "gdbp://MapGisLocal/示例数据/ds/世界地图/sfcls/首都";
+            if (clientUniqueTheme == null) {
+                clientUniqueTheme = new Zondy.ClientTheme(map, layerURL, { rows: 5, cols: 5, layerExtend: [-180, -90, 180, 84], layerFilter: "", ip: "develop.smaryun.com" });
+            }
+            clientUniqueTheme.ClientThemeInfos = uniqueInfos;
+            clientUniqueTheme.LayerRender();
+        };
+
+        function ClearArray(arr) {
+            if (Object.prototype.toString.call(arr) === '[object Array]') {
+                for (var i = arr.length - 1; i >= 0; i--) {
+                    delete arr[i];
+                }
+                arr.length = 0;
+            }
+        };
+
+        function UpdateTheme() {
+            if (clientUniqueTheme != null) {
+                ClearArray(clientUniqueTheme.ClientThemeInfos.themeInfoArr);
+
+                var clientUniqueInfos = clientUniqueTheme.ClientThemeInfos;
+                var fill = new ol.style.Fill({ color: 'rgba(255,0,0,0.4)' });
+                var image = new ol.style.Circle({ radius: 7, fill: fill });
+                var stroke = new ol.style.Stroke({ color: '#FF0000', width: 1 });
+                var style = new ol.style.Style({ fill: fill, stroke: stroke, image: image });
+                clientUniqueInfos.defaultStyle = style;
+
+                var fill0 = new ol.style.Fill({ color: 'rgba(255,255,0,0.4)' });
+                var image0 = new ol.style.Circle({ radius: 7, fill: fill0 });
+                var stroke0 = new ol.style.Stroke({ color: '#FF0000', width: 5 });
+                var style0 = new ol.style.Style({ fill: fill0, stroke: stroke0, image: image0 });
+                clientUniqueInfos.AppendUniqueInfo("德国", style0);
+
+                clientUniqueTheme.UpdateLayerRender();
+            }
+        };
+
+        function RemoveTheme() {
+            if (clientUniqueTheme != null) {
+                clientUniqueTheme.RemoveThemeLayer();
+                clientUniqueTheme = null;
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" id="createThemeBtn" value="绘制专题" onclick="ClientDraw()" />
+        <input type="button" class="ButtonLib" id="updateThemeBtn" value="更新专题" onclick="UpdateTheme()" />
+        <input type="button" class="ButtonLib" id="deleteThemeBtn" value="移除专题" onclick="RemoveTheme()" />
+    </div>
+    <div id="mapCon" style="height: 95%;">
+    </div>
+</body>
+</html>

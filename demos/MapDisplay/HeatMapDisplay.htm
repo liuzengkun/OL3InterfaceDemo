@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>热力图显示</title>
+     <link href="../../Styles/ol.css" rel="stylesheet" type="text/css" />
+    <script src="../../libs/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../libs/zondtClient.js" type="text/javascript"></script>
+    <style>
+        #menu{
+                position: absolute;
+                top: 120px;
+                left: 10px;
+                background: rgba(100, 100, 100, 0.85);
+                padding: 10px;
+                color: #cccccc;
+                width: 100px;
+        }
+    </style>
+    <script type="text/javascript">
+        var map = null;
+        var vector = null;
+        var mapDocLayer = null;
+        //地图初始化函数
+        function init() {
+            //地图范围
+            var extent = [-180, -90, 180, 90];
+            //投影坐标系
+            var projection = new ol.proj.Projection({ units: ol.proj.Units.DEGREES, extent: extent });
+            //中心点
+            var center = [0, 0];
+            //初始化热力图对象
+            vector = new Zondy.Map.ZondyHeatmap({
+                source: new ol.source.Vector({ wrapX: false }),
+                blur: 45,
+                radius: 15
+            });
+            //设置权值属性字段
+            vector.weightFldName = "Cap_Pop";
+            //设置权值处理方法
+            vector.weightFunction = function (fldValue) {
+                var pValue = parseFloat(fldValue) / 23620000 + 0.5;
+                return pValue;
+            };
+
+            mapDocLayer = new Zondy.Map.Doc("doc", "world", {
+                projection: projection,
+                ip: "127.0.0.1",
+                port: "6163"
+            });
+            map = new ol.Map({
+                target: 'map',
+                layers: [mapDocLayer, vector],
+                view: new ol.View({
+                    center: center,
+                    projection: projection,
+                    extent: extent,
+                    maxZoom: 12,
+                    minZoom: 0,
+                    zoom: 2
+                }),
+                controls: ol.control.defaults({
+                    attributionOptions: /** @type {olx.control.AttributionOptions} */({
+                        collapsible: false
+                    })
+                }).extend([
+
+                ])
+            });
+        };
+        //创建热力图
+        function createHotMap() {
+            var queryStruct = new Zondy.Object.QueryFeatureStruct();
+            queryStruct.IncludeGeometry = true;
+            var queryParam = new Zondy.Object.QueryParameter();
+            queryParam.struct = queryStruct;
+            queryParam.resultFormat = "json";
+            queryParam.page = 1;
+            //设置查询要素数目
+            queryParam.recordNumber = 500000; 
+            queryParam.where = "1>0";
+
+
+            var queryService = new Zondy.Service.QueryLayerFeature(queryParam, "gdbp://MapGisLocal/示例数据/ds/世界地图/sfcls/首都");
+            queryService.ip = "127.0.0.1";
+            queryService.port = "6163";
+            queryService.requestType = "GET";
+
+            queryService.query(function (data) {
+                if (goog.isDefAndNotNull(data)) {
+                    var objArr = vector.getHotObj(data);
+                    vector.pushData(objArr);
+                }
+            });
+        };
+
+    </script>
+</head>
+<body onload="init()">
+    <div id="map" style="position: absolute;width:100%;height:700px;"></div>
+    <div id="menu">
+        <button type="button"  style="width: 90px;height: 22px;" onclick="createHotMap()">生成热力图</button>
+    </div>
+</body>
+</html>

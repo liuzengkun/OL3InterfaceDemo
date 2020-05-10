@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>向矢量图层中添加区示例</title>
+    <!--导入外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../libs/ol/ol.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, vectorLayer;
+
+        //地图初始化函数
+        function init() {
+            //初始化地图容器
+            map = new ol.Map({
+                target: "mapCon",
+                view: new ol.View({
+                    center: [0, 0],
+                    zoom: 2,
+                    projection: "EPSG:4326"
+                })
+
+            });
+            //初始化矢量图层对象
+            vectorLayer = new Zondy.Map.Layer("MapGIS IGS VectorLayer", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界政区", "gdbp://MapGisLocal/OpenLayerVecterMap/ds/地图编辑缓存经纬度/sfcls/myreglayer"], {
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+            //将地图文档图层加载到地图中
+            map.addLayer(vectorLayer);
+        }
+
+        //随机函数生成点
+        function createPoint() {
+            var curMapBound = map.getView().projection_.extent_;
+            var w = curMapBound[2] - curMapBound[0];
+            var h = curMapBound[3] - curMapBound[1];
+            var x = Math.random() * w + curMapBound[0];
+            var y = Math.random() * h + curMapBound[1];
+            return new Zondy.Object.Point2D(x, y);
+        }
+
+        //执行添加区功能
+        function addRegion() {
+            var pointObj = new Array();
+            pointObj[0] = createPoint();
+            pointObj[1] = createPoint();
+            pointObj[2] = createPoint();
+            pointObj[3] = createPoint();
+            //设置区要素的几何信息
+            //构成区要素的弧段
+            var gArc = new Zondy.Object.Arc(pointObj);
+            //构成区要素折线
+            var gAnyLine = new Zondy.Object.AnyLine([gArc]);
+            //构成区要素
+            var gRegion = new Zondy.Object.GRegion([gAnyLine]);
+            //构成区要素的几何信息
+            var fGeom = new Zondy.Object.FeatureGeometry({ RegGeom: [gRegion] });
+            //随机输出1~1502之间的整数
+            var fillColor = Math.floor(Math.random() * 1502 + 1);
+            //设置区要素的图形参数信息
+            var cRegionInfo = new Zondy.Object.CRegionInfo({ EndColor: 1, FillColor: fillColor, FillMode: 0, OutPenWidth: 1, OverMethod: 0, PatAngle: 1, PatColor: 1, PatHeight: 1, PatID: 27, PatWidth: 1 });
+            //要素图形参数信息
+            var graphicInfo = new Zondy.Object.WebGraphicsInfo({ InfoType: 3, RegInfo: cRegionInfo });
+
+            //设置区要素的属性信息
+            var attValue = [0, 12345, 12345, "esstLake", "esstLake", "esstLake"];
+
+            //创建一个新的区要素
+            var newFeature = new Zondy.Object.Feature({ AttValue: attValue, fGeom: fGeom, GraphicInfo: graphicInfo });
+            newFeature.setFType(3);
+
+            //创建一个要素数据集
+            var featureSet = new Zondy.Object.FeatureSet();
+            var fldNumber = 6;
+            var fldType = ["long", "double", "double", "string", "string", "string"];
+            var fldName = ["ID", "面积", "周长", "CNTRY_NAME", "FIRST_FIRS", "name"];
+            var cAttValue = new Zondy.Object.CAttStruct({ FldNumber: fldNumber, FldType: fldType, FldName: fldName });
+            featureSet.AttStruct = cAttValue;
+            featureSet.addFeature(newFeature);
+
+            //创建一个图层编辑对象
+            var editLayerFeature = new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/地图编辑缓存经纬度/sfcls/myreglayer", { ip: "develop.smaryun.com", port: "6163" });
+            editLayerFeature.add(featureSet, onPloySuccess);
+        }
+
+        //添加区要素回调函数
+        function onPloySuccess(rlt) {
+            var result = rlt;
+            if (result) {
+                alert("添加区要素成功！");
+                vectorLayer.refresh();
+            } else {
+                alert("添加区要素失败！");
+            }
+        }
+    </script>
+</head>
+<body onload="init();">
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" value="添加区要素" onclick="addRegion()" />
+    </div>
+    <div id="mapCon">
+    </div>
+</body>
+</html>

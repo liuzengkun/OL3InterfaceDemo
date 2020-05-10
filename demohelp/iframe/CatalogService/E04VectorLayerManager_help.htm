@@ -1,0 +1,141 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>矢量图层目录服务</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        矢量图层目录服务:
+    </div>    
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现简单的矢量图层目录管理功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用本地数据源的GDB数据库——平台示例地理数据库sample.hdf。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）然后初始化Zondy.Service.Catalog.VectorLayer类，调用类中的方法实现矢量图层目录管理。相关接口请参见其官方说明。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">Zondy.Service.Catalog.VectorLayer类：该类是一个用于矢量图层目录管理的服务类</font><br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.Catalog.VectorLayer( options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）重新设置的该对象的属性键值对。如下所示：<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）GIS数据服务器地址，默认是"127.0.0.1"。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）GIS服务端口号，默认是"6163"。<br />
+            <font class="nextParameter">【3】servername：</font>（String类型）示例数据源名称。<br />
+            <font class="nextParameter">【4】gdbName：</font>（String类型）示例数据库名称。<br />
+            <font class="nextParameter">【5】dsName：</font>（String类型）设置目标要素数据集名称。<br />
+            <font class="nextParameter">【6】user：</font>（String类型）用户名。，除MapGISLocal数据源，其它的都设置，默认是：""。<br />
+            <font class="nextParameter">【7】password：</font>（String类型）用户密码，设置数据源的用户密码，除MapGISLocal数据源，其它的都设置，默认是：""。
+        </div>
+        <font class="funDescription">1.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getSfclsList(onSuccess)：</font>获取指定GDB下所有简单要素类列表。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。<br />
+            <br />
+            <font class="functionName">getDsSfclsList(onSuccess)：</font>获取GDB指定要素数据集下简单要素类列表。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。<br />
+            <br />
+            <font class="functionName">getAclsList(onSuccess)：</font>获取指定GDB下所有注记类列表。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getDsAclsList(onSuccess)：</font>获取GDB指定要素数据集下注记类列表。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getOclsList(onSuccess)：</font>获取指定GDB下所有对象类信息。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getDsOclsList(onSuccess)：</font>获取GDB指定要素数据集下对象类信息。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getNclsList(onSuccess)：</font>获取指定GDB下网络类信息。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getDsNclsList(onSuccess)：</font>获取GDB指定要素数据集下网络类信息。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getRdsList(onSuccess)：</font>获取指定GDB下所有栅格数据集列表。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getRdsListInRcs(onSuccess)：</font>获取GDB指定栅格目录下栅格数据集列表。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getLayerList(clsType,onSuccess)：</font>获取GDB下指定图层类型信息。详细参数介绍如下：<br />
+            <font class="nextParameter">clsType：</font>（String类型）clsType，值为"sfcls"（简单要素类）,"ds"（要素数据集）,
+            "acls"（注记类）, "ncls"（网络类），"ocls"（对象类）, "rds"（栅格数据）, "rcs"（栅格目录）。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getLayerListInDS(clsType,onSuccess)：</font>获取GDB指定要素数据集下指定图层类型信息。详细参数介绍如下：<br />
+            <font class="nextParameter">clsType：</font>（String类型）clsType，值为"sfcls"（简单要素类）,"ds"（要素数据集）,
+            "acls"（注记类）, "ncls"（网络类），"ocls"（对象类）, "rds"（栅格数据）, "rcs"（栅格目录）。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">CreateVectCls(vectCls,onSuccess)：</font>在指定GDB中创建图层。详细参数介绍如下：<br />
+            <font class="nextParameter">vectCls：</font>（Zondy.Object.VectCls类型）矢量类。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">deleteXCls(clsType, clsName, onSuccess)：</font>删除GDB中某一图层数据。详细参数介绍如下：<br />
+            <font class="nextParameter">clsType：</font>（String类型）图层类型。<br />
+            <font class="nextParameter">clsName：</font>（String类型）图层名称。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+        </div>
+        <font class="Class">2、Zondy.Object.VectCls类：</font>该类是一个矢量类。
+        <br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.VectCls( options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）重新设置的该对象的属性键值对。如下所示：<br />
+            <font class="nextParameter">【1】clsType：</font>（Zondy.Enum.VectClsType类型）图层类型。简单要素类：Zondy.Enum.VectClsType.SFCls
+            = "SFeatureCls",注记类：Zondy.Enum.VectClsType.AnnoCls = "AnnotationCls"。<br />
+            <font class="nextParameter">【2】clsName：</font>（String类型）图层名称。<br />
+            <font class="nextParameter">【3】attStruct：</font>（Zondy.Object.CAttStruct类型）图层属性结构。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+            target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>

@@ -1,0 +1,270 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>矢量图层目录服务</title>
+    <!--导入外部easyui相关样式表-->
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/icon.css" />
+    <!--导入本页面外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用，jquery-1.11.2.min.js必须在jquery.easyui.min.js库之前-->
+    <script src="../../Libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <!--引入easyui相关脚本库-->
+    <script src="../../libs/jqueryEasyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <!--引入操作JSON对象的相关脚本库-->
+    <script src="../../libs/jsonformat/json2.js" type="text/javascript"></script>
+    <script src="../../libs/jsonformat/jsonExtend.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        /*以本地数据源下的平台示例数据库sample.hdf为例，用户可设置其目标数据库*/
+        //GIS数据服务器地址
+        var ip = "develop.smaryun.com";
+        //GIS服务端口号
+        var port = "6163";
+        //用户名
+        var user = "";
+        //用户密码
+        var password = "";
+        //数据源名称
+        var srvName = "MapGISLocal";
+        //数据库名称
+        var GDBName = "sample";
+
+        /*实例化VectorLayer类，设置目标数据源与GDB */
+        var vectorLayerInfo = new Zondy.Service.Catalog.VectorLayer({
+            //设置GIS数据服务器IP
+            ip: ip,
+            //设置GIS服务端口号
+            port: port,
+            //设置数据源名称
+            serverName: srvName,
+            //设置数据源的用户名
+            User: user,
+            //设置数据源的用户密码
+            Password: password,
+            //设置数据库名称
+            gdbName: GDBName
+        });
+
+
+        /*============获取指定数据库/要素数据集下简单要素类信息============*/
+        function getSfclsList(type) {
+            //显示结果tab页
+            $('#resultShow').tabs('select', 1);
+            //获取指定GDB下所有简单要素类列表
+            if (type == "db") {
+                //通过实例化的VectorLayer类对象调用getSfclsList接口， 回调中处理结果信息
+                vectorLayerInfo.getSfclsList(getListSuccess);
+            }
+                //获取指定要素数据集下简单要素类列表
+            else if (type == "ds") {
+                //设置目标要素数据集名称
+                vectorLayerInfo.dsName = "地图综合";
+                //通过实例化的VectorLayer类对象调用getDsSfclsList接口， 回调中处理结果信息
+                vectorLayerInfo.getDsSfclsList(getListSuccess);
+            }
+        }
+
+        /* ===获取指定数据库/要素数据集下注记类信息=== */
+        function getAclsList(type) {
+            //显示结果tab页
+            $('#resultShow').tabs('select', 1);
+            //获取指定GDB下的所有注记类列表
+            if (type == "db") {
+                //通过实例化的VectorLayer类对象调用getAclsList接口， 回调中处理结果信息
+                vectorLayerInfo.getAclsList(getListSuccess);
+            }
+                //获取GDB指定要素数据集下的注记类列表
+            else if (type == "ds") {
+                //设置目标要素数据集名称
+                vectorLayerInfo.dsName = "矢量校正";
+                //通过实例化的VectorLayer类对象调用getDsAclsList接口， 回调中处理结果信息
+                vectorLayerInfo.getDsAclsList(getListSuccess);
+            }
+        }
+
+        /* 获取指定数据库/要素数据集下对象类信息==== */
+        function getOclsList(type) {
+            //显示结果tab页
+            $('#resultShow').tabs('select', 1);
+            //获取指定GDB下的所有对象类列表
+            if (type == "db") {
+                // 通过实例化的VectorLayer类对象调用getOclsList接口， 回调中处理结果信息
+                vectorLayerInfo.getOclsList(getListSuccess);
+            }
+                //获取GDB指定要素数据集下的对象类列表
+            else if (type == "ds") {
+                //设置目标要素数据集名称
+                vectorLayerInfo.dsName = "矢量校正";
+                //通过实例化的VectorLayer类对象调用getDsOclsList接口， 回调中处理结果信息
+                vectorLayerInfo.getDsOclsList(getListSuccess);
+            }
+        }
+
+        /* ===获取指定数据库/要素数据集下网络类信息=== */
+        function getNclsList(type) {
+            //显示结果tab页
+            $('#resultShow').tabs('select', 1);
+            //获取指定GDB下的所有网络类列表
+            if (type == "db") {
+                //通过实例化的VectorLayer类对象调用getOclsList接口， 回调中处理结果信息
+                vectorLayerInfo.getNclsList(getListSuccess);
+            }
+                //获取GDB指定要素数据集下的网络类列表
+            else if (type == "ds") {
+                //设置目标要素数据集名称
+                vectorLayerInfo.dsName = "网络分析";
+                //通过实例化的VectorLayer类对象调用getDsNclsList接口， 回调中处理结果信息
+                vectorLayerInfo.getDsNclsList(getListSuccess);
+            }
+        }
+
+        /* ===栅格目录管理（获取指定数据库/栅格目录下栅格数据集列表）=== */
+        function getRdsList(type) {
+            //显示结果tab页
+            $('#resultShow').tabs('select', 1);
+            //获取指定GDB下的所有栅格数据集列表
+            if (type == "db") {
+                //通过实例化的VectorLayer类对象调用getRdsList接口， 回调中处理结果信息
+                vectorLayerInfo.getRdsList(getListSuccess);
+            }
+                //获取GDB指定栅格目录下的栅格数据集列表
+            else if (type == "rcs") {
+                //设置目标栅格目录的名称
+                vectorLayerInfo.rcsName = "栅格目录";
+                //通过实例化的VectorLayer类对象调用getRdsList接口， 回调中处理结果信息
+                vectorLayerInfo.getRdsListInRcs(getListSuccess);
+            }
+        }
+
+        /* ===矢量图层服务（获取指定数据库/要素数据集下指定图层类型的图层列表信息）=== */
+        function getLayerList(type) {
+            //显示结果tab页
+            $('#resultShow').tabs('select', 1);
+            //获取GDB下指定类型(如注记类“acls”)的图层列表
+            if (type == "db") {
+                //实例化的VectorLayer类对象调用getLayerList接口， 回调中处理结果信息
+                vectorLayerInfo.getLayerList("acls", getListSuccess);
+            }
+                //获取GDB下指定要素数据集内的指定类型（如简单要素类“sfcls”）的图层列表信息
+            else if (type == "ds") {
+                //设置目标要素数据集名称
+                vectorLayerInfo.dsName = "网络分析";
+                //实例化的VectorLayer类对象调用getLayerListInDS接口， 回调中处理结果信息
+                vectorLayerInfo.getLayerListInDS("sfcls", getListSuccess);
+            }
+        }
+        /* ===回调函数，处理显示结果信息==== */
+        function getListSuccess(result) {
+            //显示结果tab页
+            $('#resultShow').tabs('select', 1);
+            if (result.length == 0) {
+                alert("没有获取到目标信息！");
+                //清空结果显示面板
+                $("#reslutTable").empty();
+                return;
+            }
+            else {
+                //显示结果列表
+                formatData = JSON.stringify(result);
+                Process(formatData, 1, "reslutTable");
+            }
+        }
+
+        /* ===在指定GDB中创建一个图层==== */
+        function CreateVectCls() {
+            //显示结果tab页
+            $('#resultShow').tabs('select', 1);
+            //实例化图层对象
+            var VectCls = new Zondy.Object.VectCls({
+                clsType: "SfeatureCls",
+                clsName: "新图层",
+                attStruct: {
+                    "FldName": [
+                                "ID",
+                                "name",
+                                "addrass",
+                                "picture",
+                                "city",
+                                "LayerID",
+                                "mpLayer"
+                    ],
+                    "FldNumber": "7",
+                    "FldType": [
+                                "long",
+                                "string",
+                                "string",
+                                "string",
+                                "string",
+                                "long",
+                                "long"
+                    ]
+                }
+            });
+            //通过实例化的VectorLayer类对象调用CreateVectCls接口， 回调中处理结果信息
+            vectorLayerInfo.CreateVectCls(VectCls, CreateVectClsSuccess);
+        }
+        function CreateVectClsSuccess(data) {
+            if (data == true) {
+                alert("创建图层操作成功！");
+                //结果面板显示目标GDB的所有简单要素类
+                getSfclsList('db');
+            }
+            else {
+                alert("创建图层操作失败！");
+                //清空结果显示面板
+                $("#reslutTable").empty();
+            }
+        }
+
+        /* ===在指定GDB中删除某一个图层数据==== */
+        function deleteXCls() {
+            //通过实例化的VectorLayer类对象调用deleteXCls接口， 回调中处理结果信息
+            vectorLayerInfo.deleteXCls("SfeatureCls", "新图层", deleteXClsSuccess)
+        }
+        function deleteXClsSuccess(data) {
+            if (data == true) {
+                alert("删除图层操作成功！");
+                //结果面板显示目标GDB的所有简单要素类
+                getSfclsList('db');
+            }
+            else {
+                alert("删除图层操作失败！");
+                //清空结果显示面板
+                $("#reslutTable").empty();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" value="获取指定GDB下所有简单要素类列表" onclick="getSfclsList('db')" />
+        <input type="button" class="ButtonLib" value="获取指定要素集下简单要素类列表" onclick="getSfclsList('ds')" />
+        <input type="button" class="ButtonLib" value="获取指定GDB下所有注记类列表" onclick="getAclsList('db')" />
+        <input type="button" class="ButtonLib" value="获取指定要素集下注记类列表" onclick="getAclsList('ds')" />
+        <input type="button" class="ButtonLib" value="获取指定GDB下所有对象类列表" onclick="getOclsList('db')" />
+        <input type="button" class="ButtonLib" value="获取指定要素集下对象类列表" onclick="getOclsList('ds')" />
+        <input type="button" class="ButtonLib" value="获取指定GDB下所有网络类列表" onclick="getNclsList('db')" />
+        <input type="button" class="ButtonLib" value="获取指定要素集下网络类列表" onclick="getNclsList('ds')" />
+        <input type="button" class="ButtonLib" value="获取指定GDB下所有栅格数据集列表" onclick="getRdsList('db')" />
+        <input type="button" class="ButtonLib" value="获取指定栅格目录下栅格数据集列表" onclick="getRdsList('rcs')" />
+        <input type="button" class="ButtonLib" value="获取指定GDB下指定类型的图层列表信息" onclick="getLayerList('db')" />
+        <input type="button" class="ButtonLib" value="获取要素集下指定类型的图层列表信息" onclick="getLayerList('ds')" />
+        <input type="button" class="ButtonLib" value="在指定GDB中创建一个图层" onclick="CreateVectCls()" />
+        <input type="button" class="ButtonLib" value="删除指定GDB中的某一个图层数据" onclick="deleteXCls()" />
+        <br />
+    </div>
+    <div id="resultShow" class="easyui-tabs" style="width: 100%; height: 500px">
+        <div id="introduction" title="说明" style="padding: 10px">
+            说明：<br />
+            上述为GDB的目录服务接口示例，默认使用平台示例数据库sample.hdf，操作前请先确认此数据库已经附加。图层的创建与删除使用自定义图层，一般先创建后删除。<br />
+        </div>
+        <div id="resultT" title="结果显示" style="padding: 10px">
+            <div id="reslutTable">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

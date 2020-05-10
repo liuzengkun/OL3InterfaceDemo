@@ -1,0 +1,223 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>显示OGC数据(WFS)</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        显示OGC数据(WFS):
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现一个简单的OGC数据加载功能，显示OGC的WFS要素数据。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用MapGIS示例数据——基于墨卡托世界范围的地图文档与图层数据发布的WFS服务（WorldMKTVector和WorldMKTLayer）。需事先在IGS服务器中发布OGC规范的WFS服务，即基于地图文档的WFS（WorldMKTVector）和基于矢量图层的WFS（WorldMKTLayer）。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；<br />
+        <br />
+        （3）创建、初始化WMS控件（OpenLayers.Layer.WMS）并添加到地图容器，加载基于地图文档的WMS服务数据作为基础图层；<br />
+        <br />
+        （4）通过创建矢量层控件（OpenLayers.Layer.Vector），结合WFS要素服务协议类对象（OpenLayers.Protocol.WFS等）进行初始化，并将矢量层控件添加到地图容器，分别加载基于地图文档和矢量图层的WFS要素服务，即通过WFS
+        GetFeature接口获取符合条件的要素信息（要素过滤使用OpenLayers.Filter进行设置）。<br />
+        <br />
+        （5）由Map对象的view属性初始化地图的显示中心和级别，加载地图。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、OpenLayers.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">OpenLayers.Map(div,options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">div：</font>（String类型）必选项，地图所在的网页div元素的id，例如代码中的'mapCon'。等同于：{div:'mapCon'}；<br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】numZoomLevels：</font>（Int类型）可选项，地图的缩放级别数，默认值是16；<br />
+            <font class="nextParameter">【2】maxExtent：</font>（Array数组类型-[OpenLayers.Bounds]）可选项，地图范围，默认值是EPSG:4326；<br />
+            <font class="nextParameter">【3】maxResolution：</font>（Float类型）可选项，最大的分辨率，默认最高是360度/256像素，相当于缩放级别0；<br />
+            <font class="nextParameter">【4】controls：</font>（Array数组类型-[OpenLayers.Control]）可选项，加载的地图相关控件，但是如果controls后的数组为空的话，作用是清除map容器中的默认控件，例如代码中的：controls:[]；
+        </div>
+        <font class="funDescription">1.2方法说明：</font><br />
+        <div class="zhuji">
+            <font class="functionName">addLayers([layers])：</font>添加多个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layers：</font>（Array类型-[OpenLayers.Layer]）继承于OpenLayers.Layer的图层对象。<br />
+            <br />
+            <font class="functionName">setCenter(lonlat,zoom)：</font>设置地图的显示中心和显示级别，初始加载地图调用此方法是为了渲染显示地图。详细参数介绍如下：<br />
+            <font class="nextParameter">lonlat：</font>（OpenLayers.LonLat类型）描述地图位置的对象。<br />
+            <font class="nextParameter">zoom：</font>（int类型）地图的显示级数。<br />
+        </div>
+        <font class="Class">2、OpenLayers.Control.Zoom类：</font>底图放大缩放导航控件，在左上角显示，用来放大缩小图层，也可以写成OpenLayers.Control.PanZoomBar。<br />
+        <br />
+        <font class="Class">3、OpenLayers.Control.LayerSwitcher类：</font>图层切换控件，在右上角显示，可以进行图层切换。<br />
+        <br />
+        <font class="Class">4、OpenLayers.Control.Navigation类：</font>地图导航控件，用来实现鼠标滚轮对地图进行放大或缩小操作，以及鼠标移动地图等功能。<br />
+        <br />
+        <font class="Class">5、OpenLayers.Layer.Vector类：</font>该类是一个矢量要素类<br />
+        <br />
+        <font class="constructorTile">7.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">OpenLayers.Layer.Vector(name,options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）第一个参数，必选项，设置显示图层的名称。<br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】strategies：</font>（Array数组类型-[OpenLayers.Strategy]）参数组中的子项，要素加载的策略方式；<br />
+            <font class="nextParameter">【2】protocol：</font>（OpenLayers.Protocol类型）参数组中的子项，要素请求的协议，如请求WFS服务要素可设置为OpenLayers.Protocol.WFS类对象；<br />
+            <font class="nextParameter">【3】filter：</font>（OpenLayers.Filter类型）参数组中的子项，设置要素筛选的条件；<br />
+            <font class="nextParameter">【4】styleMap:</font>（OpenLayers.StyleMap类型）可选项，用来设置图层要素的样式。<br />
+        </div>
+        <font class="Class">6、OpenLayers.Layer.WMS类：</font>该类是一个WMS类<br />
+        <br />
+        <font class="constructorTile">6.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">OpenLayers.Layer.WMS(name, url, params,options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必选项，图层的显示名称，例如代码中的"WMSDoc"。<br />
+            <font class="parameter">url：</font>（String类型）可选项，WMS瓦片集出图的基地址（如果有没设置，默认加载官网的地址）。<br />
+            <font class="parameter">params：</font>（object类型）可选项，一个键值对形式的对象，代表查询时的参数字符串和参数值。<br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该图层的配置选项，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】layers：</font>（Array数组类型-[OpenLayers.Layer]）options中的项，设置过滤显示条件，即需要加载显示的图层组；<br />
+            <font class="nextParameter">【2】format：</font>（String类型）options中的项，设置WMS返回的图片格式（OpenLayers.Layer.WMS的默认参数），默认值是"image/jpeg"；<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）options中的项，是否作为基础图层显示，默认值：true；
+        </div>
+        <font class="Class">7、OpenLayers.Protocol.WFS类：</font>该类是一个WFS类<br />
+        <br />
+        <font class="constructorTile">7.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">OpenLayers.Protocol.WFS(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，添加该对象其他属性。<br />
+            <font class="nextParameter">【1】url：</font>（String类型）第一个参数，必填项，设置WFS要素服务的URL地址，即WFS服务基地址；<br />
+            <font class="nextParameter">【2】featureType：</font>（String类型）第二个参数，必填项，设置WFS服务的图层名称；<br />
+            <font class="nextParameter">【3】featureNS：</font>（String类型）第三个参数,必填项，设置要素服务的命名空间<br />
+            <font class="nextParameter">【4】featurePrefix：</font>（String类型）要素的命名空间别名 (可选 - 只有当featureNS被提供了才会被使用)。
+            可以理解成“数据源”。默认值是‘feature’；<br />
+            <font class="nextParameter">【5】version：</font>（String类型）设置WFS服务的版本。默认值是"1.0.0"；<br />
+            <font class="nextParameter">【6】outputFormat：</font>（String类型）设置要素输出的格式；<br />
+        </div>
+        <font class="Class">8、OpenLayers.Filter类：</font>（注意：通过OpenLayers.Filter进行查询条件设置，一般有如下四种（具体请参见Openlayers的API））：<br />
+        <br />
+        <font class="constructorTile">6.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">OpenLayers.Filter(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】OpenLayers.Filter.FeatureId：</font>代表一个ogc:featureid过滤器，是基于要素Id来过滤要素的，特别在WFS服务或者SLDs非常有用。在WFS、SLDs中，FeatureID是指定唯一要素的，只要知道FeatureID就能指定要素样式；<br />
+            <font class="nextParameter">【2】OpenLayers.Filter.Logical：</font>代表ogc:And、ogc:Or、ogc:Not
+            rules（操作符为“与、或、不规则”的过滤）；<br />
+            <font class="nextParameter">【3】OpenLayers.Filter.Comparison：</font>代表一个比较过滤器（数值或字符串的比较），用来比较矢量图层某个属性值与指定规则对象中的参数值比较；<br />
+            <font class="nextParameter">【4】OpenLayers.Filter.Spatial：</font>代表一个空间过滤器。<br />
+        </div>
+        <font class="Class">9、OpenLayers.StyleMap类：</font>该类是一个地图样式类<br />
+        <br />
+        <font class="constructorTile">9.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">OpenLayers.StyleMap(style,options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">style：</font>（object类型）可选项，以键值对的形式设置不同状态的样式信息，键值对详细介绍如下：<br />
+            <font class="nextParameter">"default"：</font>（OpenLayers.Style类型）（可选项）设置要素默认状态下的样式信息，详细参照下面OpenLayers.Feature.Vector类介绍中的style属性。<br />
+            <font class="nextParameter">"select"：</font>（OpenLayers.Style类型）（可选项）设置要素选择状态下的样式信息，详细参照下面OpenLayers.Feature.Vector类介绍中的style属性。<br />
+            <font class="nextParameter">"temporary"：</font>（OpenLayers.Style类型）（可选项）设置要素临时状态下的样式信息，详细参照下面OpenLayers.Feature.Vector类介绍中的style属性。<br />
+            <font class="nextParameter">"delete"：</font>（OpenLayers.Style类型）（可选项）设置要素删除状态下的样式信息，详细参照下面OpenLayers.Feature.Vector类介绍中的style属性。<br />
+            <font class="parameter">options：</font>（object类型）可选项，设置其他的配置选项，以键值对的形式设置。
+        </div>
+        <font class="Class">10、OpenLayers.Style类：</font>该类是一个样式类<br />
+        <br />
+        <font class="constructorTile">10.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">OpenLayers.Style(style,options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">style：</font>（object类型）可选项，以键值对的形式设置样式信息，详细参照下面OpenLayers.Feature.Vector类介绍中的style属性。<br />
+            <font class="parameter">options：</font>（object类型）可选项，设置其他的配置选项，以键值对的形式设置。
+        </div>
+        <font class="Class">11、OpenLayers.Feature.Vector类：</font>该类是一个矢量要素类。<br />
+        <br />
+        <font class="constructorTile">11.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">OpenLayers.Feature.Vector(geometry, attributes, style)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">geometry：</font>（OpenLayers.Geometry类型）必选项，矢量要素的几何对象，点要素可使用OpenLayers.Geometry.Point类或OpenLayers.Geometry.fromWKT类生成。。<br />
+            <font class="parameter">attributes：</font>（object类型）可选项，以键值对的形式设置要素的属性信息，例如：name:"point1"。<br />
+            <font class="parameter">style：</font>（object类型）可选项，包含4种不同的键值对：分别是{"default":option1,"select":option2,"temporary":option3,"delete":option4}。<br />
+            <br />
+            <font class="parameter">option1，option2,option3均包含以下样式信息</font><br />
+            <br />
+            <font class="nextParameter">fillColor:</font>（String类型）填充颜色，默认值是"#ee9900"<br />
+            <font class="nextParameter">fillOpacity:</font>（Number类型）透明度,默认值是0.4（透明度值范围：0~1，0表示完全透明，1表示完全不透明，即从0到1透明度逐渐降低）<br />
+            <font class="nextParameter">hoverFillColor:</font>（String类型）鼠标悬停时的填充颜色，默认值是"#ee9900"（当OpenLayers.Control.SelectFeature控件的hover属性为true时才有效）<br />
+            <font class="nextParameter">hoverFillOpacity:</font>（Number类型）鼠标悬停时的透明度，默认值是0.8（当OpenLayers.Control.SelectFeature控件的hover属性为true时才有效）（透明度值范围：0~1，0表示完全透明，1表示完全不透明，即从0到1透明度逐渐降低）<br />
+            <font class="nextParameter">strokeColor:</font>（String类型）边线颜色，默认值是"#ee9900"<br />
+            <font class="nextParameter">strokeOpacity:</font>（Number类型）边线透明度，默认值是1（透明度值范围：0~1，0表示完全透明，1表示完全不透明，即从0到1透明度逐渐降低）<br />
+            <font class="nextParameter">strokeWidth:</font>（Number类型）边线宽度，默认值是1<br />
+            <font class="nextParameter">strokeLinecap:</font>（String类型）线头模式，例如"butt"、"round"（默认值）、"square"<br />
+            <font class="nextParameter">strokeDashstyle:</font>（String类型）边线样式，例如"dot"、"dash"、"dashdot"、"longdash"、"longdashdot"、"solid"（默认值）<br />
+            <font class="nextParameter">hoverStrokeColor:</font>（String类型）鼠标悬停时边线颜色，默认值是"red"（当OpenLayers.Control.SelectFeature控件的hover属性为true时才有效）<br />
+            <font class="nextParameter">hoverStrokeOpacity:</font>（Number类型）鼠标悬停时边线透明度，默认值是1（当OpenLayers.Control.SelectFeature控件的hover属性为true时才有效）（透明度值范围：0~1，0表示完全透明，1表示完全不透明，即从0到1透明度逐渐降低）<br />
+            <font class="nextParameter">hoverStrokeWidth:</font>（Number类型）鼠标悬停时边线宽度，默认值是0.2（当OpenLayers.Control.SelectFeature控件的hover属性为true时才有效）<br />
+            <font class="nextParameter">pointRadius:</font>（Number类型）点半径，默认值是6<br />
+            <font class="nextParameter">hoverPointRadius:</font>（Number类型）鼠标悬停时点半径，默认值是1（当OpenLayers.Control.SelectFeature控件的hover属性为true时才有效）<br />
+            <font class="nextParameter">hoverPointUnit:</font>（String类型）鼠标悬停时点的单位，默认值是%（当OpenLayers.Control.SelectFeature控件的hover属性为true时才有效）<br />
+            <font class="nextParameter">pointerEvents:</font>（String类型）指定事件，默认值是"visiblePainted"<br />
+            <font class="nextParameter">cursor:</font>（String类型）鼠标箭头，默认值是""（例如"inherit"）<br />
+            <font class="nextParameter">fontColor:</font>（String类型）注记字体颜色，无指定默认值（例如"#000000"）<br />
+            <font class="nextParameter">labelAlign:</font>（String类型）注记位置，例如"lt"(左上),"cm"（居中）（默认值）,"rb"（右下）<br />
+            <font class="nextParameter">labelOutlineColor:</font>（String类型）注记边线颜色，默认值是"white"<br />
+            <font class="nextParameter">labelOutlineWidth:</font>（Number类型）注记边线宽度，默认值是3<br />
+            <br />
+            <font class="parameter">option4只包含以下样式信息</font><br />
+            <font class="nextParameter">display:</font>（String类型）"none"
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+           target="_blank">
+            注：详细说明请参见MapGIS IGServer JavaScript Client的API手册和MapGIS IGServer
+            REST API.chm。
+        </a>
+    </p>
+</body>
+</html>

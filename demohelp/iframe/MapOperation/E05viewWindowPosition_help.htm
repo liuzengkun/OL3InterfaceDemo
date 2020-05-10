@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>视窗逻辑坐标</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        视窗逻辑坐标
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能
+    </div>
+    <div class="zhengwen">
+        该示例底图显示一个OSM世界地图，实现显示视窗逻辑坐标功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明:
+    </div>
+    <div class="zhengwen">
+        1、数据：使用一个OSM的世界地图。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]<br />
+        <br />
+        （1）先引入ol.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。OpenLayers 3对OpenLayers网络地图库进行了根本的重新设计。openlayer2虽然被广泛使用，但从JavaScript开发的早期发展阶段开始，已日益显示出它的落后。
+        OL3已运用现代的设计模式从底层重写。）、ol.css（是地图样式文件，包含了地图样式的方方面面，例如，填充色、图标样式、图片样式、规则图形样式、边界样式、文字样式等，样式一般针对矢量要素图层。）；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）然后在body标签里面编写地图显示的脚本，即创建ol.control.MousePosition()类和ol.Map()类，通过设置ol.Map()类的layers属性加载一张OSM的瓦片地图，通过设置ol.Map()类的view属性确定地图的显示中心和级别，通过设置ol.Map()类的controls属性加载鼠标位置控件；
+        <br />
+        <br />
+        [视窗逻辑坐标方法实现]<br />
+        <br />
+        （5）添加下拉菜单，并添加事件监听；
+        <br />
+        <br />
+        （6）通过MousePosition对象的setProjection()方法实现显示视窗逻辑坐标功能；
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.control.MousePosition类：</font>该类是控制显示鼠标光标的坐标<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.control.MousePosition(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】coordinateFormat：</font>（ol.CoordinateFormatType|undefined）可选项，设置坐标格式。<br />
+            <font class="nextParameter">【2】projection：</font>（ol.ProjectionLike）可选项，设置投影信息。<br />默认是地图本身投影。<br />
+            <font class="nextParameter">【3】className：</font>（string|undefined）可选项，设置坐标信息样式类名。<br />默认为ol-mouse-position。<br />
+            <font class="nextParameter">【4】target：</font>（Element|undefined）可选项，设置显示鼠标位置信息的目标容器。例如代码中：document.getElementById('mouse-position')。<br />
+            <font class="nextParameter">【5】undefinedHTML：</font>（string|undefined）可选项，标记未定义坐标。<br />默认为空字符串。<br />
+        </div>
+        <font class="funDescription">1.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">setProjection(projection)：</font>设置鼠标位置投影。<br />
+            <font class="nextParameter">projection：</font>(ol.proj.Projection）鼠标位置投影。<br />
+        </div>
+        <font class="Class">2、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element | string | undefined）可选项，指定地图所在的网页div元素的id，例如代码中：'mapCon'。如果在构建时未指定，则必须调用ol.Map()类的setTarget()方法以便绘制地图。<br />
+            <font class="nextParameter">【2】layers：</font>（Array-[ol.layer.Base] | ol.Collection[ol.layer.Base | undefined]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View | undefined）可选项，设置地图显示视图。如果在构建时未指定，则必须通过ol.Map()类的setView()方法指定，否则不会提取图层源。<br />
+        </div>
+        <font class="funDescription">2.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getView()：</font>获取地图视图。返回值为{ol.View}类。<br />
+            <font class="functionName">addLayer(layer)：</font>将地图图层添加到地图容器中。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">removeLayer(layer)：</font>将图层从地图容器中移除。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">render()：</font>请求地图渲染（下一帧动画）。<br />
+            <font class="functionName">getEventPixel(event)：</font>获取相对于浏览器窗口的地图像素位置。<br />
+            <font class="nextParameter">event：</font>(event）事件。<br />
+        </div>
+        <font class="Class">3、ol.layer.Tile类：</font>该类是一个瓦片图层类，用于显示瓦片资源。这些瓦片提供了预渲染，并且由特定分辨率的缩放级别组织的瓦片图片网格组成。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.layer.Tile(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】source：</font>（ol.source.Tile）必填项。为图层设置来源、服务地址。<br />
+        </div>
+        <font class="funDescription">3.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">setVisible(visible)：</font>设置图层可见性。<br />
+            <font class="nextParameter">visible：</font>(boolean)图层可见性。<br />
+            <font class="functionName">getVisible()：</font>获取图层的可见性（true或false）。<br />
+            <font class="functionName">setOpacity(opacity)：</font>设置图层透明度（取值范围0-1，0为完全透明，1为完全不透明）。<br />
+            <font class="nextParameter">opacity</font>(number)图层透明度。<br />
+            <font class="functionName">getOpacity()：</font>获取图层的透明度（取值范围0-1，0为完全透明，1为完全不透明）。<br />
+        </div>
+        <font class="Class">4、ol.layer.Tile类：</font>该类是一个瓦片图层类，用于显示瓦片资源。这些瓦片提供了预渲染，并且由特定分辨率的缩放级别组织的瓦片图片网格组成。<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.layer.Tile(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】source：</font>（ol.source.Tile）必填项。为图层设置来源、服务地址。<br />
+        </div>
+        <font class="funDescription">4.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">setVisible(visible)：</font>设置图层可见性。<br />
+            <font class="nextParameter">visible：</font>(boolean)图层可见性。<br />
+            <font class="functionName">getVisible()：</font>获取图层的可见性（true或false）。<br />
+            <font class="functionName">setOpacity(opacity)：</font>设置图层透明度（取值范围0-1，0为完全透明，1为完全不透明）。<br />
+            <font class="nextParameter">opacity</font>(number)图层透明度。<br />
+            <font class="functionName">getOpacity()：</font>获取图层的透明度（取值范围0-1，0为完全透明，1为完全不透明）。<br />
+        </div>
+        <font class="Class">5、ol.View类：</font>该类是一个地图显示视图类。ol.View对象是地图初始化必备三要素之一，表示一个简单的二维视图的映射，主要控制地图与用户的交互，如进行缩放，调节分辨率、地图的旋转等。<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.View(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】center：</font>（ol.Coordinate|undefined）可选项，设置地图显示中心；<br />
+            <font class="nextParameter">【2】zoom：</font>（number|undefined）可选项，设置地图的显示级数。<br />
+            <font class="nextParameter">【3】minZoom：</font>（number|undefined）可选项，设置地图最小缩放级别，它与maxZoom(或minResolution)和zoomFactor一起使用，如果同时给出maxResolution,maxResolution优先级高于minZoom。<br />默认值为0。<br />
+            <font class="nextParameter">【4】maxZoom：</font>（number|undefined）可选项，设置地图最大缩放级别，它与minZoom(或maxResolution)和zoomFactor一起使用，如果同时给出minResolution,minResolution优先级高于maxZoom。<br />默认值为28。<br />
+            <font class="nextParameter">【5】rotation：</font>（number|undefined）可选项，设置初始视图的旋转弧度（顺时针方向)。<br />默认值为0。<br />
+            <font class="nextParameter">【6】projection：</font>（ol.ProjectionLike）可选项，地图的投影坐标系。<br />默认为EPSG:3857，即墨卡托坐标系。<br />
+        </div>
+        <font class="funDescription">5.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getZoom()：</font>获取当前地图视图缩放级别，如果当前视图分辨率未定义或分辨率未在约束值范围内，将返回undefined。返回值为{number|undefined}类型。<br />
+            <font class="functionName">getCenter()：</font>获取当前地图视图中心。返回值为{ol.Coordinate|undefined}类型<br />
+            <font class="functionName">getRotation()：</font>获取当前地图视图的旋转弧度。返回值为{number}类型。<br />
+            <font class="functionName">setZoom(zoom)：</font>设置地图视图的缩放级别。<br />
+            <font class="nextParameter">zoom：</font>(number）地图视图的缩放级别。<br />
+            <font class="functionName">setCenter(center)：</font>设置地图视图的中心坐标。<br />
+            <font class="nextParameter">center：</font>(ol.Coordinate | undefined）地图视图的中心坐标。<br />
+            <font class="functionName">setRotation(rotation)：</font>设置当前地图视图的旋转弧度。返回值为{number}类型。<br />
+            <font class="nextParameter">rotation：</font>(number)为地图视图设置新的旋转值。<br />
+        </div>
+        <font class="Class">6、ol.Control类：</font>该类是一个地图控件基类<br />
+        <br />
+        <font class="constructorTile">6.1 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.control.defaults(opt_options)：</font>该方法表示地图默认包含的一组控件。除非另外配置，否则将返回一组默认的地图控件，分别是：ol.control.Zoom,ol.control.Rotate,ol.control.Attribution。返回值为{ol.Collection[ol.control.control]类}<br />
+            <br />
+            <font class="paraDescription">方法参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】attributionOptions：</font>(olx.control.AttributionOptions|undefined)设置属性控件的相关属性，例如：collapsible: false。<br />
+            <font class="nextParameter">【2】zoom：</font>（number|undefined类型）可选项，设置地图初始的缩放级别(如果在构建时未指定，则必须通过ol.View中constrainResolution方法确定初始分辨率)，例如：2。<br />
+        </div>
+        <font class="Class">7、ol.Collection类：</font>地图容器类，用于扩展JS数组，提供快捷操作。<br />
+        <br />
+        <font class="constructorTile">7.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Collection(opt_array)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_array：</font>（Array类型）数组<br />
+        </div>
+        <font class="funDescription">7.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">extend(arr)：</font>该方法实现将要素添加到集合中<br />
+            <font class="nextParameter">arr：</font>(Array类型）将要添加进集合的数组。例如代码中的[ol.control.MousePosition()]。<br />
+        </div>
+        <font class="Class">8、ol.proj类：</font>坐标系统定义和转换类<br />
+        <br />
+        <font class="funDescription">8.1方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">ol.proj.get(projectionLike)：</font>获取坐标系信息。<br />
+            <font class="nextParameter">projectionLike：</font>(ol.ProjectionLike)必选项，坐标系。例如代码中：EPSG:3857，即墨卡托坐标系。<br />
+            <font class="functionName">ol.proj.fromLonLat(coordinate, opt_projection)：</font>将地理坐标转化为其他坐标。<br />
+            <font class="nextParameter">coordinate：</font>(ol.Coordinate)必选项，地理坐标，即用经度和纬度组成的二维数组。例如代码中：[-109, 46.5]。<br />
+            <font class="nextParameter">aopt_projection：</font>(ol.ProjectionLik)可选项，设置目的坐标系。<br />默认为墨卡托投影，即EPSG:3857。<br />
+        </div>
+    </div>
+    <p>
+        <a href="https://openlayers.org/en/latest/apidoc/ol.proj.html" alt="OpenLayers 3 API。"
+           target="_blank">注：详细说明请参见OpenLayers3 API手册。</a>
+    </p>
+</body>
+</html>

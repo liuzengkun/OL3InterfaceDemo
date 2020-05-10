@@ -1,0 +1,120 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>矢量图层显示样式</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        矢量图层显示样式:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例以MapGIS矢量图层（世界政区、主要城市、世界河流、洲洋注记）为底图。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用世界地图的矢量图层数据。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，加载MapGIS矢量图层；
+        <br />
+        <br />
+        （3）最后添加一系列checkbox和一个button，通过单击事件给矢量图层对象的style赋值，然后重绘矢量图层，完成矢量图层的显示样式控制。<br />
+        <br />
+        a、在地图初始化函数init()中初始化图层对象（Zondy.Map.Layer）；
+        <br />
+        <br />
+        b、在button的单击事件回调函数LayerSubmit函数中初始化图层显示参数（Zondy.Object.CDisplayStyleExtend）对象，根据checkbox的值为图层显示参数对象赋值；
+        <br />
+        <br />
+        c、对设置结果进行提交，提交成功后重绘矢量图层，以达到改变地图显示样式的目的。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项，指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项，设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项，添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="funDescription">1.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>添加单个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layer：</font>继承于ol.layer.Base的图层对象。
+        </div>
+        <font class="Class">2、Zondy.Map.Layer类：</font>该类用于地图文档的显示。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Layer(name, gdbps, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必选项，设置图层的显示名称。<br />
+            <font class="parameter">gdbps：</font>（Array类型-[String]）必选项，设置要加载的图层的url，可以在MapGIS10平台数据库下找到需要显示的图层，然后右单-->复制url，便可以获取到图层的url。<br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）该矢量图层所在服务器的ip。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）设置端口号。<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）是否设置为底图。
+        </div>
+        <font class="funDescription">2.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">refresh()：</font>重新绘制。<br />
+        </div>
+        <font style="font-weight: bold;">3、Zondy.Object.CDisplayStyleExtend类：</font>该类是一个图层显示参数类。根据图层的个数来进行设置。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.CDisplayStyleExtend(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象的公共属性。如下：<br />
+            <font class="nextParameter">【1】Index：</font>（整型）图层索引。（该属性已失效，只做升级保留。）<br />
+            <font class="nextParameter">【2】SymbleShow：</font>（Boolean类型）是否进行还原显示。<br />
+            <font class="nextParameter">【3】LinPenWidFixed：</font>（Boolean类型） 线状符号线宽固定。<br />
+            <font class="nextParameter">【4】LinSizeFixed：</font>（Boolean类型）线状符号大小固定。<br />
+            <font class="nextParameter">【5】PntPenWidFixed：</font>（Boolean类型）点状符号线宽固定。<br />
+            <font class="nextParameter">【6】PntSizeFixed：</font>（Boolean类型）点状符号大小固定。<br />
+            <font class="nextParameter">【7】RegPenWidFixed：</font>（Boolean类型）填充符号线宽固定。<br />
+            <font class="nextParameter">【8】RegSizeFixed：</font>（Boolean类型）是否填充背景色。<br />
+            <font class="nextParameter">【9】AnnSizeFixed：</font>（Boolean类型）填充符号大小固定。<br />
+            <font class="nextParameter">【10】FollowScale：</font>（Boolean类型）符号是否跟随显示放大（该属性已过时，请使用各个要素类的大小固定及线宽固定）。<br />
+            <font class="nextParameter">【11】ShowCoordPnt：</font>（Boolean类型）显示坐标点。<br />
+            <font class="nextParameter">【12】ShowElemRect：</font>（Boolean类型）显示元素的外包矩形。<br />
+            <font class="nextParameter">【13】DriverQuality：</font>（整型）图像质量。<br />
+            <font class="nextParameter">【14】DynProjFlag：</font>（Boolean类型）图层显示参是否动态投影。
+        </div>
+    </div>
+    <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+       target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+</body>
+</html>

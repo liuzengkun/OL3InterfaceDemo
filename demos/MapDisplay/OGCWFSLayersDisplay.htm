@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>加载OGC的WFS图层</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--导入外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../libs/ol/ol.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map;
+        var extent = [-20037508.3427892, -20037508.3427892, 20037508.3427892, 20037508.3427892];
+        var projection = new ol.proj.Projection({ units: ol.proj.Units.METERS, extent: extent, code: "EPSG:3857" });
+        function init() {
+            //创建一个地图容器
+            map = new ol.Map({
+                target: 'mapCon',
+                view: new ol.View({
+                    center: [0, 0],
+                    zoom: 3,
+                    projection: projection
+                })
+            });
+            /*======创建基于地图文档的WMS图层对象并加载到地图中======*/
+            //基于地图文档的WMS访问基地址
+            var baseUrlDocWMS = "http://develop.smaryun.com:6163/igs/rest/ogc/doc/WorldMKTVector/WMSServer";
+            //创建基于地图文档的WMS图层对象
+            var wmsDocLayer = new ol.layer.Image({
+                title: "WMSDoc",
+                source: new ol.source.ImageWMS({
+                    //WMS服务地址
+                    url: baseUrlDocWMS,
+                    //图层等参数
+                    params: { 'LAYERS': 'WorldMKTVector:背景图层.wp,世界政区.wp,完整的国界线.WL.WL,国界海岸省界1,中国省会.wt,主要城市.wt,洲洋注记,中国', 'TILED': true },
+                    //服务类型
+                    serverType: 'geoserver'
+                })
+            });
+            // 添加wms服务图层到地图
+            map.addLayer(wmsDocLayer);
+            addWFSData();
+        }
+
+        /**加载wfs数据
+        */
+        function addWFSData() {
+            var baseurl = "http://develop.smaryun.com:6163/igs/rest/ogc/doc/WorldMKTVector/WFSServer?REQUEST=GetFeature&version=1.1.0&service=wfs&typename=WorldMKTVector:主要城市.wt&maxfeatures=60&srsName=EPSG:3857";
+            var url = 'ZDproxy.ashx?url=' + baseurl;
+            //发送Ajax请求获取数据
+            $.ajax({
+                type: 'get',
+                url: url,
+                dataType: 'xml',
+                contentType: "text/xml",
+                success: function (result) {
+                    var featuresArr = [];
+                    //解析数据
+                    if (result.children[0].children.length > 0) {
+                        for (var datalength = 0; datalength < result.children[0].children[0].children.length; datalength++) {
+                            var data = result.children[0].children[0].children[datalength].children[0].children[0].children[0].textContent.split(" ");
+                            // 获取坐标点生成要素数组
+                            featuresArr.push(new ol.Feature({
+                                geometry: new ol.geom.Point([Number(data[0]), Number(data[1])]),
+                                name: '主要城市',
+                            }));
+                        }
+                        // 创建矢量图层
+                        var vector = new ol.layer.Vector({
+                            // 矢量数据源
+                            source: new ol.source.Vector({
+                                // 矢量要素
+                                features: featuresArr
+                            }),
+                            // 设置要素样式
+                            style: new ol.style.Style({
+                                // 样式类型为圆
+                                image: new ol.style.Circle({
+                                    // 圆半径
+                                    radius: 8,
+                                    // 圆内部填充
+                                    fill: new ol.style.Fill({color: '#ffcc33'}),
+                                    // 圆的边框
+                                    stroke: new ol.style.Stroke({color: 'red', width: 1})
+                                })
+                            })
+                        });
+                        // 添加矢量图层到地图
+                        map.addLayer(vector);
+                    }
+                },
+                error: function () {
+                    alert("请求WFS服务失败");
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="init()">
+    <!--地图显示-->
+    <div id="mapCon" style="width: 100%; height: 95%; position: absolute;">
+    </div>
+</body>
+</html>

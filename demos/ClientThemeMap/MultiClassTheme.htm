@@ -1,0 +1,170 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>分段专题图</title>
+    <!--导入外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <!--<link href="../../libs/ol/ol.css" rel="stylesheet" type="text/css" />-->
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map = null;
+        var mapDocLayer = null;
+        var clientClassTheme = null;
+
+        function init() {
+            var extent = [-180, -90, 180, 90];
+            var projection = new ol.proj.Projection({ units: ol.proj.Units.DEGREES, extent: extent });
+            var center = [0, 0];
+
+            mapDocLayer = new Zondy.Map.Doc("doc", "WorldJWVector", {
+                projection: projection,
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+            map = new ol.Map({
+                target: 'mapCon',
+                layers: [mapDocLayer],
+                view: new ol.View({
+                    center: center,
+                    projection: projection,
+                    extent: extent,
+                    maxZoom: 12,
+                    minZoom: 0,
+                    zoom: 2
+                })
+            });
+        };
+
+        function ClientDraw() {
+            //初始化分段信息
+            var classInfos = new Zondy.ClientClassInfos();
+            classInfos.classFldNames = new Array();
+            classInfos.classFldNames.push("长度");
+
+            var fill0 = new ol.style.Fill({ color: 'rgba(255,255,0,0.4)' });
+            var image0 = new ol.style.Circle({ radius: 7, fill: fill0 });
+            var stroke0 = new ol.style.Stroke({ color: '#FF0000', width: 1 });
+            var style0 = new ol.style.Style({ fill: fill0, stroke: stroke0, image: image0 });
+            classInfos.AppendClassInfo({ "长度": "0 / 10" }, style0);
+
+            var fill1 = new ol.style.Fill({ color: 'rgba(255,0,255,0.4)' });
+            var image1 = new ol.style.Circle({ radius: 7, fill: fill1 });
+            var stroke1 = new ol.style.Stroke({ color: '#00FF00', width: 1 });
+            var style1 = new ol.style.Style({ fill: fill1, stroke: stroke1, image: image1 });
+            classInfos.AppendClassInfo({ "长度": "10 / 20" }, style1);
+
+            var fill2 = new ol.style.Fill({ color: 'rgba(0,255,255,0.4)' });
+            var image2 = new ol.style.Circle({ radius: 7, fill: fill2 });
+            var stroke2 = new ol.style.Stroke({ color: '#99FF00', width: 1 });
+            var style2 = new ol.style.Style({ fill: fill2, stroke: stroke2, image: image2 });
+            classInfos.AppendClassInfo({ "长度": "20 / 30" }, style2);
+
+            var fill3 = new ol.style.Fill({ color: 'rgba(100,255,0,0.4)' });
+            var image3 = new ol.style.Circle({ radius: 7, fill: fill3 });
+            var stroke3 = new ol.style.Stroke({ color: '#6699FF', width: 1 });
+            var style3 = new ol.style.Style({ fill: fill3, stroke: stroke3, image: image3 });
+            classInfos.AppendClassInfo({ "长度": "30 / 40" }, style3);
+
+            var fill4 = new ol.style.Fill({ color: 'rgba(255,100,0,0.4)' });
+            var image4 = new ol.style.Circle({ radius: 7, fill: fill4 });
+            var stroke4 = new ol.style.Stroke({ color: '#00FFFF', width: 1 });
+            var style4 = new ol.style.Style({ fill: fill4, stroke: stroke4, image: image4 });
+            classInfos.AppendClassInfo({ "长度": "40 / 50" }, style4);
+
+            var fill5 = new ol.style.Fill({ color: 'rgba(255,0,100,0.4)' });
+            var image5 = new ol.style.Circle({ radius: 7, fill: fill5 });
+            var stroke5 = new ol.style.Stroke({ color: '#FFCC00', width: 1 });
+            var style5 = new ol.style.Style({ fill: fill5, stroke: stroke5, image: image5 });
+            classInfos.AppendClassInfo({ "长度": "50 / 60" }, style5);
+
+            var layerURL = "gdbp://MapGisLocal/示例数据/ds/世界地图/sfcls/世界河流";
+            if (clientClassTheme == null) {
+                clientClassTheme = new Zondy.ClientTheme(map, layerURL, { rows: 5, cols: 5, layerExtend: [-180, -90, 180, 84], layerFilter: "", ip: "develop.smaryun.com" });
+            }
+            clientClassTheme.ClientThemeInfos = classInfos;
+            clientClassTheme.LayerRender();
+        };
+
+        function ClearArray(arr) {
+            if (Object.prototype.toString.call(arr) === '[object Array]') {
+                for (var i = arr.length - 1; i >= 0; i--) {
+                    delete arr[i];
+                }
+                arr.length = 0;
+            }
+        };
+
+        function UpdateTheme() {
+
+            if (clientClassTheme != null) {
+                ClearArray(clientClassTheme.ClientThemeInfos.themeInfoArr);
+
+                var clientClassInfos = clientClassTheme.ClientThemeInfos;
+
+                var fill0 = new ol.style.Fill({ color: 'rgba(255,0,10,0.4)' });
+                var image0 = new ol.style.Circle({ radius: 15, fill: fill0 });
+                var stroke0 = new ol.style.Stroke({ color: "#FF0000", width: 1 });
+                var style0 = new ol.style.Style({ fill: fill0, stroke: stroke0, image: image0 });
+                //clientClassInfos.AppendClassInfo({ "Cap_Pop": "0 / 5000000" }, style0);
+                clientClassInfos.AppendClassInfo({ "长度": "0 / 10" }, style0);
+
+                var fill1 = new ol.style.Fill({ color: 'rgba(10,0,255,0.4)' });
+                var image1 = new ol.style.Circle({ radius: 15, fill: fill1 });
+                var stroke1 = new ol.style.Stroke({ color: "#00FF00", width: 1 });
+                var style1 = new ol.style.Style({ fill: fill1, stroke: stroke1, image: image1 });
+                //clientClassInfos.AppendClassInfo({ "Cap_Pop": "5000000 / 10000000" }, style1);
+                clientClassInfos.AppendClassInfo({ "长度": "10 / 20" }, style1);
+
+                var fill2 = new ol.style.Fill({ color: 'rgba(0,0,255,0.4)' });
+                var image2 = new ol.style.Circle({ radius: 15, fill: fill2 });
+                var stroke2 = new ol.style.Stroke({ color: "#0000FF", width: 1 });
+                var style2 = new ol.style.Style({ fill: fill2, stroke: stroke2, image: image2 });
+                //clientClassInfos.AppendClassInfo({ "Cap_Pop": "10000000 / 15000000" }, style2);
+                clientClassInfos.AppendClassInfo({ "长度": "20 / 30" }, style2);
+
+                var fill3 = new ol.style.Fill({ color: 'rgba(100,0,0,0.4)' });
+                var image3 = new ol.style.Circle({ radius: 15, fill: fill3 });
+                var stroke3 = new ol.style.Stroke({ color: "#CC0000", width: 1 });
+                var style3 = new ol.style.Style({ fill: fill3, stroke: stroke3, image: image3 });
+                //clientClassInfos.AppendClassInfo({ "Cap_Pop": "15000000 / 20000000" }, style3);
+                clientClassInfos.AppendClassInfo({ "长度": "30 / 40" }, style3);
+
+                var fill4 = new ol.style.Fill({ color: 'rgba(0,100,0,0.4)' });
+                var image4 = new ol.style.Circle({ radius: 15, fill: fill4 });
+                var stroke4 = new ol.style.Stroke({ color: "#00CC00", width: 1 });
+                var style4 = new ol.style.Style({ fill: fill4, stroke: stroke4, image: image4 });
+                //clientClassInfos.AppendClassInfo({ "Cap_Pop": "20000000 / 25000000" }, style4);
+                clientClassInfos.AppendClassInfo({ "长度": "40 / 50" }, style4);
+
+                var fill5 = new ol.style.Fill({ color: 'rgba(0,0,100,0.4)' });
+                var image5 = new ol.style.Circle({ radius: 15, fill: fill5 });
+                var stroke5 = new ol.style.Stroke({ color: "#00CC00", width: 1 });
+                var style5 = new ol.style.Style({ fill: fill5, stroke: stroke5, image: image5 });
+                //clientClassInfos.AppendClassInfo({ "Cap_Pop": "25000000 / 30000000" }, style5);
+                clientClassInfos.AppendClassInfo({ "长度": "50 / 60" }, style5);
+                clientClassTheme.UpdateLayerRender();
+            }
+        };
+
+        function RemoveTheme() {
+            if (clientClassTheme != null) {
+                clientClassTheme.RemoveThemeLayer();
+                clientClassTheme = null;
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" id="createThemeBtn" value="绘制专题" onclick="ClientDraw()" />
+        <input type="button" class="ButtonLib" id="updateThemeBtn" value="更新专题" onclick="UpdateTheme()" />
+        <input type="button" class="ButtonLib" id="deleteThemeBtn" value="移除专题" onclick="RemoveTheme()" />
+    </div>
+    <div id="mapCon" style="height: 95%;">
+    </div>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>统一配置专题图</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        统一配置专题图：
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能
+    </div>
+    <div class="zhengwen">
+        该示例显示一个世界地图，基于世界政区图层实现统一配置专题图功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明:
+    </div>
+    <div class="zhengwen">
+        1、数据：使用一个世界地图的矢量地图文档（WorldJWVector.mapx）。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]<br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。OpenLayers 3对OpenLayers网络地图库进行了根本的重新设计。openlayer2虽然被广泛使用，但从JavaScript开发的早期发展阶段开始，已日益显示出它的落后。
+        OL3已运用现代的设计模式从底层重写。）、ol.css（是地图样式文件，包含了地图样式的方方面面，例如，填充色、图标样式、图片样式、规则图形样式、边界样式、文字样式等，样式一般针对矢量要素图层。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGISWeb二次开发的脚本库)；
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）然后编写调用矢量图层显示的脚本函数init()，即初始化ol.Map与Zondy.Map.Layer类，通过设置ol.Map类的view属性确定地图的显示中心和级别以及坐标系，再通过Map对象的addLayer方法加载Layer对象；
+        <br />
+        <br />
+        [添加专题图]<br />
+        <br />
+        （4）创建专题图功能服务对象，设置服务对象服务器IP、端口号和GUID；<br />
+        <br />
+        <br />
+        （5）注册创建专题图功能按钮的点击事件，在事件处理函数中编辑单值专题图信息，初始化Zondy.Object.Theme.ThemesInfo类设置需添加的专题相关信息，并调用专题图功能服务对象的添加功能函数（addThemesInfo）实现添加专题图功能；
+        <br />
+        <br />
+        [更新信息]<br />
+        <br />
+        （6）注册更新专题图功能按钮的点击事件，在事件处理函数中调用专题图功能服务的获取信息功能函数（getThemesInfo），获取指定专题图信息；<br />
+        <br />
+        （7）在获取信息函数的回调函数中，调用专题图更新函数（updateThemesInfo），指定更新信息，实现更新专题图功能；
+        <br />
+        <br />
+        [删除信息]<br />
+        <br />
+        （8）注册功能按钮的点击事件，调用专题图删除函数（removeThemesInfo），删除客户端和服务端的指定的专题图信息。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element | string | undefined）可选项，指定地图所在的网页div元素的id，例如代码中：'mapCon'。如果在构建时未指定，则必须调用ol.Map()类的setTarget()方法以便绘制地图。<br />
+            <font class="nextParameter">【2】layers：</font>（Array-[ol.layer.Base] | ol.Collection[ol.layer.Base | undefined]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View | undefined）可选项，设置地图显示视图。如果在构建时未指定，则必须通过ol.Map()类的setView()方法指定，否则不会提取图层源。<br />
+        </div>
+        <font class="funDescription">1.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>将地图图层添加到地图容器中。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">getLayers()：</font>获取地图所有图层。<br />
+            <font class="functionName">getView()：</font>获取地图视图。返回值为{ol.View}类。<br />
+            <font class="functionName">setView(view)：</font>设置地图视图。<br />
+            <font class="nextParameter">view：</font>(ol.View）地图视图。<br />
+            <font class="functionName">removeLayer(layer)：</font>将图层从地图容器中移除。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">render()：</font>请求地图渲染（下一帧动画）。<br />
+            <font class="functionName">getEventPixel(event)：</font>获取相对于浏览器窗口的地图像素位置。<br />
+            <font class="nextParameter">event：</font>(event）事件。<br />
+        </div>
+        <font class="Class">2、ol.View类：</font>该类是一个地图显示视图类。ol.View对象是地图初始化必备三要素之一，表示一个简单的二维视图的映射，主要控制地图与用户的交互，如进行缩放，调节分辨率、地图的旋转等。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.View(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】center：</font>（ol.Coordinate|undefined）可选项，设置地图显示中心；<br />
+            <font class="nextParameter">【2】zoom：</font>（number|undefined）可选项，设置地图的显示级数。<br />
+            <font class="nextParameter">【3】minZoom：</font>（number|undefined）可选项，设置地图最小缩放级别，它与maxZoom(或minResolution)和zoomFactor一起使用，如果同时给出maxResolution,maxResolution优先级高于minZoom。<br />默认值为0。<br />
+            <font class="nextParameter">【4】maxZoom：</font>（number|undefined）可选项，设置地图最大缩放级别，它与minZoom(或maxResolution)和zoomFactor一起使用，如果同时给出minResolution,minResolution优先级高于maxZoom。<br />默认值为28。<br />
+            <font class="nextParameter">【5】rotation：</font>（number|undefined）可选项，设置初始视图的旋转弧度（顺时针方向)。<br />默认值为0。<br />
+            <font class="nextParameter">【6】projection：</font>（ol.ProjectionLike）可选项，地图的投影坐标系。<br />默认为EPSG:3857，即墨卡托坐标系。<br />
+        </div>
+        <font class="funDescription">2.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getZoom()：</font>获取当前地图视图缩放级别，如果当前视图分辨率未定义或分辨率未在约束值范围内，将返回undefined。返回值为{number|undefined}类型。<br />
+            <font class="functionName">getCenter()：</font>获取当前地图视图中心。返回值为{ol.Coordinate|undefined}类型<br />
+            <font class="functionName">getRotation()：</font>获取当前地图视图的旋转弧度。返回值为{number}类型。<br />
+            <font class="functionName">setZoom(zoom)：</font>设置地图视图的缩放级别。<br />
+            <font class="nextParameter">zoom：</font>(number）地图视图的缩放级别。<br />
+            <font class="functionName">setCenter(center)：</font>设置地图视图的中心坐标。<br />
+            <font class="nextParameter">center：</font>(ol.Coordinate | undefined）地图视图的中心坐标。<br />
+            <font class="functionName">setRotation(rotation)：</font>设置当前地图视图的旋转弧度。返回值为{number}类型。<br />
+            <font class="nextParameter">rotation：</font>(number)为地图视图设置新的旋转值。<br />
+        </div>
+        <font class="Class">3、Zondy.Map.Doc类：</font>该类是一个提供显示矢量地图文档的功能服务类<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Doc(opt_name, opt_docName, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必填项，设置显示图层的名称（可自行设置名称）；<br />
+            <font class="parameter">docName：</font>（String类型）必填项，设置地图文档文件的名称（根据IGServer上发布的实际名称）；<br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置其他属性赋值对象；<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器地址ip。<br />默认值："localhost"；<br />
+            <font class="nextParameter">【2】port：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器端口。<br />默认值："6163"；<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）可选项，是否作为基础图层显示，默认值：true。
+        </div>
+        <font class="Class">4、Zondy.Service.ThemeOper类：</font>该类是提供多种类型的专题图服务类<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.ThemeOper(opt_guid, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">guid：</font>（String类型）可选项，缓存地图文档唯一标识（id）；
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置其他属性赋值对象；<br />
+        </div>
+        <font class="attribute">4.2 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">ip：</font>（String类型）可选项，专题地图数据服务ip地址。<br />默认值："localhost" ；
+            <br />
+            <font class="parameter">port：</font>（String类型）可选项，专题地图数据服务端口号。<br />默认值："6163"。
+        </div>
+        <font class="funDescription">4.3方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addThemesInfo(mapDocName,idxArr,themesInfoArr,onSuccess)：</font>添加专题图函数。详细参数介绍如下：<br />
+            <font class="nextParameter">mapDocName：</font>（String类型）必填项，设置添加专题图的地图文档名称（根据IGServer上发布的实际名称）。<br />
+            <font class="nextParameter">idxArr：</font>（String类型）必填项，专题图索引数组(“图层索引号/专题图索引号”与逗号分隔符构成的数组。索引从0开始,例如："0/0,1/1,2/2")。<br />
+            <font class="nextParameter">themesInfoArr：</font>（Array类型-[Zondy.Object.Theme.ThemesInfo]）必填项，添加的专题图信息数组。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）获取成功回调方法。<br />
+            <br />
+            <font class="functionName">getThemesInfo(mapDocName, idxArr, onSuccess)：</font>获取专题图信息函数。详细参数介绍如下：<br />
+            <font class="nextParameter">mapDocName：</font>（String类型）必填项，设置添加专题图的地图文档名称（根据IGServer上发布的实际名称）。<br />
+            <font class="nextParameter">idxArr：</font>（String类型）必填项，专题图索引数组(“图层索引号/专题图索引号”与逗号分隔符构成的数组。索引从0开始,例如："0/0,1/1,2/2")。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）获取成功回调方法。<br />
+            <br />
+            <font class="functionName">updateThemesInfo(mapDocName, idxArr, themesInfoArr, onSucces)：</font>更新专题图信息函数。详细参数介绍如下：<br />
+            <font class="nextParameter">mapDocName：</font>（String类型）必填项，设置添加专题图的地图文档名称（根据IGServer上发布的实际名称）。<br />
+            <font class="nextParameter">idxArr：</font>（String类型）必填项，专题图索引数组(“图层索引号/专题图索引号”与逗号分隔符构成的数组。索引从0开始,例如："0/0,1/1,2/2")。<br />
+            <font class="nextParameter">themesInfoArr：</font>（Array类型-[Zondy.Object.Theme.ThemesInfo]）必填项，更新的专题图信息数组。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）获取成功回调方法。<br />
+            <br />
+            <font class="functionName">removeThemesInfo(mapDocName, idxArr, onSuccess)：</font>删除专题图信息函数。详细参数介绍如下：<br />
+            <font class="nextParameter">mapDocName：</font>（String类型）必填项，设置添加专题图的地图文档名称（根据IGServer上发布的实际名称）。<br />
+            <font class="nextParameter">idxArr：</font>（String类型）必填项，专题图索引数组(“图层索引号/专题图索引号”与逗号分隔符构成的数组。索引从0开始,例如："0/0,1/1,2/2")。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）获取成功回调方法。<br />
+        </div>
+        <font class="Class">5、Zondy.Object.Theme.ThemesInfo类：</font>该类是描述专题图结构信息对象类<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Theme.ThemesInfo(LayerName, themeArr)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">LayerName：</font>（String类型）必填项，设置图层名（根据地图文档中实际图层名称）；
+            <font class="parameter">themeArr：</font>（Array类型-[Zondy.Object.Theme.CTheme]）必填项，必填项，专题图对象的数组；<br />
+        </div>
+        <font class="attribute">5.2 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">LayerName：</font>（String类型）可选项，设置图层名（根据地图文档中实际图层名称）；
+            <br />
+            <font class="parameter">ThemeArr：</font>（Array类型-[Zondy.Object.Theme.CTheme]）可选项，专题图对象的数组。
+        </div>
+        <font class="Class">6、Zondy.Object.Theme.CSimpleTheme类：</font>该类是描述统一配置专题图类<br />
+        <br/>
+        <font class="constructorTile">6.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Theme.CSimpleTheme(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置其他属性赋值对象；<br />
+        </div>
+        <font class="attribute">6.2 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">Name：</font>（String类型）可选项，设置专题图名称；
+            <br />
+            <font class="parameter">IsBaseTheme：</font>（Boolen类型）可选项，设置是否是单值专题，true单值专题图，false分段专题图。<br />默认为true；
+            <br />
+            <font class="parameter">Visible：</font>（Boolen类型）可选项，设置专题图是否可见。<br />；默认为true；
+            <br />
+            <font class="parameter">Type：</font>（String类型）可选项，设置专题图类型。<br />默认值为CMultiClassTheme"；
+            <br />
+            <font class="parameter">ThemeInfo：</font>（Zondy.Object.Theme.CThemeInfo类型对象）可选项，统一配置专题图的图形表现信息。
+        </div>
+        <font class="Class">7、Zondy.Object.Theme.CThemeInfo类：</font>该类是描述专题图信息类<br />
+        <br />
+        <font class="constructorTile">7.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Theme.CThemeInfo(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置其他属性赋值对象；<br />
+        </div>
+        <font class="attribute">7.2公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="nextParameter">Caption：</font>（string类型）可选项，设置专题图图形信息名称；
+            <br />
+            <font class="parameter">IsVisible：</font>（Boolen类型）可选项，设置是否可见。<br />默认为true；
+            <br />
+            <font class="parameter">MaxScale：</font>（Float类型）可选项，设置最大显示比。<br />默认值为0；
+            <br />
+            <font class="parameter">MinScale：</font>（Float类型）可选项，设置最小显示比。<br />默认值为0；
+            <br />
+            <font class="parameter">RegInfo：</font>（Zondy.Object.Theme.CRegInfo类型对象）可选项，当专题图基于区图层时，设置区要素信息；
+            <br />
+            <font class="parameter">LinInfo：</font>（Zondy.Object.Theme.CLineInfo类型对象）可选项，当专题图基于线图层，设置线要素信息；
+            <br />
+            <font class="parameter">PntInfo：</font>（Zondy.Object.Theme.CPntInfo类型对象）可选项，当专题图基于点图层时，设置点要素信息。
+        </div>
+        <font class="Class">8、Zondy.Object.Theme.CPntInfo类：</font>该类是描述点点图形参数对象类<br />
+    <br/>
+        <font class="constructorTile">8.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Theme.CPntInfo(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置其他属性赋值对象；<br />
+        </div>
+        <font class="attribute">8.2 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">LibID：</font>（int类型）可选项，设置库ID。<br />默认值为0，为系统默认的符号库；
+            <br />
+            <font class="parameter">Ovprnt：</font>（Boolen类型）可选项，设置覆盖方式，true指覆盖，不透明显示），false指透明显示。<br />默认为false；
+            <br />
+            <font class="parameter">Angle：</font>（Float类型）可选项，设置图案角度。<br />默认值为0；
+            <br />
+            <font class="parameter">BackClr：</font>（int类型）可选项，设置背景颜色（请参考MapGIS颜色库中颜色的编号）。<br />默认值为0；
+            <br />
+            <font class="parameter">BackExp：</font>（Float类型）可选项，设置背景范围扩展（用户自定义）。<br />默认值为0；
+            <br />
+            <font class="parameter">FillFlg：</font>（int类型）可选项，设置自动压背景颜色标志（请参考MapGIS颜色库中颜色的编号）。<br />默认值为0；
+            <br />
+            <font class="parameter">Height：</font>（Float类型）可选项，设置子图高度）。<br />默认值为0；
+            <br />
+            <font class="parameter">Width：</font>（Float类型）可选项，设置子图宽度）。<br />默认值为0；
+            <br />
+            <font class="parameter">OutClr：</font>（Array类型）可选项，设置可变颜色组合（颜色编号请参考MapGIS颜色库）。<br />默认值为[0, 0, 0]；
+            <br />
+            <font class="parameter">SymID：</font>（int类型）可选项，设置（点子图）符号编号（请参考MapGIS符号库中点状符号的编号）。<br />默认值为0；
+            <br />
+            <font class="parameter">OutPenW：</font>（Array类型）可选项，设置外部笔宽。<br />默认值为[0.05, 0.05, 0.05]。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client API。"
+           target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client API手册。</a>
+    </p>
+</body>
+</html>

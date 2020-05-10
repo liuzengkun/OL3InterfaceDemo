@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>矢量图层查询结果(矩形查询)</title>
+    <!--导入外部easyui相关样式表-->
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/icon.css" />
+    <!--导入本页面外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用，jquery-1.11.2.min.js必须在jquery.easyui.min.js库之前-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <!--引入操作JSON对象的相关脚本库-->
+    <script src="../../libs/jsonformat/json2.js" type="text/javascript"></script>
+    <script src="../../libs/jsonformat/jsonExtend.js" type="text/javascript"></script>
+    <!--引入easyui相关脚本库-->
+    <script src="../../libs/jqueryEasyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        function queryVectorLayerByRect() {
+            startPressBar();
+            $('#resultShow').tabs('select', 1);
+            //初始化查询结构对象，设置查询结构包含几何信息
+            var queryStruct = new Zondy.Service.QueryFeatureStruct();
+            queryStruct.IncludeGeometry = true;
+            //创建一个用于查询的矩形
+            var geomObj = new Zondy.Object.Rectangle(81.97, 16.50, 108.575, 50.79);
+            //实例化查询参数对象	
+            var queryParam = new Zondy.Service.QueryParameter({
+                geometry: geomObj,
+                resultFormat: "json",
+                struct: queryStruct
+            });
+            //设置查询分页号
+            queryParam.pageIndex = 0;
+            //设置查询要素数目
+            queryParam.recordNumber = 20;
+            //实例化地图文档查询服务对象
+            var queryService = new Zondy.Service.QueryDocFeature(queryParam, "WorldJWVector", 1, {
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+
+            //执行查询操作，querySuccess为查询回调函数
+            queryService.query(querySuccess, queryError);
+        }
+
+        //查询失败回调
+        function queryError(e) {
+            //停止进度条
+            stopPressBar();
+        }
+
+        //查询成功回调
+        function querySuccess(result) {
+            //停止进度条
+            stopPressBar();
+            var formatData = JSON.stringify(result);
+            Process(formatData, 1, "reslutTable");
+        }
+
+        /*===========================================进度条===================================================*/
+        //停止进度条
+        function stopPressBar() {
+            document.getElementById('preview').style.display = "none";
+        }
+        //开始进度条动画
+        function startPressBar() {
+            document.getElementById('preview').style.display = "";
+        }
+    </script>
+</head>
+<body>
+    <div id="preview" style="display: none; text-align: center; padding-top: 250px; font-weight: bold">
+        <img src="../../libs/img/39-1.gif" alt='' /><br />
+        <br />
+        <span>正在查询，请稍候</span>
+    </div>
+    <div class="ToolLib">
+        <input type="button" id="Button1" class="ButtonLib" value="矩形查询" onclick="queryVectorLayerByRect()" />
+    </div>
+    <div id="resultShow" class="easyui-tabs" style="width: 100%; height: 750px">
+        <div id="introduction" title="说明" style="padding: 10px">
+            注意：<br />
+            上述为矢量地图文档查询的接口示例，默认查询示例数据库（OpenLayerVecterMap.hdf）下“世界地图经纬度”中的简单要素类“世界政区”，操作前请先确认此数据库已经附加，地图文档（WorldJWVector）已经发布。矢量地图文档矩形查询使用(81.97,
+            16.50), (108.575, 50.79)这2个点构成的矩形进行操作。其中【矩形查询】功能的结果显示在“结果显示”选项卡中。<br />
+        </div>
+        <div id="resultT" title="结果显示">
+            <div id="reslutTable">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

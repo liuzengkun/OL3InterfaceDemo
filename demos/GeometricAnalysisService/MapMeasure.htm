@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>长度/面积测量</title>
+    <!--导入外部easyui相关样式表-->
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/icon.css" />
+    <!--导入本页面外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用，jquery-1.11.2.min.js必须在jquery.easyui.min.js库之前-->
+    <script src="../../Libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <!--引入easyui相关脚本库-->
+    <script src="../../libs/jqueryEasyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        /*============================================测量服务（长度）===================================================*/
+        //测量长度
+        function measureLength() {
+            //显示结果选项卡
+            $("#resultShow").tabs("select", 1);
+            measureType = "len";
+            //设置要计算长度的几何对象点集
+            var dots = [new Zondy.Object.Point2D(15, 23), new Zondy.Object.Point2D(54, 96), new Zondy.Object.Point2D(65, 42)];
+            //初始化长度测量服务
+            var calLength = new Zondy.Service.CalPolyLineLength(dots, {
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+
+            /*建议普通用户采用此类直接获取MapGIS GDB已经提供的空间参考系*/
+            var gdbInfo = new Zondy.Object.CGDBInfo({
+                //数据库名称
+                GDBName: "OpenLayerVecterMap",
+                //数据源名称                 
+                GDBSvrName: "MapGISLocal",
+                //除MapGISLocal数据源，其它的都设置            
+                Password: "",
+                //除MapGISLocal数据源，其它的都设置                        
+                User: ""
+            });
+            //用于进行SRSID投影的参数类
+            var projBySRSID = new Zondy.Service.CProjectBySRSID(601, gdbInfo);
+            //执行长度测量服务，用户可传入MapGIS GDB 已经提供的空间参考系，也可传入自定义投影参数
+            calLength.execute(projBySRSID, measureCallBack);
+        }
+
+        /*============================================测量服务（面积）===================================================*/
+        //测量面积
+        function measureArea() {
+            $("#resultShow").tabs("select",1);
+            measureType = "area";
+            //设置要计算面积的几何对象点集
+            var dots = [new Zondy.Object.Point2D(15, 23), new Zondy.Object.Point2D(54, 96), new Zondy.Object.Point2D(65, 42), new Zondy.Object.Point2D(15, 23)];
+            //初始化面积测量服务
+            var calArea = new Zondy.Service.CalArea(dots, {
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+
+            /*建议普通用户采用此类直接获取MapGIS GDB 已经提供的空间参考系*/
+            var gdbInfo = new Zondy.Object.CGDBInfo({
+                //数据库名称
+                GDBName: "OpenLayerVecterMap",
+                //数据源名称                    
+                GDBSvrName: "MapGISLocal",
+                //除MapGISLocal数据源，其它的都设置            
+                Password: "",
+                //除MapGISLocal数据源，其它的都设置                    
+                User: ""
+            });
+            //用于进行SRSID投影的参数类
+            var projBySRSID = new Zondy.Service.CProjectBySRSID(601, gdbInfo);
+            //执行面积测量服务，用户可传入MapGIS GDB 已经提供的空间参考系，也可传入自定义投影参数
+            calArea.execute(projBySRSID, measureCallBack);
+        }
+
+        //测量后的回调函数
+        function measureCallBack(data) {
+            if (measureType == "len") {
+                document.getElementById('reslutTable').innerHTML = "长度为：" + data;
+            } else if (measureType == "area") {
+                document.getElementById('reslutTable').innerHTML = "面积为：" + data;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="ToolLib">
+        <input type="button" id="measureLengthBtn" class="ButtonLib" value="长度测量" onclick="measureLength()" />
+        <input type="button" id="measureAreaBtn" class="ButtonLib" value="面积测量" onclick="measureArea()" />
+    </div>
+    <div id="resultShow" class="easyui-tabs" style="width: 100%; height: 600px">
+        <div id="introduction" title="说明" style="padding: 10px">
+            说明：<br />
+            该测量示例是在程序里面给定点坐标进行长度测量和面积测量。<br />
+        </div>
+        <div id="resultT" title="结果显示" style="padding: 10px">
+            <div id="reslutTable">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

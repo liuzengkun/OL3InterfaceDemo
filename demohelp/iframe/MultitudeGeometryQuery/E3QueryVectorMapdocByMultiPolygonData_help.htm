@@ -1,0 +1,139 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>矢量地图文档查询服务(多面查询)</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        多面查询矢量地图文档:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现一个多面查询结果。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol.js（ol是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。OpenLayers 3对OpenLayers网络地图库进行了根本的重新设计。openlayer2虽然被广泛使用，但从JavaScript开发的早期发展阶段开始，已日益显示出它的落后。
+        OL3已运用现代的设计模式从底层重写。）、ol.css（是地图样式文件，包含了地图样式的方方面面，例如，填充色、图标样式、图片样式、规则图形样式、边界样式、文字样式等，样式一般针对矢量要素图层。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGISWeb二次开发的脚本库)、json2.js、jsonExtend.js（操作JSON对象的相关脚本库)；
+        <br />
+        <br />
+        （2）然后初始化查询结构对象Zondy.Service.QueryFeatureStruct，设置查询结构包含几何信息；创建多个Zondy.Object.Point2D，用于构建查询的面Zondy.Object.Polygon；实例化查询参数对象Zondy.Service.MultiGeoQueryParameter；
+        <br />
+        <br />
+        （3）实例化地图文档查询服务对象Zondy.Service.MultiGeoQuery，最后调用MultiGeoQuery对象的query方法，执行查询；
+        <br />
+        <br />
+        （4）最后使用Process方法格式化返回的结果。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、Zondy.Service.QueryFeatureStruct类：</font>该类是要素查询结构基类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.QueryFeatureStruct(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】IncludeAttribute：</font>（Boolean）是否包含属性值。<br />默认值是true；<br />
+            <font class="nextParameter">【2】IncludeGeometry：</font>（Boolean）是否包含几何图形信息。<br />默认值是false；<br />
+            <font class="nextParameter">【3】IncludeWebGraphic：</font>（Boolean）是否包含图形参数。<br />默认值是false；<br />
+        </div>
+        <font class="Class">2、Zondy.Object.Point2D类：</font>该类是构造点几何对象类<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Point2D(x, y, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">x：</font>（double类型）必填项，构造函数的第一个参数，创建的点几何对象的x坐标值（在该坐标系范围下的x坐标）；<br />
+            <font class="parameter">y：</font>（double类型）必填项，构造函数的第二个参数，创建的点几何对象的y坐标值（在该坐标系范围下的y坐标）；<br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】nearDis：</font>（double）可选项，设置点的容差半径，只在做点查询时需要设置。<br />
+        </div>
+        <font class="Class">3、Zondy.Object.Polygon类：</font>该类是多边形几何对象类，描述一个多边形形状。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Polygon(pointArr)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">pointArr：</font>（Array数组类型-[Zondy.Object.Point2D类型]）构成多边形形状的点集合。
+        </div>
+        <font class="funDescription">3.2方法说明：</font><br />
+        <div class="zhuji">
+            <font class="functionName">setByOL(openlayersPoly)：</font>设置多边形形状几何信息的方法，通过传入Openlayers的OpenLayers.Geometry类型来设置参数；
+            <br />
+            <font class="nextParameter">openlayersPoly：</font>（ol.Geometry.Polygon类型），由OpenLayers定义的多边形对象。
+            <br />
+            <font class="functionName">toString()：</font>（String类型）返回一个字符串来表示该多边形；
+            <br />
+        </div>
+        <font class="Class">4、Zondy.Service.MultiGeoQueryParameter类：</font>该类是一个多几何查询参数类<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.MultiGeoQueryParameter(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（object类型）重新设置的该对象的属性键值对。如下所示：<br />
+            <font class="nextParameter">【1】geometry：</font>（Zondy.Object.Point2D或Zondy.Object.PolyLine或Zondy.Object.Polygon对象构成的数组）用于查询的多几何数组；<br />
+            <font class="nextParameter">【2】geometryType：</font>（String类型）几何类型，表示geometry中元素代表的几何类型，可取值为"point","line","polygon"；<br />
+            <font class="nextParameter">【3】resultFormat：</font>（String类型）回调结果的包装形式。<br />默认为json；<br />
+            <font class="nextParameter">【4】nearDis：</font>（Float类型）缓冲半径，仅在多点和多线查询时起效。<br />
+        </div>
+        <font class="attribute">4.2 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">recordNumber：</font>（Int类型）设置查询要素数目。
+        </div>
+        <font class="Class">5、Zondy.Service.MultiGeoQuery类：</font>该类是一个多几何查询服务类。<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.MultiGeoQuery(queryParam, docName, layerIndex, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">queryParam：</font>（Zondy.Service.MultiGeoQueryParameter类型）多几何查询的参数类；<br />
+            <font class="parameter">docName：</font>（String类型）文档名称。注意：必须是已在IGServer上面发布的地图文档；<br />
+            <font class="parameter">layerIndex：</font>（Int类型）图层序号；<br />
+            <font class="parameter">opt_options：</font>（object类型）重新设置的该对象的属性键值对。如下所示：<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，IGServer服务器ip。<br />默认值："localhost"；<br />
+            <font class="nextParameter">【2】port：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，IGServer服务端口。<br />默认值："6163"；
+        </div>
+        <font class="funDescription">5.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">query(onSuccess, onError)：</font>执行查询操作，向服务器发送请求。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（String类型）查询成功后的回调函数名称；<br />
+            <font class="nextParameter">onError：</font>（String类型）查询失败后的回调函数名称。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+           target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>

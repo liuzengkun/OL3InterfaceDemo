@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>矢量地图文档查询服务(交互式矩形查询)</title>
+    <!--导入外部easyui相关样式表-->
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/icon.css" />
+    <!--导入本页面外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="../../libs/zdclient.js" type="text/javascript"></script>
+    <!--引入easyui相关脚本库-->
+    <script src="../../libs/jqueryEasyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, vectorMapdoc, drawLayer, geomLayer;
+        //绘制控件
+        var drawControl;
+        //地图初始化函数
+        function init() {
+            //初始化地图容器
+            map = new OpenLayers.Map('mapCon', {
+                //设置自动获取MapGIS IGServer发布的地图的信息，地图最大分辨率，默认是360度/256像素，相当于缩放级别0
+                isAutoConfig: true,
+                controls: [
+                //缩放面板的工具控件
+                    new OpenLayers.Control.Zoom(),
+                //图层切换控件
+                    new OpenLayers.Control.LayerSwitcher(),
+                //此控件处理伴随鼠标事件的地图浏览
+                    new OpenLayers.Control.Navigation(),
+                //此控件显示鼠标移动时，所在点的地理坐标
+                    new OpenLayers.Control.MousePosition()
+                ]
+            });
+            //初始化地图文档图层对象
+            vectorMapdoc = new Zondy.Map.Doc("MapGIS IGS VectorMapdocLayer", "WorldJWVector", {
+                ip: "develop.smaryun.com",
+                port: "6163",
+                isBaseLayer: true
+            });
+            //将矢量图层加载到地图中
+            map.addLayers([vectorMapdoc]);
+            //创建绘制要素的图层并添加到地图容器中
+            drawLayer = new OpenLayers.Layer.Vector("drawLayer");
+            //将绘图图层加载到地图中
+            map.addLayer(drawLayer);
+            //创建绘图层并添加到地图容器中
+            geomLayer = new OpenLayers.Layer.Vector("geomLayer");
+            //创建拉框控件并添加在地图容器中，指定控件的回调函数featureAdded
+            drawControl = new OpenLayers.Control.DrawFeature(geomLayer, OpenLayers.Handler.RegularPolygon);
+            drawControl.handler.setOptions({ sides: 4, snapAngle: 90, irregular: true });
+            drawControl.featureAdded = drawControlback; //拉框查询的回调函数
+            map.addControl(drawControl);
+            //设置地图的初始化显示中心和级别
+            map.setCenter(new OpenLayers.LonLat(130, 0), 2);
+        }
+
+        function queryVectorLayerByRect() {
+            stopqueryVectorLayerByRect();
+            clearA();
+            $('#resultShow').tabs('select', 1);
+            if (drawControl) {
+                drawControl.activate();
+            }
+        }
+        function drawControlback(feature) {
+            clearA();
+            startPressBar();
+            //初始化查询结构对象，设置查询结构包含几何信息
+            var queryStruct = new Zondy.Service.QueryFeatureStruct();
+            //是否包含几何图形信息
+            queryStruct.IncludeGeometry = true;
+            //是否包含属性信息
+            queryStruct.IncludeAttribute = true;
+            //是否包含图形显示参数
+            queryStruct.IncludeWebGraphic = false;
+            //创建一个用于查询的矩形
+            var geomObj = new Zondy.Object.Rectangle();
+            geomObj.setByOL(feature.geometry);
+            //指定查询规则
+            var rule = new Zondy.Service.QueryFeatureRule({
+                EnableDisplayCondition: false,
+                MustInside: false,
+                CompareRectOnly: false,
+                Intersect: true
+            });
+            //实例化查询参数对象
+            var queryParam = new Zondy.Service.QueryParameter({
+                geometry: geomObj,
+                resultFormat: "json",
+                struct: queryStruct,
+                rule: rule
+            });
+            //设置查询分页号
+            queryParam.pageIndex = 0;
+            //设置查询要素数目
+            queryParam.recordNumber = 20;
+            //实例化地图文档查询服务对象
+            var queryService = new Zondy.Service.QueryDocFeature(queryParam, "WorldJWVector", 1, {
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+
+            //执行查询操作，querySuccess为查询回调函数
+            queryService.query(querySuccess, queryError);
+        }
+
+        //查询失败回调
+        function queryError(e) {
+            //停止进度条
+            stopPressBar();
+        }
+
+        //查询成功回调
+        function querySuccess(result) {
+            //停止进度条
+            stopPressBar();
+            var format = new Zondy.Format.PolygonJSON();
+            var features = format.read(result);
+            //设置图层可见
+            drawLayer.setVisibility(true);
+            //将要素添加到图层中
+            drawLayer.addFeatures(features);
+        }
+
+        function stopqueryVectorLayerByRect() {
+            if (drawControl != null)
+                drawControl.deactivate();
+        }
+
+        //清除客户端查询结果信息
+        function clearA() {
+            //停止进度条
+            stopPressBar();
+            if (drawLayer.features.length != 0) {
+                drawLayer.removeAllFeatures();
+            }
+        }
+        /*===========================================进度条===================================================*/
+        //停止进度条
+        function stopPressBar() {
+            document.getElementById('preview').style.display = "none";
+        }
+        //开始进度条动画
+        function startPressBar() {
+            document.getElementById('preview').style.display = "";
+        }
+    </script>
+</head>
+<body onload="init();">
+    <div id="preview" style="display: none; text-align: center; padding-top: 250px; font-weight: bold">
+        <img src="../../libs/img/39-1.gif" alt='' /><br />
+        <br />
+        <span>正在查询，请稍候</span>
+    </div>
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" value="矩形查询" onclick="queryVectorLayerByRect()" />
+        <input type="button" class="ButtonLib" value="停止矩形查询" onclick="stopqueryVectorLayerByRect()" />
+    </div>
+    <div id="resultShow" class="easyui-tabs" style="width: 100%; height: 500px">
+        <div id="introduction" title="说明" style="padding: 10px">
+            注意：<br />
+            上述为矢量地图文档查询的接口示例，默认查询示例数据库（OpenLayerVecterMap.hdf）下“世界地图经纬度”中的简单要素类“世界政区”，操作前请先确认此数据库已经附加，地图文档（WorldJWVector）已经发布。矢量地图文档交互式矩形查询，使用用户绘制的矩形进行操作。其中【矩形查询】功能的结果显示在“地图显示”选项卡中。<br />
+        </div>
+        <div id="MapDisplay" title="地图显示" style="padding: 10px">
+            <!--地图显示-->
+            <div id="mapCon" style="height: 600px; width: 1340px;">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

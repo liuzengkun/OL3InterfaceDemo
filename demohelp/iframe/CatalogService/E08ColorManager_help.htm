@@ -1,0 +1,76 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>无标题文档</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        颜色转换服务:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现简单的颜色转换服务功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用本地GIS数据服务器的颜色库。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）在进行颜色转换时，先初始化Zondy.Service.Catalog.ColorInfo类，通过此类里的方法实现相应的功能。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、Zondy.Service.Catalog.ColorInfo类：该类是一个颜色信息服务类</font>
+        <br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.Catalog.ColorInfo( options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）重新设置的该对象的属性键值对。如下所示：<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）GIS数据服务器地址，默认是"127.0.0.1"。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）GIS服务端口号，默认是"6163"。
+        </div>
+        <font class="funDescription">1.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getColorNO(options,onSuccess)：</font>根据RGB值获取该颜色在颜色库中的颜色号，其参数主要为传入的RGB值。详细参数介绍如下：<br />
+            <font class="nextParameter">options：</font>（object类型）设置RGB值，详细如下：<br />
+            【1】Blue: 设置蓝色强度值，范围是0~255，默认为0。<br />
+            【2】Green: 设置绿色强度值，范围是0~255，默认为0。<br />
+            【3】Red: 设置红色强度值，范围是0~255，默认为0。<br />
+            【4】SystemLibID:颜色所在的系统库ID（MapGIS有若干系统库，每个系统库都包含一个颜色库）默认为0。<br />
+            【5】addNew: 如果查找到的颜色与传入的颜色RGB不完全相同，是否根据传入的RGB值添加新颜色到颜色库，默认为false。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。<br />
+            <br />
+            <font class="functionName">getColorRGB(options,onSuccess)：</font>根据颜色号获取颜色RGB值，其参数主要为传入的颜色号。详细参数介绍如下：<br />
+            <font class="nextParameter">options：</font>（object类型）设置颜色号，详细如下：<br />
+            【1】 SystemLibID: 颜色所在的系统库ID（MapGIS有若干系统库，每个系统库都包含一个颜色库），默认为0。<br />
+            【2】 ColorNO: 数字类型，设置颜色号，详细请查看MapGIS10-->设置-->系统库管理-->颜色库，默认是6。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+            target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>

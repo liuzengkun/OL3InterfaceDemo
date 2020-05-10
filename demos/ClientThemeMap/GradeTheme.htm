@@ -1,0 +1,122 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>等级符号专题图</title>
+    <!--导入外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <!--<link href="../../libs/ol/ol.css" rel="stylesheet" type="text/css" />-->
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var SvrCfg = {
+            //服务ip
+            ip: "develop.smaryun.com",
+            //服务端口
+            port: "6163",
+            //地图文档名称，注意：必须是发布在IGServer上的地图文档
+            mapdocName: "WorldJWVector",
+            //地图的显示中心
+            mapCenter: { x: 0, y: 0 },
+            //地图的显示级别
+            dispLevel: 2
+        };
+        var map, layer, docLayer, clientGradeTheme;
+        function init() {
+            //初始化地图容器
+            map = new ol.Map({
+                target: "mapCon",
+                view: new ol.View({
+                    center: [SvrCfg.mapCenter.x, SvrCfg.mapCenter.y],
+                    zoom: SvrCfg.dispLevel,
+                    projection: "EPSG:4326"
+                })
+            });
+            //初始化地图文档图层对象
+            docLayer = new Zondy.Map.Doc("MapGIS IGS MapDocLayer", SvrCfg.mapdocName, {
+                ip: SvrCfg.ip,
+                port: SvrCfg.port
+            });
+            //layer = new ol.layer.Vector({ source: new ol.source.Vector({ wrapX: false }) });
+            //map.addLayer(layer);
+            //将地图文档图层加载到地图中
+            map.addLayer(docLayer);
+        }
+
+        function ClientDraw() {
+            RemoveTheme();
+            //创建等级符号专题图信息对象
+            var gradeInfos = new Zondy.ClientGradeInfos();
+            //设置字段名称
+            gradeInfos.fldName = "长度";
+            //设置图层的URL
+            var layerURL = "gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界河流";
+            if (clientGradeTheme == null) {
+                //创建专题图对象
+                clientGradeTheme = new Zondy.ClientTheme(map, layerURL, { rows: 2, cols: 2, layerExtend: [-180, -90, 180, 90], layerFilter: "", ip: SvrCfg.ip, port: SvrCfg.port });
+            }
+            //设置专题图信息
+            clientGradeTheme.ClientThemeInfos = gradeInfos;
+            //开始绘制专题图
+            clientGradeTheme.LayerRender();
+        };
+        //更新专题图
+        function UpdateTheme() {
+            if (clientGradeTheme != null) {
+                //获取专题图信息
+                var clientGradeInfos = clientGradeTheme.ClientThemeInfos;
+                //修改专题图的信息
+                //clientGradeInfos.baseValue = 10;
+                clientGradeInfos.plusStyle = new ol.style.Style({
+                    fill: new ol.style.Fill({ color: 'rgba(0,0,255,0.4)' }),
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(255,0,0,0.4)',
+                        width: 2
+                    }),
+                    image: new ol.style.Circle({
+                        radius: 7,
+                        fill: new ol.style.Fill({ color: 'rgba(255,0,0,0.4)' })
+                    })
+                }); 
+                clientGradeInfos.minusStyle = new ol.style.Style({
+                    fill: new ol.style.Fill({ color: 'rgba(102,204,255,0.4)' }),
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0,255,0,0.4)',
+                        width: 1
+                    }),
+                    image: new ol.style.Circle({
+                        radius: 7,
+                        fill: new ol.style.Fill({ color: 'rgba(0,255,0,0.4)' })
+                    })
+                });
+
+
+                clientGradeInfos.dispMinus = true;
+                clientGradeInfos.dispZero = true;
+                //更新专题图
+                clientGradeTheme.UpdateLayerRender();
+            } else {
+                alert("没有专题图信息，请先生成专题图！");
+            }
+        };
+        //移除专题图
+        function RemoveTheme() {
+            if (clientGradeTheme != null) {
+                clientGradeTheme.RemoveThemeLayer();
+                clientGradeTheme = null;
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" id="createThemeBtn" value="绘制专题" onclick="ClientDraw()" />
+        <input type="button" class="ButtonLib" id="updateThemeBtn" value="更新专题" onclick="UpdateTheme()" />
+        <input type="button" class="ButtonLib" id="deleteThemeBtn" value="移除专题" onclick="RemoveTheme()" />
+    </div>
+    <div id="mapCon" style="position: absolute; width: 100%; height: 95%;">
+    </div>
+</body>
+</html>

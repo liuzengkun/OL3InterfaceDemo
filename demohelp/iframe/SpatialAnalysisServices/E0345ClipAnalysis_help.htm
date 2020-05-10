@@ -1,0 +1,206 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>裁剪分析</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        裁剪分析:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现一个裁剪分析功能，显示“世界政区”。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用世界地图世界政区的矢量图层（世界政区）作底图。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）然后编写调用矢量地图文档显示的脚本函数init()，即初始化ol.Map与Zondy.Map.Layer类。通过设置该类的layers属性加载图层，再通过设置该类的view属性初始化地图的显示中心和级别
+        <br />
+        <br />
+        （4）最后初始化图层裁剪分析服务Zondy.Service.ClipByLayer或圆裁剪分析服务Zondy.Service.ClipByCircle或多边形裁剪分析服务Zondy.Service.ClipByPolygon，设置裁剪分析必要参数（对象中的属性来自本类公共属性和Zondy.Service.ClipBase类的公共属性）。并调用裁剪分析服务的execute方法完成图层裁剪分析或者圆裁剪分析或者多边形裁剪分析功能。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明:
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项，指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项，设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项，添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="funDescription">1.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>添加单个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layer：</font>继承于ol.layer.Base的图层对象<br />
+        </div>
+        <font class="Class">2、Zondy.Map.Layer类：</font>该类用于地图文档的显示。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Layer(name, gdbps, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必选项，设置图层的显示名称。<br />
+            <font class="parameter">gdbps：</font>（Array类型-[String]）必选项，设置要加载的图层的url，可以在MapGIS10平台数据库下找到需要显示的图层，然后右单-->复制url，便可以获取到图层的url。<br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）该矢量图层所在服务器的ip。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）设置端口号。<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）是否设置为底图。
+        </div>
+        <font class="Class">3、Zondy.Service.ClipBase类：</font>裁剪分析基类分析类。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.ClipBase(parameters, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">parameters：</font>（object类型）分析相关必要参数，可在此设置该类的公共属性。<br />
+            <font class="parameter">options：</font>（object类型）其他参数键值对，可在此设置该类的公共属性。
+        </div>
+        <font class="attribute">3.2 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">desInfo：</font>（String类型） 裁剪分析结果图层URL（包含结果图层名）。<br />
+            <font class="parameter">attOptType：</font>（整型）取值范围:<br />
+            <font class="nextParameter">&nbsp; &nbsp; 0</font>（IgnoreAtt，代表忽略属性）<br />
+            <font class="nextParameter">&nbsp; &nbsp; 1</font>（默认值， KeepAtt，代表保留属性）。<br />
+            <font class="parameter">infoOptType：</font>（整型）默认值为1，取值范围：<br />
+            <font class="nextParameter">&nbsp; &nbsp; 0</font>（RandomInfo，代表随机生成图形参数信息）<br />
+            <font class="nextParameter">&nbsp; &nbsp; 1</font>（UsesAInfo，代表选择裁剪图层的图形参数信息作为结果图层的图形参数信息）<br />
+            <font class="nextParameter">&nbsp; &nbsp; 2</font>（UsesBInfo，代表选择被裁剪图层的图形参数信息作为结果图层的图形参数信息）。<br />
+            <font class="parameter">overType：</font>（整型）取值范围:<br />
+            <font class="nextParameter">&nbsp; &nbsp; 3</font>（内裁剪，默认值）<br />
+            <font class="nextParameter">&nbsp; &nbsp; 4</font>（外裁剪） 。<br />
+            <font class="parameter">tolerance：</font>（Float类型） 容差半径。<br />
+            <font class="parameter">isCleanNode：</font>（Boolean类型）是否结点平差。<br />
+            <font class="parameter">isLabelPnt：</font>（Boolean类型）是否裁剪label点。<br />
+            <font class="parameter">isValidReg：</font>（Boolean类型） 是否检查区的合法性。<br />
+            <font class="parameter">ip：</font>（String类型） 服务器ip。<br />
+            <font class="parameter">port：</font>（String类型） 端口号。
+        </div>
+        <font class="Class">4、Zondy.Service.ClipByLayer类：</font>图层裁剪分析类。<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.ClipByLayer(parameters, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">parameters：</font>（object类型）分析相关必要参数，可在此设置该类的公共属性。<br />
+            <font class="parameter">options：</font>（object类型）其他参数键值对，可在此设置该类的公共属性。
+        </div>
+        <font class="funDescription">4.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">execute(onSuccess, way, isAsy, f, onError)：</font>执行裁剪分析。参数详细介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）执行成功后的回调函数名称。<br />
+            <font class="nextParameter">way：</font>（String类型）请求服务的方式，post和get两种。<br />
+            <font class="nextParameter">isAsy：</font>（Boolean类型）是否异步传输，默认false。<br />
+            <font class="nextParameter">f：</font>（String类型）结果返回的格式，默认json。<br />
+            <font class="nextParameter">onError：</font>（Function类型）执行失败的回调函数名称。
+        </div>
+        <font class="attribute">4.3 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">srcInfo1：</font>（String类型）源简单要素类的URL。<br />
+            <font class="parameter">srcInfo2：</font>（String类型） 裁剪框简单要素类的URL，注意：裁剪框只能是区要素。
+        </div>
+        <font class="Class">5、Zondy.Service.ClipByCircle类：</font>圆裁剪分析类。<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.ClipByCircle(parameters, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">parameters：</font>（object类型）分析相关必要参数，可在此设置该类的公共属性。<br />
+            <font class="parameter">options：</font>（object类型）其他参数键值对，可在此设置该类的公共属性。
+        </div>
+        <font class="funDescription">5.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">execute(onSuccess, way, isAsy, f, onError)：</font>执行裁剪分析。参数详细介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）执行成功后的回调函数名称。<br />
+            <font class="nextParameter">way：</font>（String类型）请求服务的方式，post和get两种。<br />
+            <font class="nextParameter">isAsy：</font>（Boolean类型）是否异步传输，默认false。<br />
+            <font class="nextParameter">f：</font>（String类型）结果返回的格式，默认json。<br />
+            <font class="nextParameter">onError：</font>（Function类型）执行失败的回调函数名称。
+        </div>
+        <font class="attribute">5.3 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">srcInfo：</font>（String类型）源图层URL，即被裁剪图层URL。<br />
+            <font class="parameter">center：</font>（String类型）圆心坐标。<br />
+            <font class="parameter">radius：</font>（Float类型）半径长度。<br />
+            <font class="parameter">step：</font>（Float类型）离散化步长。
+        </div>
+        <font class="Class">6、Zondy.Service.ClipByPolygon类：</font>多边形裁剪分析类。<br />
+        <br />
+        <font class="constructorTile">6.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.ClipByPolygon(parameters, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">parameters：</font>（object类型）分析相关必要参数，可在此设置该类的公共属性。<br />
+            <font class="parameter">options：</font>（object类型）其他参数键值对，可在此设置该类的公共属性。
+        </div>
+        <font class="funDescription">6.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">execute(onSuccess, way, isAsy, f, onError)：</font>执行裁剪分析。参数详细介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）执行成功后的回调函数名称。<br />
+            <font class="nextParameter">way：</font>（String类型）请求服务的方式，post和get两种。<br />
+            <font class="nextParameter">isAsy：</font>（Boolean类型）是否异步传输，默认false。<br />
+            <font class="nextParameter">f：</font>（String类型）结果返回的格式，默认json。<br />
+            <font class="nextParameter">onError：</font>（Function类型）执行失败的回调函数名称。
+        </div>
+        <font class="attribute">6.3 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">srcInfo：</font>（String类型）源图层URL，即被裁剪图层URL。<br />
+            <font class="parameter">strPos：</font>（String类型）多边形点坐标串。strPos为STRING格式，内容是多边形几个点坐标：x1,y1,x2,y2....。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+           target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>

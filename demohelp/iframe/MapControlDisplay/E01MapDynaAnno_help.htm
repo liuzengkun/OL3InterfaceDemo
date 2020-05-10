@@ -1,0 +1,222 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>地图动态注记</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        地图动态注记:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例以MapGIS矢量地图文档（世界地图）为底图，以矢量地图文档中的主要城市图层的名称字段作为地图注记，采用动态注记方式用按钮控制其注记的显示。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用世界地图的矢量地图文档（WorldJWVector.mapx），该矢量数据服务在GIS服务器中发布。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，加载MapGIS矢量地图文档（世界地图）；
+        <br />
+        <br />
+        （3）最后添加一个checkbox和一个button，通过单击事件调用MapDispSetting函数进行主要城市图层的动态注记设置。<br />
+        <br />
+        a、在地图初始化函数init()中初始化地图显示参数对象；
+        <br />
+        <br />
+        b、在MapDispSetting函数中初始化动态注记对象，根据checkbox的状态为动态注记对象和地图显示参数对象赋值；
+        <br />
+        <br />
+        c、由button的单击事件回调函数Submit1_onclick控制动态注记的显示与否。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项，指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项，设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项，添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="funDescription">1.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>添加单个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layer：</font>继承于ol.layer.Base的图层对象。
+        </div>
+        <font class="Class">2、Zondy.Map.Doc类：</font>该类用于地图文档的显示。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Doc(name, docName, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必选项，设置图层的显示名称。<br />
+            <font class="parameter">docName：</font>（String类型）必选项，设置要加载的地图文档的名称，该地图文档必须已在IGSerever上发布，并且这里的地图文档名称要与发布的地图文档名称一致。<br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）该矢量图层所在服务器的ip。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）设置端口号。<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）是否设置为底图。
+        </div>
+        <font class="funDescription">2.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">redraw(flag)：</font>重新绘制。详细参数介绍如下：<br />
+            <font class="nextParameter">flag：</font>（Boolean类型）是否重新绘制。
+        </div>
+        <font class="attribute">2.3 公共属性</font>
+        <br />
+        <div class="zhuji">
+            <font class="parameter">style：</font>（Zondy.Object.CDisplayStyle类型） 设置图层样式。
+        </div>
+        <font class="Class">3、Zondy.Object.CDisplayStyle类：</font>地图显示参数类。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.CDisplayStyle(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象的公共属性。如下：<br />
+            <font class="nextParameter">【1】ShowStyle：</font>（Array类型-[Zondy.Object.DynShowStyle]）每个数组元素依次对应一个图层的DynShowStyle，如果相应的图层显示参数不需更新，请设置相应位置的数组元素值为null。
+        </div>
+        <font class="Class">4、Zondy.Object.DynShowStyle类：</font>该类用来描述注记显示的样式。<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.DynShowStyle(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象的公共属性。如下：<br />
+            <font class="nextParameter">【1】DynNoteFlag：</font>（Boolean类型）是否动态注记。<br />
+            <font class="nextParameter">【2】SymbleScale：</font>（Float类型）符号显示比例。<br />
+            <font class="nextParameter">【3】DynNoteInfo：</font>（Zondy.Object.CDynNoteInfo类型）动态注记参数对象。
+        </div>
+        <font class="Class">5、Zondy.Object.LablePntInfo类：</font>该类用来设置点要素动态注记方位属性参数信息。<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.LabelPntInfo(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象的公共属性。如下：<br />
+            <font class="nextParameter">【1】Ang：</font>（Array类型-[Double]）动态注记方位角度值。<br />
+            <font class="nextParameter">【2】ClientOutLabel：</font>（Boolean类型）是否不完全注记false。<br />
+            <font class="nextParameter">【3】Distance：</font>（Double类型）注记偏离要素的距离。<br />
+            <font class="nextParameter">【4】EightDirLableType：</font>（Array类型-[Zondy.Enum.EightDirType]）注记方位优先级组合，如：[0,2]。<br />
+            <font class="nextParameter">【5】PntType：</font>（Zondy.Enum.LabelPntType类型）点的动态注记的方位类型，0：任意方位、1：八方位、2：压点。
+        </div>
+        <font class="Class">6、Zondy.Enum.EightDirType：</font>该类用来设置点八方位注记类型。<br />
+        <br />
+        <font class="constructorTile">6.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Enum.EightDirType(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象的公共属性。如下：<br />
+            <font class="nextParameter">【1】East：</font>（Int类型）设置点八方位注记类型向东。
+            <font class="nextParameter">【2】North：</font>（Int类型）设置点八方位注记类型向北。
+            <font class="nextParameter">【3】NorthEast：</font>（Int类型）设置点八方位注记类型向东北。
+            <font class="nextParameter">【4】NorthWest：</font>（Int类型）设置点八方位注记类型向西北。
+            <font class="nextParameter">【5】South：</font>（Int类型）设置点八方位注记类型向南。
+            <font class="nextParameter">【6】SouthEast：</font>（Int类型）设置点八方位注记类型向东南。
+            <font class="nextParameter">【7】SouthWest：</font>（Int类型）设置点八方位注记类型向西南。
+            <font class="nextParameter">【8】West：</font>（Int类型）设置点八方位注记类型向西。
+            <font class="nextParameter">【9】NoDir：</font>（Int类型）设置点八方位注记类型向无方位。
+        </div>
+        <font class="Class">7、Zondy.Object.DynNoteLableType：</font>该类用来设置动态注记方位属性对象。<br />
+        <br />
+        <font class="constructorTile">7.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.DynNoteLabelType(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象的公共属性。如下：<br />
+            <font class="nextParameter">【1】PntInfo：</font>（Zondy.Object.LablePntInfo类型）点要素动态注记方位属性。
+        </div>
+        <font class="Class">8、Zondy.Object.LablePntInfo：</font>该类用来设置点要素动态注记方位属性对象。<br />
+        <br />
+        <font class="constructorTile">8.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.LablePntInfo(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象的公共属性。如下：<br />
+            <font class="nextParameter">【1】Ang：</font>（Array-[Double]类型）设置点任意方位的角度值。<br />默认值是：null<br />
+            <font class="nextParameter">【2】ClientOutLabel：</font>（Boolean类型）设置不完全注记。<br />默认值是：false<br />
+            <font class="nextParameter">【3】Distance：</font>（Double类型）设置偏移距离，单位为像素。<br />默认值是：0.00<br />
+            <font class="nextParameter">【4】EightDirLableType：</font>（Array-[Zondy.Enum.EightDirType]类型）设置点八方位注记类型。
+            <font class="nextParameter">【5】PntType：</font>（Zondy.Enum.LabelPntType枚举类型）设置点方位。<br />默认值是：0
+        </div>
+        <font class="Class">9、Zondy.Object.CDynNoteInfo类：</font>该类是动态注记参数对象类。<br />
+        <br />
+        <font class="constructorTile">9.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.CDynNoteInfo(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象的公共属性。如下：<br />
+            <font class="nextParameter">【1】FieldName：</font>（String类型）注记字段名称。<br />
+            <font class="nextParameter">【2】FontAngle：</font>（Double类型）注记字体角度。<br />
+            <font class="nextParameter">【3】FontColor：</font>（整型） 注记颜色，颜色库索引，详细请参见MapGIS10平台系统库管理下面的颜色库。<br />
+            <font class="nextParameter">【4】FontSize：</font>（整型）注记字体大小。<br />
+            <font class="nextParameter">【5】FontStyle：</font>（整型） 注记西文字体id，主要针对字母;0:宋体、1：黑体、2：仿宋、3：隶书、4：楷体、5：微软雅黑、6：幼圆、7：新宋体。<br />
+            <font class="nextParameter">【6】Ifnt：</font>（整型）注记中文字体id，主要针对中文;0:宋体、1：黑体、2：仿宋、3：隶书、4：楷体、5：微软雅黑、6：幼圆、7：新宋体。<br />
+            <font class="nextParameter">【7】Ifnx：</font>（Zondy.Enum.FontShape类型） 注记字形状；Zondy.Enum.FontShape.Positive：正体、Zondy.Enum.FontShape.LeftOblique：左斜、Zondy.Enum.FontShape.RightOblique：右斜、Zondy.Enum.FontShape.LeftTowering：左耸、Zondy.Enum.FontShape.RightTowering：右耸。<br />
+            <font class="nextParameter">【8】IsFilled：</font>（Boolean类型）是否填充背景色。<br />
+            <font class="nextParameter">【9】Backclr：</font>（整型） 注记背景颜色编号，仅当IsFilled参数设置为true时有效，详细请参见MapGIS10平台系统库管理下面的颜色库。<br />
+            <font class="nextParameter">【10】Backexp：</font>（Float类型）注记轮廓宽度,仅当IsFilled参数设置为true时有效，为0时表示背景宽度为适应注记的宽度，如0。<br />
+            <font class="nextParameter">【11】IsHzpl：</font>（Boolean类型）是否水平线上。<br />
+            <font class="nextParameter">【12】LabelLevel：</font>（Float类型）注记冲突策略（注记优先级）。<br />
+            <font class="nextParameter">【13】LabelType：</font>（Zondy.Object.DynNoteLabelType类型）注记方位属性。<br />
+            <font class="nextParameter">【14】Space：</font>（Float类型）注记字的间距。<br />
+            <font class="nextParameter">【15】StrikeThrough：</font>（整型）注记删除线。<br />默认值是：0<br />
+            <font class="nextParameter">【16】UnderLine：</font>（整型）注记下划线。<br />默认值是：0
+        </div>
+    </div>
+    <p>
+        <a href="" alt="MapGIS IGServer JavaScript Client的API手册。" target="_blank">
+            注：详细说明请参见MapGIS
+            IGServer JavaScript Client的API手册。
+        </a>
+    </p>
+</body>
+</html>

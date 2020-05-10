@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>数据库目录服务</title>
+    <!--导入外部easyui相关样式表-->
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="../../libs/jqueryEasyui/themes/icon.css" />
+    <!--导入本页面外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用，jquery-1.11.2.min.js必须在jquery.easyui.min.js库之前-->
+    <script src="../../Libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <!--引入easyui相关脚本库-->
+    <script src="../../libs/jqueryEasyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <!--引入操作JSON对象的相关脚本库-->
+    <script src="../../libs/jsonformat/json2.js" type="text/javascript"></script>
+    <script src="../../libs/jsonformat/jsonExtend.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        /*以本地数据源下的平台示例数据库sample.hdf为例*/
+        //GIS数据服务器地址
+        var ip = "develop.smaryun.com";
+        //GIS服务端口号
+        var port = "6163";
+        //用户名
+        var user = "";
+        //用户密码
+        var password = "";
+        //数据源名称
+        var srvName = "MapGISLocal";
+        //示例数据库名称
+        var GDBName = "sample";
+
+        //实例化GDBInfo类，设置目标数据源与GDB
+        var catalogSvr = new Zondy.Service.Catalog.GDBInfo({
+            //设置GIS数据服务器IP
+            ip: ip,
+            //设置GIS服务端口号
+            port: port,
+            //设置数据源名称
+            serverName: srvName,
+            //设置数据源的用户名 
+            User: user,
+            //设置数据源的用户密码
+            Password: password,
+            //设置数据库名称 
+            gdbName: GDBName
+        })
+        //获取指定数据库下要素数据集列表
+        function getDSList() {
+            //显示结果选项卡
+            $('#resultShow').tabs('select', 1);
+            //通过实例化的GDBInfo类对象调用getDsList接口，回调中处理结果
+            catalogSvr.getDsList(getListSuccess);
+        }
+
+        //获取指定数据库下所有栅格目录列表
+        function getRcsList() {
+            //显示结果选项卡
+            $('#resultShow').tabs('select', 1);
+            //通过实例化的GDBInfo类对象调用getRcsList接口，回调中处理结果
+            catalogSvr.getRcsList(getListSuccess);
+        }
+
+        //回调函数中处理显示结果
+        function getListSuccess(result) {
+            if (result.length == 0) {
+                alert("没有获取到信息！");
+                return;
+            }
+            //将一个JOSN对象转换成一个包含 JSON 文本的字符串。
+            var formatData = JSON.stringify(result);
+            //显示json字符串导到指定的div中
+            Process(formatData, 1, "reslutTable");
+        }
+    </script>
+</head>
+<body>
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" value="获取指定GDB下要素数据集列表" onclick="getDSList()" />
+        <input type="button" class="ButtonLib" value="获取指定GDB下栅格目录列表" onclick="getRcsList()" />
+        <br />
+    </div>
+    <div id="resultShow" class="easyui-tabs" style="width: 100%; height: 600px">
+        <div id="introduction" title="说明" style="padding: 10px">
+            注意：上述为GDB的目录服务接口示例，默认使用平台示例数据库sample.hdf，操作前请先确认此数据库已经附加。<br />
+        </div>
+        <div id="resultT" title="结果显示" style="padding: 10px">
+            <div id="reslutTable">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>删除线要素（矢量图层）示例</title>
+    <!--导入外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../libs/ol/ol.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, vectorLayer;
+
+        //地图初始化函数
+        function init() {
+            //初始化地图容器
+            map = new ol.Map({
+                target: "mapCon",
+                view: new ol.View({
+                    center: [0, 0],
+                    zoom: 2,
+                    projection: "EPSG:4326"
+                }),
+                controls: [new ol.control.MousePosition()]
+            });
+            //初始化矢量图层对象
+            vectorLayer = new Zondy.Map.Layer("MapGIS IGS VectorLayer", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界河流", "gdbp://MapGisLocal/OpenLayerVecterMap/ds/地图编辑缓存经纬度/sfcls/mylinelayer"], {
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+            //将地图文档图层加载到地图中
+            map.addLayer(vectorLayer);
+            //查询地图，获取活动图层所有要素列表
+            initFeatureIds();
+        }
+
+        //执行删除线要素功能
+        function deleteLine() {
+            //获取当前选择的要素编号
+            var featureIds = $("#featureID").find("option:selected").text();
+            if (featureIds == "请选择要素") {
+                alert("请先选择要素，再进行删除!");
+                return;
+            }
+            //执行删除要素操作
+            var deleteService = new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/地图编辑缓存经纬度/sfcls/mylinelayer", { ip: "develop.smaryun.com", port: "6163" });
+            deleteService.deletes(featureIds, onLineSuccess);
+        }
+
+        //删除线要素回调函数
+        function onLineSuccess(rlt) {
+            var result = rlt;
+            if (result) {
+                alert("删除线要素成功！");
+                vectorLayer.refresh();
+                //获取Select最大索引值，从0开始
+                var maxIndex = $("#featureID option:last").index();
+                $("#featureID option").remove();
+                //查询地图，更新要素列表
+                initFeatureIds(maxIndex);
+            } else {
+                alert("删除线要素失败！");
+            }
+        }
+
+        /*===========================以下代码为便于用户操作而添加，用于自动获取数据库中已存在的要素编号以及要素外包络矩形中心===========================*/
+        var featureSelect;
+        //查询地图，获取活动图层所有要素列表
+        function initFeatureIds(maxIndex) {
+            featureSelect = $("#featureID");
+            $("<option value='请选择要素'>请选择要素</option>").appendTo(featureSelect);
+
+            if (maxIndex != null && maxIndex == 1) {
+                return;
+            }
+            //初始化查询结构对象，设置查询结构包含几何信息
+            var queryStruct = new Zondy.Service.QueryFeatureStruct();
+            //是否包含几何图形信息
+            queryStruct.IncludeGeometry = true;
+            //是否包含属性信息
+            queryStruct.IncludeAttribute = true;
+            //是否包含图形显示参数
+            queryStruct.IncludeWebGraphic = false;
+            //实例化查询参数对象	
+            var queryParam = new Zondy.Service.QueryByLayerParameter("gdbp://MapGisLocal/OpenLayerVecterMap/ds/地图编辑缓存经纬度/sfcls/mylinelayer", {
+                resultFormat: "json",
+                struct: queryStruct
+            });
+            //设置查询要素数目
+            queryParam.recordNumber = 1000;
+            //设置属性条件
+            //queryParam.where = "name='中国'";
+            //实例化地图文档查询服务对象
+            var queryService = new Zondy.Service.QueryLayerFeature(queryParam, {
+                ip: "develop.smaryun.com",
+                port: "6163"
+            });
+            //执行查询操作，querySuccess为查询回调函数
+            queryService.query(querySuccess);
+        }
+
+        var pntArr = new Array();
+        //查询成功回调
+        function querySuccess(a) {
+            if (a.SFEleArray != null) {
+                if (a.SFEleArray.length == 0) {
+                    alert("查询结果为空");
+                }
+                else {
+                    for (var i = 0; i < a.SFEleArray.length; i++) {
+                        var obj = a.SFEleArray[i];
+                        $("<option value='" + i + "'>" + obj.FID + "</option>").appendTo(featureSelect);
+
+                        //获取不同编号对应元素的外包络矩形及中心，用于跳转
+                        var featureBound = obj.bound;
+                        var x = 0, y = 0;
+                        //计算外包矩形的中心点
+                        x = featureBound.xmax != featureBound.xmin ? ((featureBound.xmax - featureBound.xmin) / 2 + featureBound.xmin) : featureBound.xmax;
+                        y = featureBound.ymax != featureBound.ymin ? ((featureBound.ymax - featureBound.ymin) / 2 + featureBound.ymin) : featureBound.ymax;
+                        pntArr.push([x, y]);
+                    }
+                    //if else(a.SFEleArray.length == 0)
+                }
+                //if (a.SFEleArray != null) 
+            }
+            else {
+                alert("当前地图未查到要素，请先运行对应的要素添加示例！");
+                //if else(a.SFEleArray != null) 
+            }
+        }
+
+        //选中某一个要素编号后触发的事件，用于进行要素定位，地图跳转
+        function onSelect() {
+            var index = $("#featureID").val();
+            if (index == "请选择要素") {
+                return;
+            }
+            var pnt = pntArr[index];
+            var view = new ol.View({
+                center:pnt,
+                zoom:4,
+                projection:"EPSG:4326"
+            });
+            map.setView(view);
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div class="ToolLib">
+        请输入要删除的要素ID：<select id="featureID" onchange="onSelect()"></select>
+        <input type="button" class="ButtonLib" value="删除线要素" onclick="deleteLine()" />
+    </div>
+    <div id="mapCon">
+    </div>
+</body>
+</html>

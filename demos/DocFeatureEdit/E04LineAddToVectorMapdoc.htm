@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>向矢量地图文档中添加线要素</title>
+    <!--导入外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../libs/ol/ol.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, docLayer;
+
+        //地图初始化函数
+        function init() {
+            //初始化地图容器
+            map = new ol.Map({
+                target: "mapCon",
+                view: new ol.View({
+                    center:[0,0],
+                    zoom:2,
+                    projection:"EPSG:4326"
+                })
+            });
+            //初始化地图文档图层对象
+            docLayer = new Zondy.Map.Doc("MapGIS IGS VectorMapdocLayer", "WorldJWEdit", {
+                ip: "develop.smaryun.com",
+                port: "6163",
+                isBaseLayer: true
+            });
+            //将地图文档图层加载到地图中
+            map.addLayer(docLayer);
+        }
+
+        //随机函数生成点
+        function createPoint() {
+            //获取地图显示范围
+            var curMapBound = map.getView().projection_.extent_;
+            var w = curMapBound[2] - curMapBound[0];
+            var h = curMapBound[3] - curMapBound[1];
+            var x = Math.random() * w + curMapBound[0];
+            var y = Math.random() * h + curMapBound[1];
+            return new Zondy.Object.Point2D(x, y);
+        }
+
+        //添加线要素
+        function addLine() {
+            //构成线要素的点
+            var pointObj = new Array();
+            pointObj[0] = createPoint();
+            pointObj[1] = createPoint();
+            //构成折线的弧段
+            var gArc = new Zondy.Object.Arc(pointObj);
+            //构成线的折线
+            var gAnyLine = new Zondy.Object.AnyLine([gArc]);
+            //设置线要素的几何信息
+            var gline = new Zondy.Object.GLine(gAnyLine);
+            //设置要素的几何信息
+            var fGeom = new Zondy.Object.FeatureGeometry({ LinGeom: [gline] });
+            //随机输出1~8之间的整数,作为新添加的要素的颜色号
+            var lineColor = Math.floor(Math.random() * 8 + 1);
+
+            //设置添加线要素的图形参数信息
+            var clineInfo = new Zondy.Object.CLineInfo({ "Color": lineColor, "LinStyleID": 0, "LinStyleID2": 1, "LinWidth": 2, "Xscale": 10, "Yscale": 10 });
+            //设置要素的图形参数信息
+            var graphicInfo = new Zondy.Object.WebGraphicsInfo({ InfoType: 2, LinInfo: clineInfo });
+
+            //设置添加线要素的属性信息
+            var attValue = ['长江'];
+
+            //创建一个线要素
+            var newFeature = new Zondy.Object.Feature({ fGeom: fGeom, GraphicInfo: graphicInfo, AttValue: attValue });
+            //设置要素为线要素
+            newFeature.setFType(2);
+
+            //创建一个要素数据集
+            var featureSet = new Zondy.Object.FeatureSet();
+            var fldNumber = 1; //属性个数
+            var fldName = ["CName"];
+            var fldType = ["string"];
+            //创建属性结构设置对象
+            var cAttStruct = new Zondy.Object.CAttStruct({ FldName: fldName, FldNumber: fldNumber, FldType: fldType });
+            //设置要素数据集的树形结构
+            featureSet.AttStruct = cAttStruct;
+            //将添加的线要素添加到属性数据集中
+            featureSet.addFeature(newFeature);
+
+            //创建一个地图编辑对象
+            var editDocFeature = new Zondy.Service.EditDocFeature("WorldJWEdit", 10, { ip: "develop.smaryun.com", port: "6163" });
+            editDocFeature.add(featureSet, onLineSuccess);
+        }
+
+        //添加线要素回调函数
+        function onLineSuccess(rlt) {
+            var result = rlt;
+            if (result) {
+                alert("添加线要素成功！");
+                docLayer.refresh();
+            } else {
+                alert("添加线要素失败！");
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" value="添加线要素" onclick="addLine()" />
+    </div>
+    <div id="mapCon">
+    </div>
+</body>
+</html>

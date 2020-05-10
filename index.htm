@@ -1,0 +1,743 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>OpenLayers3示例</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- 强制360浏览器用WebKit内核 -->
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <link type="text/css" rel="stylesheet" href="css/base.css" />
+    <!-- 开源库jQuery -->
+    <script src="libs/jquery-1.11.2.min.js"></script>
+    <!-- 第三方插件库（复制功能插件） -->
+    <script src="libs/jqueryzclip/jquery.zclip.js" type="text/javascript"></script>    <!-- 源码编辑器样式文件与插件库 -->
+    <link type="text/css" rel="stylesheet" href="libs/codemirror/lib/codemirror.css" />
+    <script type="text/javascript" src="libs/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="libs/codemirror/mode/xml/xml.js"></script>
+    <script type="text/javascript" src="libs/codemirror/mode/javascript/javascript.js"></script>
+    <script type="text/javascript" src="libs/codemirror/mode/css/css.js"></script>
+    <script type="text/javascript" src="libs/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script type="text/javascript" src="libs/codemirror/addon/edit/matchbrackets.js"></script>
+    <!-- 系统首页功能库 -->
+    <script type="text/javascript" src="js/init.js"></script>
+
+</head>
+<body>
+    <div id="header">
+        <a class="logo">
+            <img src="images/MapGIS logo白色样式1.png" />
+            <!--<img src="images/MapGIS logo边线样式.png" />-->
+            <span> OpenLayers 3 示例集锦</span>
+        </a>
+    </div>
+    <div id="content">
+        <div class="leftsidebar_box">
+            <div class="line"></div>
+            <dl class="control">
+                <dt class="first_dt">地图控件<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('Navigation', 'MapControls', 'MapControls/E01Navigation_help.htm')">导航控件</dd>
+                <dd onclick="setCore('ZoomSlider', 'MapControls','MapControls/E02ZoomSlider_help.htm')">zoomslider</dd>
+                <dd onclick="setCore('MousePosition', 'MapControls', 'MapControls/E03MousePosition_help.htm')">鼠标位置</dd>
+                <dd onclick="setCore('ScaleLine', 'MapControls', 'MapControls/E04ScaleLine_help.htm')"> 比例尺</dd>
+                <dd onclick="setCore('OverviewMap', 'MapControls', 'MapControls/E05OverviewMap_help.htm')">鹰 眼</dd>
+                <dd onclick="setCore('LayerControl', 'MapControls', 'MapControls/E07LayerControl_help.htm')">图层选择</dd>
+            </dl>
+            <dl class="MapOperation">
+                <dt>地图操作<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('Operation', 'MapOperation', 'MapOperation/E01Operation_help.htm')">
+                    地图操作
+                </dd>
+                <dd onclick="setCore('setBackground', 'MapOperation', 'MapOperation/E02setBackground_help.htm')">
+                    设置地图背景
+                </dd>
+                <dd onclick="setCore('MapPositioning', 'MapOperation', 'MapOperation/E03MapPositioning_help.htm')">
+                    地图定位
+                </dd>
+                <dd onclick="setCore('setviewZoom', 'MapOperation', 'MapOperation/E04setviewZoom_help.htm')">
+                    显示级数
+                </dd>
+                <dd onclick="setCore('viewWindowPosition', 'MapOperation', 'MapOperation/E05viewWindowPosition_help.htm')">
+                    视窗逻辑坐标
+                </dd>
+                <dd onclick="setCore('Mapinformation', 'MapOperation', 'MapOperation/E06Mapinformation_help.htm')">
+                    地图域当前信息
+                </dd>
+                <dd onclick="setCore('coutpicture', 'MapOperation', 'MapOperation/E07coutpicture_help.htm')">
+                    导出成图片
+                </dd>
+                <dd onclick="setCore('coutPDF', 'MapOperation', 'MapOperation/E08coutPDF_help.htm')">
+                    导出成PDF
+                </dd>
+                <dd onclick="setCore('MapEvent', 'MapOperation', 'MapOperation/E09MapEvent_help.htm')">
+                    地图事件
+                </dd>
+                <dd onclick="setCore('LayerSearch', 'MapOperation', 'MapOperation/E10LayerSearch_help.htm')">
+                    图层探查
+                </dd>
+                <dd onclick="setCore('LayersControl', 'MapOperation', 'MapOperation/E11LayersControl_help.htm')">
+                    图层层级控制
+                </dd>
+                <dd onclick="setCore('LayerGroupControl', 'MapOperation', 'MapOperation/E12LayerGroupControl_help.htm')">
+                    图层组控制
+                </dd>
+
+            </dl>
+            <dl class="GraphicOperation">
+                <dt>图形操作<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('GraphicDrawByPoint', 'GraphicOperation', 'GraphicOperation/E01GraphicDrawByPoint_help.htm')">
+                    坐标添加点
+                </dd>
+                <dd onclick="setCore('GraphicDrawByLine', 'GraphicOperation', 'GraphicOperation/E02GraphicDrawByLine_help.htm')">
+                    坐标添加线
+                </dd>
+                <dd onclick="setCore('GraphicDrawByCircle', 'GraphicOperation', 'GraphicOperation/E03GraphicDrawByCircle_help.htm')">
+                    坐标添加圆
+                </dd>
+                <dd onclick="setCore('GraphicDrawBySquare', 'GraphicOperation', 'GraphicOperation/E04GraphicDrawBySquare_help.htm')">
+                    坐标添加正方形
+                </dd>
+                <dd onclick="setCore('GraphicDrawByRectangle', 'GraphicOperation', 'GraphicOperation/E05GraphicDrawByRectangle_help.htm')">
+                    坐标添加矩形
+                </dd>
+                <dd onclick="setCore('GraphicDrawByPolygon', 'GraphicOperation', 'GraphicOperation/E06GraphicDrawByPolygon_help.htm')">
+                    坐标添加多边形
+                </dd>
+                <dd onclick="setCore('DrawFeatures', 'GraphicOperation', 'GraphicOperation/E07DrawFeatures_help.htm')">
+                    绘制几何图形
+                </dd>
+                <dd onclick="setCore('FreehandDrawing', 'GraphicOperation', 'GraphicOperation/E08FreehandDrawing_help.htm')">
+                    绘制任意图形
+                </dd>
+                <dd onclick="setCore('FeaturesStyle', 'GraphicOperation', 'GraphicOperation/E09FeaturesStyle_help.htm')">
+                    图形样式编辑
+                </dd>
+                <dd onclick="setCore('ModifyFeatures', 'GraphicOperation', 'GraphicOperation/E10ModifyFeatures_help.htm')">
+                    图形交互编辑
+                </dd>
+                <dd onclick="setCore('GetGeometryInfo', 'GraphicOperation', 'GraphicOperation/E11GetGeometryInfo_help.htm')">
+                    获取几何信息
+                </dd>
+                <dd onclick="setCore('DrawLineArrows', 'GraphicOperation', 'GraphicOperation/E12DrawLineArrows_help.htm')">
+                    绘制箭头线
+                </dd>
+            </dl>
+            <dl class="MapMarker">
+                <dt>地图标注<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('AddPicture', 'MapMarker', 'MapMarker/E01AddPicture_help.htm')">
+                    图片标注
+                </dd>
+                <dd onclick="setCore('AddText', 'MapMarker', 'MapMarker/E02AddText_help.htm')">
+                    文字标注
+                </dd>
+                <dd onclick="setCore('AddTextandPic', 'MapMarker', 'MapMarker/E03AddTextandPic_help.htm')">
+                    图文标注
+                </dd>
+                <dd onclick="setCore('AddPopup', 'MapMarker', 'MapMarker/E04AddPopup_help.htm')">
+                    popup弹出框
+                </dd>
+                <dd onclick="setCore('AddClusterLabels', 'MapMarker', 'MapMarker/E05AddClusterLabels_help.htm')">
+                    聚合标注
+                </dd>
+            </dl>
+            <dl class="FeatureAnimation">
+                <dt>要素动画<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('FeatureAnimation', 'FeatureAnimation', 'FeatureAnimation/E01FeatureAnimation_help.htm')">
+                    要素动画
+                </dd>
+                <dd onclick="setCore('FeatureMove', 'FeatureAnimation', 'FeatureAnimation/E02FeatureMove_help.htm')">
+                    要素移动
+                </dd>
+                <dd onclick="setCore('FlightAnimation', 'FeatureAnimation', 'FeatureAnimation/E03FlightAnimation_help.htm')">
+                    航线动画
+                </dd>
+            </dl>
+            <dl class="ThirdPartyMapDisplay">
+                <dt>第三方地图显示<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('Bing', 'ThirdPartyMapDisplay','ThirdPartyMapDisplay/E01Bing_help.htm')">
+                    Bing
+                </dd>
+                <dd onclick="setCore('OSM', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E02OSM_help.htm')">
+                    OSM
+                </dd>
+                <dd onclick="setCore('ImageArcGIS', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E03ImageArcGIS_help.htm')">
+                    Image ArcGIS MapServer
+                </dd>
+                <dd onclick="setCore('TileArcGIS', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E04TileArcGIS_help.htm')">
+                    Tiled ArcGIS MapServer
+                </dd>
+                <dd onclick="setCore('ArcGISFeature', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E05ArcGISFeature_help.htm')">
+                    ArcGIS REST Feature
+                </dd>
+                <dd onclick="setCore('KML', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E06KML_help.htm')">
+                    KML
+                </dd>
+                <dd onclick="setCore('TileJSON', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E07TileJSON_help.htm')">
+                    TileJSON
+                </dd>
+                <dd onclick="setCore('gpx', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E08gpx_help.htm')">
+                    GPX
+                </dd>
+                <dd onclick="setCore('CanvasTiles', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E09CanvasTiles_help.htm')">
+                    瓦片网格
+                </dd>
+                <dd onclick="setCore('OverLayerMaps', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E01Bing_help.htm')">
+                    图层叠加显示
+                </dd>
+                <dd onclick="setCore('MapExport', 'ThirdPartyMapDisplay', 'ThirdPartyMapDisplay/E01Bing_help.htm')">
+                    地图打印
+                </dd>
+            </dl>
+            <dl class="OGCResources">
+                <dt>OGC资源<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('LoadWMTSMap', 'OGCResources', 'OGCResources/E03LoadWMTSMap_help.htm')">
+                    加载WMTS
+                </dd>
+                <dd onclick="setCore('LoadWMSMap', 'OGCResources', 'OGCResources/E02LoadWMSMap_help.htm')">
+                    加载WMS
+                </dd>
+                <dd onclick="setCore('LoadWFSFeatrue', 'OGCResources', 'OGCResources/E01LoadWFSFeatrue_help.htm')">
+                    加载WFS
+                </dd>
+            </dl>
+            <dl class="MapAnimation">
+                <dt>地图动画<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('MapAnimation', 'MapAnimation', 'MapAnimation/E01MapAnimation_help.htm')">
+                    地图动画
+                </dd>
+            </dl>
+            <dl class="Measurement">
+                <dt>测量<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('measure', 'Measurement','Measurement/measure_help.htm')">
+                    测量（测距、测面）
+                </dd>
+            </dl>
+            <dl class="HeatMapDisplay">
+                <dt>热力图显示<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('Heatmap', 'HeatMapDisplay', 'HeatMapDisplay/E01Heatmap_help.htm')">
+                    热力图
+                </dd>
+            </dl>
+            <dl class="MapDisplay">
+                <dt>地图显示<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('TileMapDisplay','MapDisplay','MapDisplay/E01TileLayerDisplay_help.htm')">
+                    瓦片地图
+                </dd>
+                <dd onclick="setCore('OldTileMapDisplay', 'MapDisplay', 'MapDisplay/E02OldTileMapDisplay_help.htm')">
+                    瓦片地图（兼容K9）
+                </dd>
+                <dd onclick="setCore('VecDocDisplay', 'MapDisplay', 'MapDisplay/E03VecDocDisplay_help.htm')">
+                    矢量地图文档
+                </dd>
+                <dd onclick="setCore('VecLayerDisplay', 'MapDisplay', 'MapDisplay/E04VecLayerDisplay_help.htm')">
+                    矢量图层
+                </dd>
+                <dd onclick="setCore('CacheTileDisplay', 'MapDisplay', 'MapDisplay/E05CacheTileDisplay_help.htm')">
+                    动态裁图
+                </dd>
+                <dd onclick="setCore('TianDiTuDisplay', 'MapDisplay', 'MapDisplay/E08TianDiTuDisplay_help.htm')">
+                    天地图
+                </dd>
+                <dd onclick="setCore('GoogleLayerDisplay', 'MapDisplay', 'MapDisplay/E09GoogleLayerDisplay_help.htm')">
+                    Google地图
+                </dd>
+                <dd onclick="setCore('ArcGISMapInLLDisplay', 'MapDisplay', 'MapDisplay/E10ArcGISMapInLLDisplay.htm')">
+                    ArcGIS(经纬度)
+                </dd>
+                <dd onclick="setCore('ArcGISMapInMKTDisplay2', 'MapDisplay', 'MapDisplay/E11ArcGISMapInMKTDisplay2_help.htm')">
+                    ArcGIS(墨卡托)
+                </dd>
+                <dd onclick="setCore('OGCWMSDocDisplay', 'MapDisplay', 'MapDisplay/E12OGCWMSDocDisplay_help.htm')">
+                    加载OGC的WMS(地图文档)
+                </dd>
+                <dd onclick="setCore('OGCWMSLayersDisplay', 'MapDisplay', 'MapDisplay/E13OGCWMSLayersDisplay_help.htm')">
+                    加载OGC的WMS（矢量图层）
+                </dd>
+                <dd onclick="setCore('OGCWFSLayersDisplay', 'MapDisplay', 'MapDisplay/E14OGCWFSLayersDisplay_help.htm')">
+                    加载OGC的WFS
+                </dd>
+                <dd onclick="setCore('OGCWMTSLayersDisplay', 'MapDisplay', 'MapDisplay/E15OGCWMTSLayersDisplay_help.htm')">
+                    加载OGC的WMTS
+                </dd>
+            </dl>
+            <dl class="MapControlDisplay">
+                <dt>地图显示控制<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E01MapDynaAnno', 'MapControlDisplay', 'MapControlDisplay/E01MapDynaAnno_help.htm')">
+                    矢量地图文档动态注记
+                </dd>
+                <dd onclick="setCore('E03VectlayerStyleSetting', 'MapControlDisplay', 'MapControlDisplay/E03VectlayerStyleSetting_help.htm')">
+                    矢量图层显示样式
+                </dd>
+                <dd onclick="setCore('E04VectorLayerFilter', 'MapControlDisplay', 'MapControlDisplay/E04VectlayerFilter_help.htm')">
+                    矢量图层过滤显示
+                </dd>
+                <dd onclick="setCore('E05VecDocFilter', 'MapControlDisplay', 'MapControlDisplay/E05VecDocFilter_help.htm')">
+                    矢量地图文档过滤显示
+                </dd>
+                <dd onclick="setCore('E06VecDocLayerControl', 'MapControlDisplay', 'MapControlDisplay/E06VecDocLayerControl_help.htm')">
+                    地图文档图层控制显示
+                </dd>
+            </dl>
+            <dl class="CatalogService">
+                <dt>目录服务<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('SvrManager', 'CatalogService', 'CatalogService/E01SvrManager_help.htm')">
+                    数据源目录服务
+                </dd>
+                <dd onclick="setCore('GDBManager', 'CatalogService', 'CatalogService/E02GDBManager_help.htm')">
+                    数据库目录服务
+                </dd>
+                <dd onclick="setCore('VectorMapdocManager', 'CatalogService', 'CatalogService/E03VectorMapdocManager_help.htm')">
+                    矢量地图文档目录服务
+                </dd>
+                <dd onclick="setCore('VectorLayerManager', 'CatalogService', 'CatalogService/E04VectorLayerManager_help.htm')">
+                    矢量图层目录服务
+                </dd>
+                <dd onclick="setCore('TileLayerManager', 'CatalogService', 'CatalogService/E05TileLayerManager_help.htm')">
+                    瓦片目录服务
+                </dd>
+                <dd onclick="setCore('SrefCatalog', 'CatalogService', 'CatalogService/E06SrefCatalog_help.htm')">
+                    空间参照系目录服务
+                </dd>
+                <dd onclick="setCore('DocLegend', 'CatalogService', 'CatalogService/E07DocLegend_help.htm')">
+                    图例服务
+                </dd>
+                <dd onclick="setCore('ColorManager', 'CatalogService', 'CatalogService/E08ColorManager_help.htm')">
+                    RGB和颜色号转换服务
+                </dd>
+            </dl>
+            <dl class="VectorLayerQuery">
+                <dt>矢量图层查询<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E01QueryVectorLayerByPntData','VectorLayerQuery','VectorLayerQuery/E01QueryVectorLayerByPntData_help.htm')">
+                    固定点查询(返回json)
+                </dd>
+                <dd onclick="setCore('E02QueryVectorLayerByPnt','VectorLayerQuery','VectorLayerQuery/E02QueryVectorLayerByPnt_help.htm')">
+                    固定点查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E03QueryVectorLayerByPlineData','VectorLayerQuery','VectorLayerQuery/E03QueryVectorLayerByPlineData_help.htm')">
+                    固定线查询(返回json)
+                </dd>
+                <dd onclick="setCore('E04QueryVectorLayerByPline','VectorLayerQuery','VectorLayerQuery/E04QueryVectorLayerByPline_help.htm')">
+                    固定线查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E05QueryVectorLayerByRectData','VectorLayerQuery','VectorLayerQuery/E05QueryVectorLayerByRectData_help.htm')">
+                    固定矩形查询(返回json)
+                </dd>
+                <dd onclick="setCore('E06QueryVectorLayerByRect','VectorLayerQuery','VectorLayerQuery/E06QueryVectorLayerByRect_help.htm')">
+                    固定矩形查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E07QueryVectorLayerByCircleData','VectorLayerQuery','VectorLayerQuery/E07QueryVectorLayerByCircleData_help.htm')">
+                    固定圆查询(返回json)
+                </dd>
+                <dd onclick="setCore('E08QueryVectorLayerByCircle','VectorLayerQuery','VectorLayerQuery/E08QueryVectorLayerByCircle_help.htm')">
+                    固定圆查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E09QueryVectorLayerByPolygonData','VectorLayerQuery','VectorLayerQuery/E09QueryVectorLayerByPolygonData_help.htm')">
+                    固定多边形查询(返回json)
+                </dd>
+                <dd onclick="setCore('E10QueryVectorLayerByPolygon', 'VectorLayerQuery', 'VectorLayerQuery/E10QueryVectorLayerByPolygon_help.htm')">
+                    固定多边形查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E21QueryVectorLayerByMultiPolygonData', 'VectorLayerQuery', 'VectorLayerQuery/E21QueryVectorLayerByMultiPolygonData_help.htm')">
+                    固定带洞多边形查询（返回json）
+                </dd>
+                <dd onclick="setCore('E22QueryVectorLayerByMultiPolygon', 'VectorLayerQuery', 'VectorLayerQuery/E22QueryVectorLayerByMultiPolygon_help.htm')">
+                    固定带洞多边形查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E11QueryPntLayerByRect','VectorLayerQuery','VectorLayerQuery/E11QueryPntLayerByRect_help.htm')">
+                    点图层查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E12QueryLineLayerByRect','VectorLayerQuery','VectorLayerQuery/E12QueryLineLayerByRect_help.htm')">
+                    线图层查询高亮（高亮显示）
+                </dd>
+                <dd onclick="setCore('E13QueryAreaLayerByRect','VectorLayerQuery','VectorLayerQuery/E13QueryAreaLayerByRect_help.htm')">
+                    区图层查询高亮（高亮显示）
+                </dd>
+                <dd onclick="setCore('E14QueryVectorLayerByAttributeData','VectorLayerQuery','VectorLayerQuery/E14QueryVectorLayerByAttributeData_help.htm')">
+                    属性查询(返回json)
+                </dd>
+                <dd onclick="setCore('E15QueryVectorLayerByAttribute','VectorLayerQuery','VectorLayerQuery/E15QueryVectorLayerByAttribute_help.htm')">
+                    属性查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E16QueryVectorLayerByPolygonAttData','VectorLayerQuery','VectorLayerQuery/E16QueryVectorLayerByPolygonAttData_help.htm')">
+                    几何+属性查询(返回json)
+                </dd>
+                <dd onclick="setCore('E17QueryVectorLayerByOIDData','VectorLayerQuery','VectorLayerQuery/E17QueryVectorLayerByOIDData_help.htm')">
+                    OID查询(返回json)
+                </dd>
+                <dd onclick="setCore('E18QueryVectorLayerByOID', 'VectorLayerQuery', 'VectorLayerQuery/E18QueryVectorLayerByOID_help.htm')">
+                    OID查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E19QueryMultiLayerByRectData','VectorLayerQuery','VectorLayerQuery/E19QueryMultiLayerByRectData_help.htm')">
+                    多图层查询（返回json）
+                </dd>
+                <dd onclick="setCore('E20QueryMultiLayerByRect', 'VectorLayerQuery', 'VectorLayerQuery/E20QueryMultiLayerByRect_help.htm')">
+                    多图层查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E23QueryVectorLayerByInteractivePnt', 'VectorLayerQuery', 'VectorLayerQuery/E23QueryVectorLayerByInteractivePnt_help.htm')">
+                    交互式点击查询
+                </dd>
+                <dd onclick="setCore('E24QueryVectorLayerByInteractiveCircle', 'VectorLayerQuery', 'VectorLayerQuery/E24QueryVectorLayerByInteractiveCircle_help.htm')">
+                    交互式圆查询
+                </dd>
+                <dd onclick="setCore('E25QueryVectorLayerByInteractiveRect', 'VectorLayerQuery', 'VectorLayerQuery/E25QueryVectorLayerByInteractiveRect_help.htm')">
+                    交互式拉框查询
+                </dd>
+                <dd onclick="setCore('E26QueryVectorLayerByInteractivePolygon', 'VectorLayerQuery', 'VectorLayerQuery/E26QueryVectorLayerByInteractivePolygon_help.htm')">
+                    交互式多边形查询
+                </dd>
+            </dl>
+            <dl class="MapdocQuery">
+                <dt>地图文档查询<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E01QueryVectorMapdocByPntData', 'MapdocQuery', 'MapdocQuery/E01QueryVectorMapdocByPntData_help.htm')">
+                    固定点查询(返回json)
+                </dd>
+                <dd onclick="setCore('E02QueryVectorMapdocByPnt', 'MapdocQuery', 'MapdocQuery/E02QueryVectorMapdocByPnt_help.htm')">
+                    固定点查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E03QueryVectorMapdocByPlineData', 'MapdocQuery', 'MapdocQuery/E03QueryVectorMapdocByPlineData_help.htm')">
+                    固定线查询(返回json)
+                </dd>
+                <dd onclick="setCore('E04QueryVectorMapdocByPline', 'MapdocQuery', 'MapdocQuery/E04QueryVectorMapdocByPline_help.htm')">
+                    固定线查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E07QueryVectorMapdocByCircleData', 'MapdocQuery', 'MapdocQuery/E07QueryVectorMapdocByCircleData_help.htm')">
+                    固定圆查询(返回json)
+                </dd>
+                <dd onclick="setCore('E08QueryVectorMapdocByCircle', 'MapdocQuery', 'MapdocQuery/E08QueryVectorMapdocByCircle_help.htm')">
+                    固定圆查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E05QueryVectorMapdocByRectData', 'MapdocQuery', 'MapdocQuery/E05QueryVectorMapdocByRectData_help.htm')">
+                    固定矩形查询(返回json)
+                </dd>
+                <dd onclick="setCore('E06QueryVectorMapdocByRect', 'MapdocQuery', 'MapdocQuery/E06QueryVectorMapdocByRect_help.htm')">
+                    固定矩形查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E09QueryVectorMapdocByPolygonData', 'MapdocQuery', 'MapdocQuery/E09QueryVectorMapdocByPolygonData_help.htm')">
+                    固定多边形查询(返回json)
+                </dd>
+                <dd onclick="setCore('E10QueryVectorMapdocByPolygon', 'MapdocQuery', 'MapdocQuery/E10QueryVectorMapdocByPolygon_help.htm')">
+                    固定多边形查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E21QueryVectorMapdocByMultiPolygonData', 'MapdocQuery', 'MapdocQuery/E21QueryVectorMapdocByMultiPolygonData_help.htm')">
+                    固定带洞多边形查询(返回json)
+                </dd>
+                <dd onclick="setCore('E22QueryVectorMapdocByMultiPolygon', 'MapdocQuery', 'MapdocQuery/E22QueryVectorMapdocByMultiPolygon_help.htm')">
+                    固定带洞多边形查询(高亮显示)
+                </dd>
+                <dd onclick="setCore('E11QueryPntLayerByRect', 'MapdocQuery', 'MapdocQuery/E11QueryPntLayerByRect_help.htm')">
+                    查询地图文档点图层（高亮显示）
+                </dd>
+                <dd onclick="setCore('E12QueryLineLayerByRect', 'MapdocQuery', 'MapdocQuery/E12QueryLineLayerByRect_help.htm')">
+                    查询地图文档线图层（高亮显示）
+                </dd>
+                <dd onclick="setCore('E13QueryAreaLayerByRect', 'MapdocQuery', 'MapdocQuery/E13QueryAreaLayerByRect_help.htm')">
+                    查询地图文档区图层（高亮显示）
+                </dd>
+                <dd onclick="setCore('E14QueryVectorMapdocByAttributeData', 'MapdocQuery', 'MapdocQuery/E14QueryVectorMapdocByAttributeData_help.htm')">
+                    属性查询(返回json)
+                </dd>
+                <dd onclick="setCore('E15QueryVectorMapdocByAttribute', 'MapdocQuery', 'MapdocQuery/E15QueryVectorMapdocByAttribute_help.htm')">
+                    属性查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E16QueryVectorMapdocByPolygonAttData', 'MapdocQuery', 'MapdocQuery/E16QueryVectorMapdocByPolygonAttData_help.htm')">
+                    几何+属性查询(返回json)
+                </dd>
+                <dd onclick="setCore('E17QueryVectorMapdocByOIDData', 'MapdocQuery', 'MapdocQuery/E17QueryVectorMapdocByOIDData_help.htm')">
+                    OID查询(返回json)
+                </dd>
+                <dd onclick="setCore('E18QueryVectorMapdocByOID', 'MapdocQuery', 'MapdocQuery/E18QueryVectorMapdocByOID_help.htm')">
+                    OID查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E19QueryMultiMapdoByRectData', 'MapdocQuery', 'MapdocQuery/E19QueryMultiMapdoByRectData_help.htm')">
+                    多图层查询（返回json）
+                </dd>
+                <dd onclick="setCore('E20QueryMultiMapdoByRect', 'MapdocQuery', 'MapdocQuery/E20QueryMultiMapdoByRect_help.htm')">
+                    多图层查询（高亮显示）
+                </dd>
+                <dd onclick="setCore('E23QueryVectorMapdocByInteractivePnt', 'MapdocQuery', 'MapdocQuery/E23QueryVectorMapdocByInteractivePnt_help.htm')">
+                    交互式点击查询
+                </dd>
+                <dd onclick="setCore('E24QueryVectorMapdocByInteractiveCircle', 'MapdocQuery', 'MapdocQuery/E24QueryVectorMapdocByInteractiveCircle_help.htm')">
+                    交互式圆查询
+                </dd>
+                <dd onclick="setCore('E25QueryVectorMapdocByInteractiveRect', 'MapdocQuery', 'MapdocQuery/E25QueryVectorMapdocByInteractiveRect_help.htm')">
+                    交互式拉框查询
+                </dd>
+                <dd onclick="setCore('E26QueryVectorMapdocByInteractivePolygon', 'MapdocQuery', 'MapdocQuery/E26QueryVectorMapdocByInteractivePolygon_help.htm')">
+                    交互式多边形查询
+                </dd>
+            </dl>
+            <dl class="LayerFeatureEdit">
+                <dt>图层要素编辑<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E01PntAddToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E01PntAddToVectorLayer_help.htm')">
+                    点要素添加
+                </dd>
+                <dd onclick="setCore('E02PntDeleteToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E02PntDeleteToVectorLayer_help.htm')">
+                    点要素删除
+                </dd>
+                <dd onclick="setCore('E03PntUpdateToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E03PntUpdateToVectorLayer_help.htm')">
+                    点要素修改
+                </dd>
+                <dd onclick="setCore('E04LineAddToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E04LineAddToVectorLayer_help.htm')">
+                    线要素添加
+                </dd>
+                <dd onclick="setCore('E05LineDeleteToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E05LineDeleteToVectorLayer_help.htm')">
+                    线要素删除
+                </dd>
+                <dd onclick="setCore('E06LineUpdateToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E06LineUpdateToVectorLayer_help.htm')">
+                    线要素修改
+                </dd>
+                <dd onclick="setCore('E07RegionAddToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E07RegionAddToVectorLayer_help.htm')">
+                    区要素添加
+                </dd>
+                <dd onclick="setCore('E08RegionDeleteToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E08RegionDeleteToVectorLayer_help.htm')">
+                    区要素删除
+                </dd>
+                <dd onclick="setCore('E09RegionUpdateToVectorLayer', 'LayerFeatureEdit', 'LayerFeatureEdit/E09RegionUpdateToVectorLayer_help.htm')">
+                    区要素修改
+                </dd>
+            </dl>
+            <dl class="DocFeatureEdit">
+                <dt>地图文档要素编辑<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E01PntAddToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E01PntAddToVectorMapdoc_help.htm')">
+                    点要素添加
+                </dd>
+                <dd onclick="setCore('E02PntDeleteToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E02PntDeleteToVectorMapdoc_help.htm')">
+                    点要素删除
+                </dd>
+                <dd onclick="setCore('E03PntUpdateToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E03PntUpdateToVectorMapdoc_help.htm')">
+                    点要素修改
+                </dd>
+                <dd onclick="setCore('E04LineAddToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E04LineAddToVectorMapdoc_help.htm')">
+                    线要素添加
+                </dd>
+                <dd onclick="setCore('E05LineDeleteToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E05LineDeleteToVectorMapdoc_help.htm')">
+                    线要素删除
+                </dd>
+                <dd onclick="setCore('E06LineUpdateToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E06LineUpdateToVectorMapdoc_help.htm')">
+                    线要素修改
+                </dd>
+                <dd onclick="setCore('E07RegionAddToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E07RegionAddToVectorMapdoc_help.htm')">
+                    区要素添加
+                </dd>
+                <dd onclick="setCore('E08RegionDeleteToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E08RegionDeleteToVectorMapdoc_help.htm')">
+                    区要素删除
+                </dd>
+                <dd onclick="setCore('E09RegionUpdateToVectorMapdoc', 'DocFeatureEdit', 'DocFeatureEdit/E09RegionUpdateToVectorMapdoc_help.htm')">
+                    区要素修改
+                </dd>
+            </dl>
+            <dl class="GeometricAnalysisService">
+                <dt>几何分析服务<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('MapMeasure', 'GeometricAnalysisService', 'GeometricAnalysisService/E01MapMeasure_help.htm')">
+                    测量服务
+                </dd>
+                <dd onclick="setCore('DotsProject', 'GeometricAnalysisService', 'GeometricAnalysisService/E02MapDotsProject_help.htm')">
+                    点投影转换
+                </dd>
+                <dd onclick="setCore('RectProject', 'GeometricAnalysisService', 'GeometricAnalysisService/E03RectangleProject_help.htm')">
+                    矩形投影转换
+                </dd>
+                <dd onclick="setCore('TopAnalysistDis', 'GeometricAnalysisService', 'GeometricAnalysisService/E04TopAnalysistDis_help.htm')">
+                    拓扑分析（相离）
+                </dd>
+                <dd onclick="setCore('TopAnalysistInter', 'GeometricAnalysisService', 'GeometricAnalysisService/E05TopAnalysistInter_help.htm')">
+                    拓扑分析（相交）
+                </dd>
+                <dd onclick="setCore('TopAnalysistContain', 'GeometricAnalysisService', 'GeometricAnalysisService/E06TopAnalysistContain_help.htm')">
+                    拓扑分析（包含）
+                </dd>
+                <dd onclick="setCore('TopAnalysistAdjacent', 'GeometricAnalysisService', 'GeometricAnalysisService/E07TopAnalysistAdjacent_help.htm')">
+                    拓扑分析（相邻）
+                </dd>
+            </dl>
+            <dl class="LayerProjectionTransform">
+                <dt>图层投影转换<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('ProjectByParam','LayerProjectionTransform','LayerProjectionTransform/E01ProjectByParam_help.htm')">
+                    根据空间参照系信息投影
+                </dd>
+                <dd onclick="setCore('ProjectBySRID', 'LayerProjectionTransform', 'LayerProjectionTransform/E02ProjectBySRID_help.htm')">
+                    根据空间参照系ID信息投影
+                </dd>
+            </dl>
+            <dl class="SpatialAnalysisServices">
+                <dt>空间分析服务<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E01BuffAnalysisByClass', 'SpatialAnalysisServices', 'SpatialAnalysisServices/E01BuffAnalysisByClass_help.htm')">
+                    类缓冲分析
+                </dd>
+                <dd onclick="setCore('E02BuffAnalysisByFeature', 'SpatialAnalysisServices', 'SpatialAnalysisServices/E02BuffAnalysisByFeature_help.htm')">
+                    要素缓冲分析
+                </dd>
+                <dd onclick="setCore('E03CircleClipAnalysis', 'SpatialAnalysisServices', 'SpatialAnalysisServices/E0345ClipAnalysis_help.htm')">
+                    圆裁剪分析
+                </dd>
+                <dd onclick="setCore('E04PolygonClipAnalysis', 'SpatialAnalysisServices', 'SpatialAnalysisServices/E0345ClipAnalysis_help.htm')">
+                    多边形裁剪分析
+                </dd>
+                <dd onclick="setCore('E05LayerClipAnalysis', 'SpatialAnalysisServices', 'SpatialAnalysisServices/E0345ClipAnalysis_help.htm')">
+                    图层裁剪分析
+                </dd>
+                <dd onclick="setCore('E07PolygonOverLayAnalysis', 'SpatialAnalysisServices', 'SpatialAnalysisServices/E067OverLayAnalysis_help.htm')">
+                    多边形叠加分析
+                </dd>
+                <dd onclick="setCore('E06LayerOverLayAnalysis', 'SpatialAnalysisServices', 'SpatialAnalysisServices/E067OverLayAnalysis_help.htm')">
+                    图层叠加分析
+                </dd>
+            </dl>
+            <dl class="ThemeMapService">
+                <dt>专题图服务<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E01UniqueTheme', 'ThemeMapService', 'ThemeMapService/E01UniqueTheme_help.htm')">
+                    单值专题图
+                </dd>
+                <dd onclick="setCore('E02SingleClassTheme', 'ThemeMapService', 'ThemeMapService/E02SingleClassTheme_help.htm')">
+                    唯一专题图
+                </dd>
+                <dd onclick="setCore('E03ParagraphThemeBySinglefield', 'ThemeMapService', 'ThemeMapService/E03ParagraphThemeBySinglefield_help.htm')">
+                    分段(单字段)专题图
+                </dd>
+                <dd onclick="setCore('E03ParagraphThemeByMultifield', 'ThemeMapService', 'ThemeMapService/E03ParagraphThemeByMultifield_help.htm')">
+                    分段(多字段)专题图
+                </dd>
+                <dd onclick="setCore('E04SimpleTheme', 'ThemeMapService', 'ThemeMapService/E04SimpleTheme_help.htm')">
+                    统一配置专题图
+                </dd>
+                <dd onclick="setCore('E05RandomTheme', 'ThemeMapService', 'ThemeMapService/E05RandomTheme_help.htm')">
+                    随机专题图
+                </dd>
+                <dd onclick="setCore('E06FourColorTheme', 'ThemeMapService', 'ThemeMapService/E06FourColorTheme_help.htm')">
+                    四色专题图
+                </dd>
+                <dd onclick="setCore('E07ChartTheme', 'ThemeMapService', 'ThemeMapService/E07ChartTheme_help.htm')">
+                    统计专题图
+                </dd>
+                <dd onclick="setCore('E08DotDensityTheme', 'ThemeMapService', 'ThemeMapService/E08DotDensityTheme_help.htm')">
+                    点密度专题图
+                </dd>
+                <dd onclick="setCore('E09GraduatedSymbolTheme', 'ThemeMapService', 'ThemeMapService/E09GraduatedSymbolTheme_help.htm')">
+                    等级符号专题图
+                </dd>
+                <dd onclick="setCore('E10RangeTheme', 'ThemeMapService', 'ThemeMapService/E10RangeTheme_help.htm')">
+                    范围专题图
+                </dd>
+            </dl>
+            <dl class="NetAnalysis">
+                <dt>网络分析<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E11NetAnalysist(old)','NetAnalysis','NetAnalysis/E11NetAnalysist(old)_help.htm')">
+                    路径分析(老版本)
+                </dd>
+                <dd onclick="setCore('E11NetAnalysist(new)', 'NetAnalysis', 'NetAnalysis/E11NetAnalysist(new)_help.htm')">
+                    路径分析(新版本)
+                </dd>
+                <dd onclick="setCore('E12NetAnalysistDntFlg', 'NetAnalysis', 'NetAnalysis/E12NetAnalysistDntFlg_help.htm')">
+                    点上网标
+                </dd>
+                <dd onclick="setCore('E13NetAnalysistLineFlg', 'NetAnalysis', 'NetAnalysis/E13NetAnalysistLineFlg_help.htm')">
+                    线上网标
+                </dd>
+            </dl>
+            <dl class="ContourAnalysis">
+                <dt>等值线分析<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('E01ContourAnalyse','ContourAnalysis','ContourAnalysis/E01ContourAnalyse_help.htm')">
+                    等值线分析
+                </dd>
+            </dl>
+            <dl class="StatisticalGraph">
+                <dt>统计图<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('StatisticsAnalysisForEC', 'StatisticalGraph', 'StatisticalGraph/E01StatisticsAnalysisForEC_help.htm')">
+                    echart方式
+                </dd>
+            </dl>
+            <dl class="MilitaryMakerDraw">
+                <dt>军标绘制<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('MilitaryArrow', 'MilitaryMakerDraw', 'MilitaryMakerDraw/E01MilitaryArrow_help.htm')">
+                    绘制箭头
+                </dd>
+                <dd onclick="setCore('MilitaryCompass', 'MilitaryMakerDraw', 'MilitaryMakerDraw/E02MilitaryCompass_help.htm')">
+                    绘制指北针
+                </dd>
+                <dd onclick="setCore('MilitaryFlag', 'MilitaryMakerDraw', 'MilitaryMakerDraw/E03MilitaryFlag_help.htm')">
+                    绘制旗标
+                </dd>
+                <dd onclick="setCore('MilitaryPlotting', 'MilitaryMakerDraw', 'MilitaryMakerDraw/E04MilitaryPlotting_help.htm')">
+                    交互绘制
+                </dd>
+            </dl>
+            <dl class="ClientThemeMap">
+                <dt>客户端专题图<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('DensityTheme', 'ClientThemeMap', 'ClientThemeMap/DensityTheme_help.htm')">
+                    点密度专题图
+                </dd>
+                <dd onclick="setCore('FourColorTheme', 'ClientThemeMap', 'ClientThemeMap/FourColorTheme_help.htm')">
+                    四色专题图
+                </dd>
+                <dd onclick="setCore('GradeTheme', 'ClientThemeMap', 'ClientThemeMap/GradeTheme_help.htm')">
+                    等级符号专题图
+                </dd>
+                <dd onclick="setCore('UniqueTheme', 'ClientThemeMap', 'ClientThemeMap/UniqueTheme_help.htm')">
+                    单值专题图
+                </dd>
+                <dd onclick="setCore('UnifiedTheme', 'ClientThemeMap', 'ClientThemeMap/UnifiedTheme_help.htm')">
+                    统一专题图
+                </dd>
+                <dd onclick="setCore('RandomTheme', 'ClientThemeMap', 'ClientThemeMap/RandomTheme_help.htm')">
+                    随机专题图
+                </dd>
+                <dd onclick="setCore('MultiClassTheme', 'ClientThemeMap', 'ClientThemeMap/MultiClassTheme_help.htm')">
+                    分段专题图
+                </dd>
+            </dl>
+            <dl class="MultitudeGeometryQuery">
+                <dt>多几何查询<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('QueryVectorMapdocByMultiPntData', 'MultitudeGeometryQuery', 'MultitudeGeometryQuery/E01QueryVectorMapdocByMultiPntData_help.htm')">
+                    多点查询（返回json）
+                </dd>
+                <dd onclick="setCore('QueryVectorMapdocByMultiPlineData', 'MultitudeGeometryQuery', 'MultitudeGeometryQuery/E02QueryVectorMapdocByMultiPlineData_help.htm')">
+                    多线查询（返回json）
+                </dd>
+                <dd onclick="setCore('QueryVectorMapdocByMultiPolygonData', 'MultitudeGeometryQuery', 'MultitudeGeometryQuery/E3QueryVectorMapdocByMultiPolygonData_help.htm')">
+                    多面查询（返回json）
+                </dd>
+            </dl>
+            <dl class="ObjectClassQuery">
+                <dt>对象类查询<img src="images/left/select_xl01.png" /></dt>
+                <dd onclick="setCore('QueryVectorLayerByAtt', 'ObjectClassQuery', 'ObjectClassQuery/E01QueryVectorLayerByAtt_help.htm')">
+                    对象类查询（返回json）
+                </dd>
+            </dl>
+        </div>
+        <div id="code_wrapper">
+            <div id="code_arrow" class="go_back">
+                <span title="显示代码">›</span>
+                <p title="隐藏代码">‹</p>
+            </div>
+            <div id="code_core">
+                <div class="code_head">
+                    <!--<a id="code_copy" class="" href="javascript:void(0);">复制</a>
+                    源代码编辑器-->
+
+                    <span id="coreHeader" class="s1" onclick="showCore();">源代码编辑器</span>
+                    <span id="interfaceHeader" class="s2" onclick="showInstruction();">接口说明</span>
+                    <!--<a id="code_copy" rel="#codes">复制</a>-->
+                    <a id="code_restore" onclick="reStore();">还原</a>
+                    <a id="code_run" onclick="run();">运行</a>
+                </div>
+
+                <div class="code_body">
+                    <!--源码显示界面-->
+                    <div id="coreContent">
+                        <textarea id="codes" rows="10" cols="30" name="codes"> </textarea>
+                    </div>
+                    <!--接口说明显示界面-->
+                    <div id="interfaceContent">
+                        <iframe id="interface_iframe" name="interface_iframe"></iframe>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="iframe_wrapper">
+            <iframe id="container_iframe" name="container_iframe" scrolling="no"></iframe>
+        </div>
+    </div>
+</body>
+</html>

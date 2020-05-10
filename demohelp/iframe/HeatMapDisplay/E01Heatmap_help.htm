@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>热点图</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        热点图
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能
+    </div>
+    <div class="zhengwen">
+        该示例实现向世界瓦片图层添加热点图的功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明:
+    </div>
+    <div class="zhengwen">
+        1、数据：使用一个世界瓦片图层地图和KML数据。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]<br />
+        <br />
+        （1）先引入ol.js（ol是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。OpenLayers 3对OpenLayers网络地图库进行了根本的重新设计。openlayer2虽然被广泛使用，但从JavaScript开发的早期发展阶段开始，已日益显示出它的落后。
+        OL3已运用现代的设计模式从底层重写。）、ol.css（是地图样式文件，包含了地图样式的方方面面，例如，填充色、图标样式、图片样式、规则图形样式、边界样式、文字样式等，样式一般针对矢量要素图层。）；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）然后在body标签里面编写地图显示的脚本，即创建ol.Map类。通过设置该类的layers属性加载一个世界瓦片图层地图和KML数据，再通过设置该类的view属性确定地图的显示中心和级别；
+        <br />
+        <br />
+        [创建热点图]<br />
+        <br />
+        （4）创建一个热力图类（ol.layer.Heatmap），为其加载一个矢量数据源（读取本地的KML数据），设置热点半径和模糊尺寸；
+        <br />
+        <br />
+        [添加监听]<br />
+        <br />
+        （5）为矢量数据源ol.layer.Heatmap添加addfeature事件，当添加了要素时触发，设置要素的weight属性；
+        <br />
+        <br />
+        （6）分别为另个参数设置控件（input）添加事件监听，动态设置热点图的参数；
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项，指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项，设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项，添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="Class">2、ol.layer.Tile类：</font>该类是一个瓦片图层类，用于显示瓦片资源。这些瓦片提供了预渲染，并且由特定分辨率的缩放级别组织的瓦片图片网格组成。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.layer.Tile(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】source：</font>（ol.source.Tile类型）必填项。为图层设置来源、服务地址。<br />
+        </div>
+        <font class="Class">3、ol.View类：</font>该类是一个地图显示视图类。ol.View对象是地图初始化必备三要素之一，表示一个简单的二维视图的映射，主要控制地图与用户的交互，如进行缩放，调节分辨率、地图的旋转等。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.View(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】center：</font>（ol.Coordinate|undefined类型）可选项，设置地图显示中心；<br />
+            <font class="nextParameter">【2】zoom：</font>（number|undefined类型）可选项，设置地图的显示级数。<br />
+            <font class="nextParameter">【3】minZoom：</font>（number|undefined类型）可选项，设置地图最小缩放级别，它与maxZoom(或minResolution)和zoomFactor一起使用，如果同时给出maxResolution,maxResolution优先级高于minZoom。<br />默认值为0。<br />
+            <font class="nextParameter">【4】maxZoom：</font>（number|undefined类型）可选项，设置地图最大缩放级别，它与minZoom(或maxResolution)和zoomFactor一起使用，如果同时给出minResolution,minResolution优先级高于maxZoom。<br />默认值为28。<br />
+            <font class="nextParameter">【5】rotation：</font>（number|undefined类型）可选项，设置初始视图的旋转弧度（顺时针方向)。<br />默认值为0。
+        </div>
+        <font class="Class">4、ol.layer.Heatmap类：</font>该类是一个热力图图层类。<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.layer.Heatmap(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】gradient：</font>(Array[string]类型)可选项，设置热力图的颜色梯度。<br />默认是：['#00f','#0ff','#0f0','#ff0','#f00']。<br />
+            <font class="nextParameter">【2】radius：</font>（number|undefined类型）可选项，设置热力图半径的大小(以像素为单位)。<br />默认是8。<br />
+            <font class="nextParameter">【3】blur：</font>（number|undefined类型）可选项，设置热力图模糊的大小(以像素为单位)。<br />默认是15。<br />
+            <font class="nextParameter">【4】shadow：</font>（number|undefined类型）可选项，设置热力图阴影大小(以像素为单位)。<br />默认是250。<br />
+            <font class="nextParameter">【5】weight：</font>（string|function类型）必选项，设置要素的weight属性。<br />返回一个重量的特性。weight值应该在范围0到1之间。<br />
+            <font class="nextParameter">【6】extent：</font>（ol.Extent|undefined类型）可选项，设置要素的边界。<br />
+            <font class="nextParameter">【7】minResolution：</font>（number|undefined类型）可选项。设置可见图层最小的分辨率。<br />
+            <font class="nextParameter">【8】maxResolution：</font>（number|undefined类型）可选项。设置可见图层最大的分辨率。<br />
+            <font class="nextParameter">【9】opacity：</font>（number|undefined类型）可选项。设置透明度（取值范围0-1完全透明/完全不透明）。<br />默认值是1<br />
+            <font class="nextParameter">【10】source：</font>（ol.source.Image类型）必填项。为图层设置来源、服务地址。<br />
+            <font class="nextParameter">【11】visible：</font>（boolean|undefined类型）可选项。设置是否可见性。<br />默认值是true(可见的）。<br />
+        </div>
+        <font class="Class">5、ol.source.Vector类：</font>该类是设置矢量图层数据来源。<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.source.Vector(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项。设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】features：</font>(Array[ol.feature]|ol.Collection[ol.feature]|undefined)可选项。设置要素。<br />
+            <font class="nextParameter">【2】url：</font>（string）必选项。设置矢量图层数据的url。<br />
+            <font class="nextParameter">【3】format：</font>（ol.format.Feature|undefined）可选项。设置XHR方式加载数据的格式。当设置了url时format必须设置。<br />默认是undefined。<br />
+        </div>
+    </div>
+    <p>
+        <a href="http://openlayers.org/en/latest/apidoc/" alt="OpenLayers 3 API。"
+           target="_blank">注：详细说明请参见OpenLayers3 API手册。</a>
+    </p>
+</body>
+</html>

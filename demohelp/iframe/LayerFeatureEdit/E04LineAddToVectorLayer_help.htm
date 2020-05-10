@@ -1,0 +1,415 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>添加要素</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        线要素添加（矢量图层）：
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能
+    </div>
+    <div class="zhengwen">
+        该示例实现向矢量图层中添加线要素的功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明:
+    </div>
+    <div class="zhengwen">
+        1、数据：使用一个世界地图的矢量图层（世界河流）。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]<br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。OpenLayers 3对OpenLayers网络地图库进行了根本的重新设计。openlayer2虽然被广泛使用，但从JavaScript开发的早期发展阶段开始，已日益显示出它的落后。
+        OL3已运用现代的设计模式从底层重写。）、ol.css（是地图样式文件，包含了地图样式的方方面面，例如，填充色、图标样式、图片样式、规则图形样式、边界样式、文字样式等，样式一般针对矢量要素图层。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGISWeb二次开发的脚本库)；
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）然后编写调用矢量图层显示的脚本函数init()，即初始化ol.Map与Zondy.Map.Layer类，通过设置ol.Map类的view属性确定地图的显示中心和级别，再通过Map对象的addLayers方法加载Layer对象；
+        <br />
+        <br />
+        [创建要素]<br />
+        <br />
+        （4）创建一个线形状（Zondy.Object.GLine对象），描述线形状的几何信息；
+        <br />
+        <br />
+        （5）设置当前线要素的几何信息（Zondy.Object.FeatureGeometry）；
+        <br />
+        <br />
+        （6）描述线要素的符号参数信息（Zondy.Object.CLineInfo）；
+        <br />
+        <br />
+        （7）设置当前线要素的图形参数信息（Zondy.Object.WebGraphicsInfo）；
+        <br />
+        <br />
+        （8）设置添加点要素的属性信息；
+        <br />
+        <br />
+        （9）创建一个要素（Zondy.Object.Feature对象），并设置要素为线要素；
+        <br />
+        <br />
+        （10）创建一个要素数据集（Zondy.Object.FeatureSet对象），设置属性结构（Zondy.Object.CAttStruct对象）；
+        <br />
+        <br />
+        [添加要素]<br />
+        <br />
+        （11）通过调用featureSet对象的addFeature（）方法将要素添加到要素数据集中；
+        <br />
+        <br />
+        （12）创建一个编辑服务类（Zondy.Service.EditLayerFeature对象），调用编辑服务类的add方法执行添加要素功能。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element | string | undefined）可选项，指定地图所在的网页div元素的id，例如代码中：'mapCon'。如果在构建时未指定，则必须调用ol.Map()类的setTarget()方法以便绘制地图。<br />
+            <font class="nextParameter">【2】layers：</font>（Array-[ol.layer.Base] | ol.Collection[ol.layer.Base | undefined]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View | undefined）可选项，设置地图显示视图。如果在构建时未指定，则必须通过ol.Map()类的setView()方法指定，否则不会提取图层源。<br />
+        </div>
+        <font class="funDescription">1.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>将地图图层添加到地图容器中。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">getLayers()：</font>获取地图所有图层。<br />
+            <font class="functionName">getView()：</font>获取地图视图。返回值为{ol.View}类。<br />
+            <font class="functionName">setView(view)：</font>设置地图视图。<br />
+            <font class="nextParameter">view：</font>(ol.View）地图视图。<br />
+            <font class="functionName">removeLayer(layer)：</font>将图层从地图容器中移除。<br />
+            <font class="nextParameter">layer：</font>(ol.layer.Base）地图图层。<br />
+            <font class="functionName">render()：</font>请求地图渲染（下一帧动画）。<br />
+            <font class="functionName">getEventPixel(event)：</font>获取相对于浏览器窗口的地图像素位置。<br />
+            <font class="nextParameter">event：</font>(event）事件。<br />
+        </div>
+        <font class="Class">2、ol.View类：</font>该类是一个地图显示视图类。ol.View对象是地图初始化必备三要素之一，表示一个简单的二维视图的映射，主要控制地图与用户的交互，如进行缩放，调节分辨率、地图的旋转等。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.View(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】center：</font>（ol.Coordinate|undefined）可选项，设置地图显示中心；<br />
+            <font class="nextParameter">【2】zoom：</font>（number|undefined）可选项，设置地图的显示级数。<br />
+            <font class="nextParameter">【3】minZoom：</font>（number|undefined）可选项，设置地图最小缩放级别，它与maxZoom(或minResolution)和zoomFactor一起使用，如果同时给出maxResolution,maxResolution优先级高于minZoom。<br />默认值为0。<br />
+            <font class="nextParameter">【4】maxZoom：</font>（number|undefined）可选项，设置地图最大缩放级别，它与minZoom(或maxResolution)和zoomFactor一起使用，如果同时给出minResolution,minResolution优先级高于maxZoom。<br />默认值为28。<br />
+            <font class="nextParameter">【5】rotation：</font>（number|undefined）可选项，设置初始视图的旋转弧度（顺时针方向)。<br />默认值为0。<br />
+            <font class="nextParameter">【6】projection：</font>（ol.ProjectionLike）可选项，地图的投影坐标系。<br />默认为EPSG:3857，即墨卡托坐标系。<br />
+        </div>
+        <font class="funDescription">2.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getZoom()：</font>获取当前地图视图缩放级别，如果当前视图分辨率未定义或分辨率未在约束值范围内，将返回undefined。返回值为{number|undefined}类型。<br />
+            <font class="functionName">getCenter()：</font>获取当前地图视图中心。返回值为{ol.Coordinate|undefined}类型<br />
+            <font class="functionName">getRotation()：</font>获取当前地图视图的旋转弧度。返回值为{number}类型。<br />
+            <font class="functionName">setZoom(zoom)：</font>设置地图视图的缩放级别。<br />
+            <font class="nextParameter">zoom：</font>(number）地图视图的缩放级别。<br />
+            <font class="functionName">setCenter(center)：</font>设置地图视图的中心坐标。<br />
+            <font class="nextParameter">center：</font>(ol.Coordinate | undefined）地图视图的中心坐标。<br />
+            <font class="functionName">setRotation(rotation)：</font>设置当前地图视图的旋转弧度。返回值为{number}类型。<br />
+            <font class="nextParameter">rotation：</font>(number)为地图视图设置新的旋转值。<br />
+        </div>
+        <font class="Class">3、Zondy.Map.Layer类：</font>提供显示矢量图层的功能服务类<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Layer(opt_name, opt_gdbps, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_name：</font>（String类型）可填项，设置显示图层的名称，可自行设置任名称；<br />
+            <font class="parameter">opt_gdbps：</font>（Array数组类型-[String类型]）必填项，设置要加载的矢量图层的名称（desktop平台中相对应的路径），多个用,分隔，如：[gdbp1,gdbp2]；<br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器地址ip。<br />默认值："localhost"；<br />
+            <font class="nextParameter">【2】port：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器端口。<br />默认值："6163"；<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）可选项，是否作为基础图层显示，默认值：true。
+            <br />
+        </div>
+        <font class="Class">4、Zondy.Object.Point2D类：</font>该类是构造点几何对象类<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Point2D(x, y, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">x：</font>（double类型）必填项，构造函数的第一个参数，创建的点几何对象的x坐标值（在该坐标系范围下的x坐标）；<br />
+            <font class="parameter">y：</font>（double类型）必填项，构造函数的第二个参数，创建的点几何对象的y坐标值（在该坐标系范围下的y坐标）；<br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】nearDis：</font>（double）可选项，设置点的容差半径，只在做点查询时需要设置。<br />
+        </div>
+        <font class="Class">5、Zondy.Object.Arc类：</font>该类是一个构造弧段几何对象类<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Arc(dots, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">dots</font>（Array数组类型-[Zondy.Object.Point2D]）必选项，用以构造弧段的一组点；<br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="parameter">【1】ArcID：</font>（Int类型）可选项，表示一个弧段的ID编号。<br />默认值为0；<br />
+            <font class="parameter">【2】Dots：</font>（Array数组类型-[Zondy.Object.Point2D]）可选项，构造弧段的一组点。
+        </div>
+    <font class="Class">6、
+        
+        类：</font>该类是一个构造线对象类<br />
+        <br />
+        <font class="constructorTile">6.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">
+                
+            (arcs,opt_options)
+            </font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">arcs：</font>（Array数组类型-[Zondy.Object.Arc]）可选项，一组Zondy.Object.Arc，用以描述弧段；<br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="parameter">【1】Arcs：</font>（Array数组类型-[Zondy.Object.Arc]）可选项，描述弧段的数组。<br />
+            <br />
+        </div>
+        <font class="Class">7、Zondy.Object.GLine类：</font>该类是线要素几何图形信息对象类<br />
+        <br />
+        <font class="constructorTile">7.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.GLine(line,opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">line：</font>（Zondy.Object.AnyLine对象类型）可选项，构造线要素的线几何对象；<br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="parameter">【1】Line：</font>（Zondy.Object.AnyLine类型）可选项，构造线要素的线几何对象。<br />
+            <font class="parameter">【2】GID：</font>（Int类型）可选项，要素几何图形ID。来源其父类Zondy.Object.FeatureGraphicBase。<br />
+        </div>
+        <font class="funDescription">7.2方法说明：</font><br />
+        <div class="zhuji">
+            <font class="functionName">setLine(line)：</font>设置线要素几何信息；<br />
+            <font class="nextParameter">line：</font>（Zondy.Object.AnyLine]）线几何对象。<br />
+        </div>
+        <font class="Class">8、Zondy.Object.CLineInfo类：</font>该类是线要素的符号参数信息对象类<br />
+        <br />
+        <font class="constructorTile">8.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.CLineInfo(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】Color：</font>（Int类型）线颜色（请参考MapGIS颜色库中颜色编号）。<br />默认值为1；<br />
+            <font class="nextParameter">【2】LinStyleID：</font>（Int类型）辅助线型ID（请参考MapGIS符号库中线符号编号）。<br />默认值为0；<br />
+            <font class="nextParameter">【3】LinStyleID2：</font>（Int类型）线型ID（请参考MapGIS符号库中线符号编号）。<br />默认值为1；<br />
+            <font class="nextParameter">【4】LinWidth：</font>（Float类型）线宽度（根据实际情况自定义宽度）。<br />默认值为1；<br />
+            <font class="nextParameter">【5】Xscale：</font>（Float类型）x比例系数（用户自定义）。<br />默认值为1；<br />
+            <font class="nextParameter">【6】Yscale：</font>（Float类型）y比例系数（用户自定义）。<br />默认值为1。<br />
+        </div>
+        <font class="Class">9、Zondy.Object.WebGraphicsInfo类：</font>该类是要素符号参数信息对象类<br />
+        <br />
+        <font class="constructorTile">9.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.CPointInfo(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】InfoType：</font>（Zondy.Enum.FeatureType枚举类型）要素几何类型，只对简单要素类有效枚举类型。取值范围：<br />
+            1：代表Zondy.Enum.FeatureType.Pnt类型，即点；<br />
+            2：代表Zondy.Enum.FeatureType.Lin类型，即线；<br />
+            3：代表Zondy.Enum.FeatureType.Reg类型，即区。<br />
+            默认值为0；<br />
+            <font class="nextParameter">【2】LinInfo：</font>（Zondy.Object.CLineInfo类型）线信息对象，默认值为null；<br />
+            <font class="nextParameter">【3】PntInfo：</font>（Zondy.Object.CPointInfo类型）点信息对象，默认值为null；<br />
+            <font class="nextParameter">【4】RegInfo：</font>（Zondy.Object.CRegionInfo类型）区信息对象，默认值为null；<br />
+        </div>
+        <font class="Class">10、Zondy.Object.FeatureGeometry类：</font>该类是要素几何信息对象类<br />
+        <br />
+        <font class="constructorTile">10.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.FeatureGeometry(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】LinGeom：</font>（Array数组类型-[Zondy.Object.GLine]）一组线要素几何信息；<br />
+            <font class="nextParameter">【2】PntGeom：</font>（Array数组类型-[Zondy.Object.GPoint]）一组点要素几何信息；<br />
+            <font class="nextParameter">【3】RegGeom：</font>（Array数组类型-[Zondy.Object.GRegion]）一组区要素几何信息。<br />
+        </div>
+        <font class="funDescription">10.2方法说明：</font><br />
+        <div class="zhuji">
+            <font class="functionName">setLine(pnts)：</font>设置线要素几何信息；<br />
+            <font class="nextParameter">pnts：</font>（Array数组类型-[Zondy.Object.GLine]）点几何数组；<br />
+            <br />
+            <font class="functionName">setPntGeom(lines)：</font>设置点要素几何信息；<br />
+            <font class="nextParameter">lines：</font>（Array数组类型-[Zondy.Object.GPoint]）线几何数组；<br />
+            <br />
+            <font class="functionName">setRegGeom(Regs)：</font>设置区要素几何信息。<br />
+            <font class="nextParameter">Regs：</font>（Array数组类型-[Zondy.Object.GRegion]）区几何数组。
+        </div>
+        <font class="Class">11、Zondy.Object.Feature类：</font>该类是要素信息对象类<br />
+        <br />
+        <font class="constructorTile">11.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Feature(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="parameter">【1】AttValue：</font>（Array数组类型）必填项，要素属性信息。<br />默认值为null；<br />
+            <font class="parameter">【2】FID：</font>（Int类型）可选项，要素唯一标识的id号。<br />默认值为0；<br />
+            <font class="parameter">【3】bound：</font>（Zondy.Object.Rectangle类型的对象）可选项，要素的外包矩形范围信息。<br />默认值为null；<br />
+            <font class="parameter">【4】fGeom：</font>（Zondy.Object.FeatureGeometry类型的对象）必填项，要素的空间几何图形描述。<br />默认值为null；<br />
+            <font class="parameter">【5】ftype：</font>（Zondy.Enum.FeatureType枚举类型）可选项，要素几何类型，只对简单要素类有效。<br />默认值为0；<br />
+            取值范围：<br />
+            1：代表点）；<br />
+            2：代表线）；<br />
+            3：代表区）。<br />
+            <font class="parameter">【6】GraphicInfo：</font>（Zondy.Object.WebGraphicsInfo类型对象）可选项，要素几何图形参数信息，默认值为null。<br />
+        </div>
+        <font class="funDescription">11.2方法说明：</font><br />
+        <div class="zhuji">
+            <font class="functionName">setAttValues(values)：</font>设置当前要素的属性值。如果没有初始化AttValue属性的值，则必须调用该方法<br />
+            <font class="nextParameter">values：</font>（Array数组类型（[“string1”,”string” …]）或Object对象类型（{key1:value1,key2:value2
+            …}））属性值数组 /或者属性键值对。<br />
+            <br />
+            <font class="functionName">setFType(type)：</font>设置要素几何类型信息<br />
+            <font class="nextParameter">type：</font>（Zondy.Enum.FeatureType枚举类型）几何类型。<br />
+            取值范围：<br />
+            1：代表点）；<br />
+            2：代表线）；<br />
+            3：代表区）。<br />
+            <br />
+            <font class="functionName">setBound(bound)：</font>设置当前要素的外包矩形信息；<br />
+            <font class="nextParameter">bound：</font>（String:'xmin,ymin,xmax,ymax' 或 Zondy.Object.Rectangle）。外包矩形描述，可以是字符串，zondy矩形或者openlayers矩形。返回值为{ol.extent}类型。<br />
+            <br />
+            <font class="functionName">setFID(fid)：</font>设置当前要素的FID；<br />
+            <font class="nextParameter">fid：</font>（Int类型）要素唯一标识的id号。<br />
+            <br />
+            <font class="functionName">getAttValue(attKey)：</font>获取要素指定字段的属性值。返回值是String类型；<br />
+            <font class="nextParameter">attKey：</font>（Int类型）指定字段在要素属性结构中的索引号。<br />
+            <br />
+            <font class="functionName">getGraphicInfo()：</font>获取当前要素的几何图形参数。返回值是Zondy.Object.WebGraphicsInfo类型；<br />
+            <br />
+            <font class="functionName">getAttValueArray()：</font>获取当前要素的所有字段属性值。返回值是Array数组类型-[string]；<br />
+            <br />
+            <font class="functionName">getRectBound()：</font>获取当前要素的外包矩形信息。返回值是Zondy.Object.Rectangle类型；<br />
+            <br />
+            <font class="functionName">getGeometry()：</font>获取当前要素的几何描述。返回值是String类型；<br />
+            <br />
+            <font class="functionName">getFID()：</font>获取当前要素的FID。返回值是Int类型。
+        </div>
+        <font class="Class">12、Zondy.Object.FeatureSet类：</font>该类是要素集合信息对象类<br />
+        <br />
+        <font class="constructorTile">12.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Feature(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="parameter">【1】AttStruct：</font>（Zondy.Object.CAttStruct类型对象）可选项，属性结构 ，默认值为null；<br />
+            <font class="parameter">【2】SFEleArray：</font>（Array数组类型-[Zondy.Object.Feature类型对象]）可选项，要素数组；<br />
+            <font class="parameter">【3】TotalCount：</font>（Int类型）可选项，一次查询的总要素个数（仅在做要素查询时有意义）。<br />默认值0；
+        </div>
+        <font class="funDescription">12.2方法说明：</font><br />
+        <div class="zhuji">
+            <font class="functionName">clear()：</font>清空要素集合，还原主参数为默认值。<br />
+            <br />
+            <font class="functionName">addFeature(features)：</font>向要素集中添加一组或者一个要素<br />
+            <font class="nextParameter">features：</font>（Array数组类型[Zondy.Object.Feature]或Object对象类型[代表Feature的属性键值对]）一组要素，或者一个要素。<br />
+            <br />
+            <font class="functionName">getFeaturesLength()：</font>获取要素集要素的记录条数。返回值为int类型。<br />
+            <br />
+            <font class="functionName">getFeatureByIndex(i)：</font>获取指定要素对象<br />
+            <font class="nextParameter">i：</font>（Int类型）目的要素在要素集（要素数组）中的索引号。<br />
+            <br />
+            <font class="functionName">getAttType(attKey)：</font>获取某属性字段的类型<br />
+            <font class="nextParameter">attKey：</font>（String类型或Int类型）属性字段关键字。可以是{String}字段名，也可以是序号{Interger}。<br />
+            <br />
+            <font class="functionName">getAttIndexByAttName(name)：</font>通过属性的名称获取属性结构中的索引号<br />
+            <font class="nextParameter">name：</font>（String类型）指定的属性字段名称。<br />
+            <br />
+            <font class="functionName">getAttNameByIndex(index)：</font>通过属性字段的索引号获取属性名称<br />
+            <font class="nextParameter">index：</font>（Int类型）属性序号。
+        </div>
+        <font class="Class">13、Zondy.Object.CAttStruct类：</font>该类是图层属性结构对象类<br />
+        <br />
+        <font class="constructorTile">13.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.CAttStruct(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">FldName：</font>（Array类型）可选项，属性字段名数组（用户自定义）。<br />默认值为null；<br />
+            <font class="nextParameter">FldNumber：</font>（Int类型）可选项，属性个数。<br />默认值0；<br />
+            <font class="nextParameter">FldType：</font>（Array类型）可选项，属性字段类型数组（用户自定义)。<br />默认值为null。
+        </div>
+        <font class="Class">14、Zondy.Service.EditLayerFeature类：</font>该类是一个矢量图层要素编辑服务类<br />
+        <br />
+        <font class="constructorTile">14.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.EditLayerFeature(gdbp, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">gdbp：</font>（String类型）必填项。图层的URL，添加要素只能同时操作单个图层；<br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）options中的项，来源于父类（Zondy.Service.HttpRequest）参数，服务器地址ip，默认值："localhost"；<br />
+            <font class="nextParameter">【2】port：</font>（String类型）options中的项，来源于父类（Zondy.Service.HttpRequest）参数，服务器端口，默认值："6163"；
+        </div>
+        <font class="funDescription">14.2方法说明：</font><br />
+        <div class="zhuji">
+            <font class="functionName">add(features, onSuccess, onError)：</font>添加一组要素服务执行的函数，向服务器发送请求。<br />
+            <font class="nextParameter">features：</font>（Zondy.Object.FeatureSet类型对象），表示一组要添加的要素集合；<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）添加成功后的回调函数；<br />
+            <font class="nextParameter">onError：</font>（Function类型）添加失败后的回调函数。<br />
+            <br />
+            <font class="functionName">deletes(featureIds,onSuccess,onError)：</font>删除一组要素服务执行的函数，向服务器发送请求。<br />
+            <font class="nextParameter">featureIds：</font>（String类型）要删除的要素OID，多个要素OID间用','分割；<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）删除成功后的回调函数；<br />
+            <font class="nextParameter">onError：</font>（Function类型）删除失败后的回调函数。<br />
+            <br />
+            <font class="functionName">update(featureIds,onSuccess,onError)：</font>更新删除一组要素服务执行的函数，向服务器发送请求。<br />
+            <font class="nextParameter">featureIds：</font>（String类型）要更新的要素集合；<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）更新成功后的回调函数；<br />
+            <font class="nextParameter">onError：</font>（Function类型）更新失败后的回调函数。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client API。"
+           target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client API手册。</a>
+    </p>
+</body>
+</html>

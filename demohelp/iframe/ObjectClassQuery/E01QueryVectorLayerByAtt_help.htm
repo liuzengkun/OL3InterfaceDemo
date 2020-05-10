@@ -1,0 +1,107 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>对象类查询</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        对象类查询:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现查询对象类的功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用两个自定义的对象类user和user2。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol.js（ol是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。OpenLayers 3对OpenLayers网络地图库进行了根本的重新设计。openlayer2虽然被广泛使用，但从JavaScript开发的早期发展阶段开始，已日益显示出它的落后。
+        OL3已运用现代的设计模式从底层重写。）、ol.css（是地图样式文件，包含了地图样式的方方面面，例如，填充色、图标样式、图片样式、规则图形样式、边界样式、文字样式等，样式一般针对矢量要素图层。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGISWeb二次开发的脚本库)、json2.js、jsonExtend.js（操作JSON对象的相关脚本库)；
+        <br />
+        <br />
+        （2）初始化查询结构对象Zondy.Service.QueryFeatureStruct，设置查询结构包含几何信息；实例化查询参数对象Zondy.Service.ObjClsQueryParameter，设置查询要素数目、查询条件，返回数据格式；；
+        <br />
+        <br />
+        （3）然后实例化对象类查询服务对象Zondy.Service.ObjClsQuery，最后调用ObjClsQuery对象的query方法，执行查询。
+        <br />
+        <br />
+        （4）最后使用Process方法格式化返回的结果。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、Zondy.Service.QueryFeatureStruct类：</font>该类是要素查询结构基类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.QueryFeatureStruct(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】IncludeAttribute：</font>（Boolean）是否包含属性值。<br />默认值是true；<br />
+            <font class="nextParameter">【2】IncludeGeometry：</font>（Boolean）是否包含几何图形信息。<br />默认值是false；<br />
+            <font class="nextParameter">【3】IncludeWebGraphic：</font>（Boolean）是否包含图形参数。<br />默认值是false；<br />
+        </div>
+        <font class="Class">2、Zondy.Service.ObjClsQueryParameter类：</font>该类是一个对象查询参数类<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.ObjClsQueryParameter(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】objectIds：</font>（Int整型） 需要查询的要素OID号，多个间用‘，’分隔。如果此参数有值，查询将默认转化为使用要素ID查询，而忽略条件查询；<br />
+            <font class="nextParameter">【2】where：</font>（String类型）条件查询的SQL语句；<br/>
+            例如：<br />
+            查询username为liu的要素："username='liu'"<br />
+            查询username为liu或password为777的要素："username='liu' OR password='777'"<br />
+            查询username为liu且password为123的要素："username='liu' AND password='123';<br />
+            查询password中带有数字“1”的要素："password LIKE '%1%'"<br />
+            <font class="nextParameter">【3】resultFormat：</font>（String类型）回调结果的包装形式。<br />默认为json；br/>
+        </div>
+        <font class="Class">3、Zondy.Service.ObjClsQuery类：</font>该类是一个对象查询服务类。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.ObjClsQuery(queryParam, gdbp, opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">queryParam：</font>（Zondy.Service.MultiGeoQueryParameter类型）对象类查询的参数对象；<br />
+            <font class="parameter">gdbp：</font>（String类型）对象类url；<br />
+            <font class="parameter">opt_options：</font>（object类型）重新设置的该对象的属性键值对。如下所示：<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，IGServer服务器ip。<br />默认值："localhost"；<br />
+            <font class="nextParameter">【2】port：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，IGServer服务端口。<br />默认值："6163"；
+        </div>
+        <font class="funDescription">3.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">query(onSuccess, onError, requestType,options)：</font>查询函数，向服务器发送请求（来源于父类Zondy.Service.QueryServiceBase中的方法）。<br />
+            <font class="nextParameter">onSuccess：</font>请求成功时回调函数；<br />
+            <font class="nextParameter">onError：</font>请求失败时回调函数；<br />
+            <font class="nextParameter">requestType：</font>（String类型）请求方式（GET或者POST）。<br />如果没有设置此项时，默认使用GET方式请求；<br />
+            <font class="nextParameter">options：</font>（Object类型）可选项，设置其他参数。<br />
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+           target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>

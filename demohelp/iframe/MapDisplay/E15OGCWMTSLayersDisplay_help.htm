@@ -1,0 +1,145 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>加载OGC的WMTS图层</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        加载OGC的WMTS图层:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现一个简单的OGC数据加载功能，显示OGC的WMTS数据。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用MapGIS示例数据发布的经纬度世界地图文档服务（WorldJWVector）与基于瓦片数据服务（WhMapTileOld）发布的WMTS服务（WhMapTileWMTS）。需事先在IGS服务器中发布OGC规范的WMTS服务。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        [地图显示]
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）再创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）创建、初始化Doc控件（Zondy.Map.Doc）并添加到地图容器，加载MapGIS矢量地图文档图层；<br />
+        <br />
+        （4）创建、初始化WMS控件（ol.source.WMTS）并添加到地图容器，加载基于瓦片数据的WMTS服务。<br />
+        <br />
+        （5）由Map对象的view属性初始化地图的显示中心和级别，加载地图。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项，指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项，设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项，添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="funDescription">1.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>添加单个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layer：</font>继承于ol.layer.Base的图层对象<br />
+        </div>
+        <font class="Class">2、Zondy.Map.Doc类：</font>该类是一个提供显示矢量地图文档的功能服务类<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Doc(name,docName,options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必填项，设置显示图层的名称（可自行设置名称）；<br />
+            <font class="parameter">docName：</font>（String类型）必填项，设置地图文档文件的名称（根据IGServer上发布的实际名称）；<br />
+            <font class="parameter">options：</font>（Object类型）可选项，设置其他属性赋值对象，以键值对的形式设置；<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器地址ip，默认值："localhost"；<br />
+            <font class="nextParameter">【2】port：</font>（String类型）可选项，来源于父类（Zondy.Service.HttpRequest）参数，服务器端口，默认值："6163"；<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）可选项，是否作为基础图层显示，默认值：true。
+        </div>
+        <font class="Class">3、ol.layer.Tile类：</font>该类是一个瓦片图层类，用于显示瓦片资源。这些瓦片提供了预渲染，并且由特定分辨率的缩放级别组织的瓦片图片网格组成。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.layer.Tile(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】opacity：</font>（number|undefined类型）可选项，设置透明度（取值范围0-1完全透明/完全不透明）。<br />默认值是1<br />
+            <font class="nextParameter">【2】preload：</font>（ol.source.Tile）可选项。设置预加载。加载预加载水平低分辨率的瓦片。<br />预加载默认为0,这意味着没有预加载。<br />
+            <font class="nextParameter">【3】source：</font>（ol.source.Tile）必填项。为图层设置来源、服务地址。<br />
+            <font class="nextParameter">【4】map：</font>（ol.Map|undefined类型）可选项。为图层设置覆盖在哪个地图容器上。若没有设置，则使用ol.Map的addLayer方法添加图层到地图容器里<br />
+            <font class="nextParameter">【5】visible：</font>（boolean|undefined类型）可选项。设置是否可见性。<br />默认值是true(可见的)。<br />
+            <font class="nextParameter">【6】extent：</font>(ol.Extent|undefined类型)可选项，设置要素的边界。<br />
+            <font class="nextParameter">【7】minResolution：</font>（number|undefined类型）可选项。设置可见图层最小的分辨率。<br />
+            <font class="nextParameter">【8】maxResolution：</font>（number|undefined类型）可选项。设置可见图层最大的分辨率。<br />
+            <font class="nextParameter">【9】useInterimTilesOnError：</font>（boolean|undefined类型）可选项。设置使用临时瓦片上的错误函数。<br />默认值是true。<br />
+        </div>
+        <font class="Class">4、ol.source.WMTS类：</font>该类是一个WMTS服务图层类<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.source.WMTS(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】attributions：</font>（ol.AttributionLike|undefined类型）可选项，设置属性信息。<br />
+            <font class="nextParameter">【2】cacheSize：</font>（number|undefined）可选项，设置缓存大小。<br />默认是2048。<br />
+            <font class="nextParameter">【3】crossOrigin：</font>（null| string|undefined类型）可选项。设置crossOrigin属性用以加载图片。<br />必须提供一个crossOrigin值如果使用WebGL渲染器或如果你想访问与画布渲染器像素数据。请搜索https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image查看更多细节。<br />
+            <font class="nextParameter">【4】logo：</font>（string|olx.LogoOptions|undefined类型）可选项。设置logo标志。<br />
+            <font class="nextParameter">【5】tileGrid：</font>（ol.tilegrid.TileGrid | undefined类型）可选项，设置瓦片的网格。如果这是没有定义,将使用默认的网格：如果定义了一个投影范围，网格将基于投影范围来设置；如果没有，就默认设置一个基于全球范围与原点(0,0)的网格。<br />
+            <font class="nextParameter">【6】projection：</font>（ol.ProjectionLike）可选项，地图的投影坐标系。<br />
+            <font class="nextParameter">【7】reprojectionErrorThreshold：</font>（number|undefined类型）可选项，设置重投影允许的最大误差（以像素为单位）。设置值越大，精度越低。<br />默认是0.5。<br />
+            <font class="nextParameter">【8】requestEncoding：</font>（nol.source.WMTS.RequestEncoding|string|undefined类型）可选项，设置请求编码。<br />默认是KVP。<br />
+            <font class="nextParameter">【9】layer：</font>（string类型）必填项，设置WMTS capabilities图层的名字。<br />
+            <font class="nextParameter">【10】style：</font>（string类型）必填项，设置WMTS capabilities图层的样式。<br />
+            <font class="nextParameter">【11】tileClass：</font>（function|undefined类型）必填项，设置用来实例化瓦片图像的类。<br />默认值是ol.ImageTile<br />
+            <font class="nextParameter">【12】tilePixelRatio：</font>（number|undefined类型）必填项，设置瓦片服务的像素值。<br />默认值是1<br />
+            <font class="nextParameter">【13】version：</font>（string|undefined类型）可选项，设置WMTS版本。<br />默认值是1.0.0<br />
+            <font class="nextParameter">【14】format：</font>（string|undefined类型）可选项，设置图像格式。<br />默认值是image/jpeg<br />
+            <font class="nextParameter">【15】matrixSet：</font>（string类型）必填项，设置矩阵集。<br />
+            <font class="nextParameter">【16】dimensions：</font>（Object|undefined类型）可选项。设置额外的“维度”瓦片请求<br />
+            <font class="nextParameter">【17】url：</font>（string|undefined类型）可选项。设置WMS服务的URL<br />
+            <font class="nextParameter">【18】tileLoadFunction：</font>(ol.TileLoadFunctionType|undefined类型)可选项，设置加载图像URL的可选函数。<br />默认值是：function(imageTile, src) {imageTile.getImage().src = src;};<br />
+            <font class="nextParameter">【19】urls：</font>（[string]数组|undefined类型）可选项。设置WMS服务url。当GetMap的WMS支持多个url请求时，使用这个代替url。<br />
+            <font class="nextParameter">【20】wrapX：</font>（boolean|undefined）可选项，设置是否在地图水平坐标轴上重复。<br />默认是true。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+           target="_blank">
+            注：详细说明请参见MapGIS IGServer JavaScript Client的API手册和MapGIS IGServer
+            REST API.chm。
+        </a>
+    </p>
+</body>
+</html>

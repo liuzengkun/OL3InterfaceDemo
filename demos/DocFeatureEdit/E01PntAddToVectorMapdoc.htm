@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>向矢量地图文档中添加点示例</title>
+    <!--导入外部样式表-->
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../libs/ol/ol.css" rel="stylesheet" type="text/css" />
+    <!--必要的脚本引用-->
+    <script src="../../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../../libs/ol/ol-debug.js" type="text/javascript"></script>
+    <script src="../../libs/zondyClient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        /*==========================================底图显示===================================================*/
+        var map, docLayer;
+
+        //地图初始化函数
+        function init() {
+            //初始化地图容器
+            map = new ol.Map({
+                target: "mapCon",
+                view: new ol.View({
+                    center: [0, 0],
+                    zoom: 2,
+                    projection: "EPSG:4326"
+                })
+            });
+            //初始化地图文档图层对象
+            docLayer = new Zondy.Map.Doc("MapGIS IGS VectorMapdocLayer", "WorldJWEdit", {
+                ip: "develop.smaryun.com",
+                port: "6163",
+                isBaseLayer: true
+            });
+            //将地图文档图层加载到地图中
+            map.addLayer(docLayer);
+
+        }
+
+        //随机函数生成点
+        function createPoint() {
+            //获取地图显示范围
+            var curMapBound = map.getView().projection_.extent_;
+            var w = curMapBound[2] - curMapBound[0];
+            var h = curMapBound[3] - curMapBound[1];
+            var x = Math.random() * w + curMapBound[0];
+            var y = Math.random() * h + curMapBound[1];
+            return new Zondy.Object.GPoint(x, y);
+        }
+        //添加点要素
+        function addPoint() {
+            //创建一个点形状，描述点形状的几何信息
+            var gpoint = createPoint();
+            //设置当前点要素的几何信息
+            var fGeom = new Zondy.Object.FeatureGeometry({ PntGeom: [gpoint] });
+            //随机输出1~8之间的整数,作为新添加的要素的颜色号
+            var pntColor = Math.floor(Math.random() * 8 + 1);
+            //描述点要素的符号参数信息
+            var pointInfo = new Zondy.Object.CPointInfo({ Angle: 0, Color: pntColor, Space: 0, SymHeight: 12, SymID: 98, SymWidth: 12 });
+            //设置当前点要素的图形参数信息
+            var webGraphicInfo = new Zondy.Object.WebGraphicsInfo({ InfoType: 1, PntInfo: pointInfo });
+            //设置添加点要素的属性信息        
+            var attValue = ['中国', '中国', 1.0];
+            //创建一个要素
+            var feature = new Zondy.Object.Feature({ fGeom: fGeom, GraphicInfo: webGraphicInfo, AttValue: attValue });
+            //设置要素为点要素
+            feature.setFType(1);
+            //创建一个要素数据集
+            var featureSet = new Zondy.Object.FeatureSet();
+            featureSet.clear();
+            //设置属性结构
+            var cAttStruct = new Zondy.Object.CAttStruct({ FldName: ["Cname", "CNTRY_NAME", "POPULATION"], FldNumber: 3, FldType: ["string", "string", "double"] });
+            featureSet.AttStruct = cAttStruct;
+            //添加要素到要素数据集
+            featureSet.addFeature(feature);
+
+            //创建一个编辑服务类
+            var editService = new Zondy.Service.EditDocFeature("WorldJWEdit", 11, { ip: "develop.smaryun.com", port: "6163" });
+            //执行添加点要素功能
+            editService.add(featureSet, onPntSuccess);
+        }
+
+        //添加点要素回调函数
+        function onPntSuccess(rlt) {
+            var result = rlt;
+            if (result) {
+                alert("添加点要素成功！");
+                docLayer.refresh();
+            } else {
+                alert("添加点要素失败！");
+            }
+        }
+    </script>
+</head>
+<body onload="init();">
+    <div class="ToolLib">
+        <input type="button" class="ButtonLib" value="添加点要素" onclick="addPoint()" />
+    </div>
+    <div id="mapCon">
+    </div>
+</body>
+</html>

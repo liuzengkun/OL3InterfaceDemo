@@ -1,0 +1,128 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>无标题文档</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        地图测量:
+    </div>
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现地图测量功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        实现步骤：
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）自己定义几何对象点集以及设置投影参数。
+        <br />
+        <br />
+        （3）最后调用Zondy.Service.CalPolyLineLength类/Zondy.Service.CalArea类的execute方法，执行测量。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、Zondy.Object.Point2D类：</font>该类是一个2D几何点类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.Point2D(x,y)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">x：</font>（Float类型）必填项，构造函数的第一个参数，创建的点的x坐标值。<br />
+            <font class="parameter">y：</font>（Float类型）必填项，构造函数的第二个参数，创建的点的y坐标值。
+        </div>
+        <font class="Class">2、Zondy.Object.CGDBInfo类：</font>该类用来表示一个GDB的相关信息。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Object.CGDBInfo(options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+              <font class="parameter">options：</font>（object类型）重新设置的该对象的属性键值对。如下所示：<br />
+            <font class="nextParameter">【1】GDBName：</font>（String类型）:数据库名称，例如： "OpenLayerVecterMap"。<br />
+            <font class="nextParameter">【2】GDBSvrName：</font>（String类型） 数据源名称，例如："MapGISLocal"。<br />
+            <font class="nextParameter">【3】Password：</font>（String类型）除MapGISLocal数据源，其它的都设置。<br />
+            <font class="nextParameter">【4】User：</font>（String类型）除MapGISLocal数据源，其它的都设置。
+        </div>
+        <font class="Class">3、Zondy.Service.CalPolyLineLength类：</font>该类是一个长度测量服务类。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.CalPolyLineLength(obj, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">obj：</font>（Array类型-[Zondy.Object.Point2D]）:必填项，需要计算的点数组，{Array},一组{Zondy.Object.Point2D}类型。<br />
+            <font class="parameter">options：</font>（String类型） 可选项，设置其他属性赋值对象。如下所示：<br />
+            <font class="nextParameter">【1】ip：</font>设置查询服务ip。<br />
+            <font class="nextParameter">【2】port：</font>设置查询服务端口号。
+        </div>
+        <font class="funDescription">3.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">execute(projParam, onSuccess)：</font>执行测量服务。详细参数介绍如下：<br />
+            <font class="nextParameter">projParam：</font>（Zondy.Service.CProjectParam | Zondy.Service.CProjectBySRSID（建议普通用户采用此类直接获取MapGIS
+            GDB 已经提供的空间参考系））投影参数。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。<br />
+        </div>
+        <font class="Class">4、Zondy.Service.CalArea类：</font>该类是一个面积测量服务类。<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.CalArea(obj, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">obj：</font>（Array类型-[Zondy.Object.Point2D]）:必填项，需要计算的点数组，{Array},一组{Zondy.Object.Point2D}类型。<br />
+            <font class="parameter">options：</font>（String类型） 可选项，设置其他属性赋值对象。如下所示：<br />
+            <font class="nextParameter">【1】ip：</font>设置查询服务ip。<br />
+            <font class="nextParameter">【2】port：</font>设置查询服务端口号。
+        </div>
+        <font class="funDescription">4.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">execute(projParam, onSuccess)：</font>执行测量服务。详细参数介绍如下：<br />
+            <font class="nextParameter">projParam：</font>（Zondy.Service.CProjectParam | Zondy.Service.CProjectBySRSID（建议普通用户采用此类直接获取MapGIS
+            GDB 已经提供的空间参考系））投影参数。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。<br />
+        </div>
+        <font class="Class">5、Zondy.Service.CProjectBySRSID类：</font>该类用于进行SRSID投影的参数类。<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.CProjectBySRSID( desSrsID, gdbInfo)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">DesSrsID：</font>（整型）:目标SRSID号。<br />
+            <font class="parameter">GdbInfo：</font>（Zondy.Object.CGDBInfo类型） 关于SRSID的GDB信息。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+            target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>

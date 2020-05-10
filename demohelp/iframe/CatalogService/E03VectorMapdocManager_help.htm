@@ -1,0 +1,159 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title>矢量地图文档目录服务</title>
+    <link href="../../css/helpstyle.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="biaoti">
+        矢量地图文档目录服务:
+    </div>    
+    <div class="xiaobiaoti">
+        一、示例功能：
+    </div>
+    <div class="zhengwen">
+        该示例实现简单的矢量地图文档目录管理功能。
+    </div>
+    <div class="xiaobiaoti">
+        二、实现说明：
+    </div>
+    <div class="zhengwen">
+        1、数据：使用示例数据库OpenLayerVecterMap.hdf的经纬度世界地图文档WorldJWVector.mapx，在本地GIS服务器中发布为地图文档服务（WorldJWVector）。<br />
+        <br />
+        2、实现步骤：
+        <br />
+        <br />
+        （1）先引入ol-debug.js（ol-debug是一个专为WebGIS客户端开发提供的JavaScript 类库包，用于实现标准格式发布的地图数据访问。）、jquery-1.11.2.min.js（第三方js资源库）、zdclient.js(中地公司提供的一套基于OpenLayers的MapGIS
+        Web二次开发的脚本库)；
+        <br />
+        <br />
+        （2）创建一个ID为“mapCon”的div层，并设置其样式；
+        <br />
+        <br />
+        （3）然后编写调用矢量地图文档显示的脚本函数init()，即初始化ol.Map与Zondy.Map.Doc类。通过设置该类的layers属性加载图层，再通过设置该类的view属性初始化地图的显示中心和级别
+        <br />
+        <br />
+        （4）矢量地图文档目录管理时，先初始化Zondy.Service.Catalog.MapDoc类，然后调用类中的方法实现数据库管理。其中，地图文档的添加图层与删除图层操作，是基于地图文档的缓存文件实现的，需要先加载地图文档获取此文档缓存的guid。
+    </div>
+    <div class="xiaobiaoti">
+        三、功能类/参数说明
+    </div>
+    <div class="zhengwen">
+        <font class="Class">1、ol.Map类：</font>该类是一个地图容器类<br />
+        <br />
+        <font class="constructorTile">1.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">ol.Map(opt_options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">opt_options：</font>（Object类型）可选项，设置该对象其他属性，以键值对的形式设置。<br />
+            <font class="nextParameter">【1】target：</font>（Element|string|undefined类型）可选项，指定地图所在的网页div元素的id，例如代码中的'mapCon'（如果在构建时未指定，则必须调用ol.Map中setTarget方法以便绘制地图）。<br />
+            <font class="nextParameter">【2】layers：</font>（Array类型-[ol.layer.Base]|ol.Collection[ol.layer.Base|undefined类型]）可选项，指定加载的图层。如果未定义，则将呈现不包含图层的地图（图层是按提供的顺序呈现的，如果想要矢量图层显示在瓦片图层顶部，则必须位于瓦片图层之后）。<br />
+            <font class="nextParameter">【3】view：</font>（ol.View|undefined类型）可选项，设置地图显示视图（如果在构建时未指定，则必须通过ol.Map中的setView方法指定，否则不会提取图层源）。<br />
+            <font class="nextParameter">【4】controls：</font>（ol.Collection.[ol.control.Control]|Array类型-[ol.control.Control]|undefined类型）可选项，添加地图控件（如果在构建时未指定，则调用ol.control.defaults()方法）。<br />
+        </div>
+        <font class="funDescription">1.2方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">addLayer(layer)：</font>添加单个图层到地图容器中。详细参数介绍如下：<br />
+            <font class="nextParameter">layer：</font>继承于ol.layer.Base的图层对象。
+        </div>
+        <font class="Class">2、Zondy.Map.Doc类：</font>该类用于地图文档的显示。<br />
+        <br />
+        <font class="constructorTile">2.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Map.Doc(name, docName, options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">name：</font>（String类型）必选项，设置图层的显示名称。<br />
+            <font class="parameter">docName：</font>（String类型）必选项，设置要加载的地图文档的名称，该地图文档必须已在IGSerever上发布，并且这里的地图文档名称要与发布的地图文档名称一致。<br />
+            <font class="parameter">options：</font>（object类型）可选项，设置该对象其他属性。<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）该矢量图层所在服务器的ip。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）设置端口号。<br />
+            <font class="nextParameter">【3】isBaseLayer：</font>（Boolean类型）是否设置为底图。
+        </div>
+        <font class="Class">3、Zondy.Service.Catalog.MapDoc类：</font>矢量地图文档目录服务类。<br />
+        <br />
+        <font class="constructorTile">3.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.Catalog.MapDoc( options)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">options：</font>（object类型）重新设置的该对象的属性键值对。如下所示：<br />
+            <font class="nextParameter">【1】ip：</font>（String类型）GIS数据服务器地址，默认是"127.0.0.1"。<br />
+            <font class="nextParameter">【2】port：</font>（String类型）GIS服务端口号，默认是"6163"。
+        </div>
+        <font class="funDescription">3.2 方法说明：</font>
+        <br />
+        <div class="zhuji">
+            <font class="functionName">getMapDocList(onSuccess)：</font>获取地图文档列表。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。<br />
+            <br />
+            <font class="functionName">getMapDocInfo(onSuccess)：</font>获取地图文档信息。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。<br />
+            <br />
+            <font class="functionName">getLayersInfo(onSuccess)：</font>获取地图中所有图层信息。详细参数介绍如下：<br />
+            <font class="nextParameter">path：</font>（String类型）新建数据库的存放路径。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">getLayerInfo(onSuccess)：</font>获取指定地图图层信息。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">addLayer(addLayerInfos,onSuccess)：</font>向矢量地图文档中添加图层。详细参数介绍如下：<br />
+            <font class="nextParameter">addLayerInfos：</font>（Array类型-[Zondy.Service.Catalog.CAddMapLayerInfo]）需要添加的图层。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">deleteLayer(onSuccess)：</font>从矢量地图文档中删除指定图层。详细参数介绍如下：<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+            <br />
+            <br />
+            <font class="functionName">changeIndex(newIndexArray,onSuccess)：</font>更改矢量地图文档中图层顺序。详细参数介绍如下：<br />
+            <font class="nextParameter">newIndexArray：</font>（Array类型-[整型]）新图层的序号顺序数组。<br />
+            <font class="nextParameter">onSuccess：</font>（Function类型）回调函数名称。
+        </div>
+        <font class="Class">4、Zondy.Service.Catalog.CAddMapLayerInfo类：</font>该类是一个描述添加图层参数信息的类<br />
+        <br />
+        <font class="constructorTile">4.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">
+                Zondy.Service.Catalog.CAddMapLayerInfo( layerName, index,
+                gdbp)
+            </font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">layerName：</font>（String类型）图层的名称。<br />
+            <font class="parameter">index：</font>（整型）图层在地图或者组下的序号，注意：该序列号不能小于-1，-1表示将图层添加到所有已有图层之后，0为第一个图层。<br />
+            <font class="parameter">gdbp：</font>（String类型）图层的gdbp，也就是图层所在数据库的位置。。
+        </div>
+        <font class="Class">5、Zondy.Service.Catalog.IncludeStruct类：</font>地图文档相关信息的结构类<br />
+        <br />
+        <font class="constructorTile">5.1 构造函数：</font>
+        <br />
+        <div class="zhuji">
+            <font class="constructor">Zondy.Service.Catalog.IncludeStruct( details, subs)</font><br />
+            <br />
+            <font class="paraDescription">参数说明：</font>
+            <br />
+            <font class="parameter">details：</font>（Boolean类型）是否包含细节内容。<br />
+            <font class="parameter">subs：</font>（Boolean类型）是否包含子项。
+        </div>
+    </div>
+    <p>
+        <a href="http://simayun.cn:81/API/JS/JavaScript_API(OL2)/default.html" alt="MapGIS IGServer JavaScript Client的API手册。"
+           target="_blank">注：详细说明请参见MapGIS IGServer JavaScript Client的API手册。</a>
+    </p>
+</body>
+</html>
